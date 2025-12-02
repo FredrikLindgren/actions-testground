@@ -327,7 +327,7 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
           let name = Var.get_string (Arch.backslash_to_slash name) in
           log_only_modder "Defined Inlined File [%s] (length %d)\n"
             name (String.length contents) ;
-          Hashtbl.add inlined_files (Arch.backslash_to_slash name) contents
+          Hashtbl.replace inlined_files (Arch.backslash_to_slash name) contents
 
       | TP_Biff(dest,what) ->
           let find_list = ref [] in
@@ -781,7 +781,7 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
                       end else begin
                         log_only_modder "Defined Inlined File [%s] (length %d)\n"
                           dest (String.length result_buff) ;
-                        Hashtbl.add inlined_files (Arch.backslash_to_slash dest) result_buff
+                        Hashtbl.replace inlined_files (Arch.backslash_to_slash dest) result_buff
                       end) ()
                     in
                     if copy_at_end then worklist := doit :: !worklist
@@ -1666,7 +1666,7 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
                 let contents = Var.get_string (load_file d) in
                 log_only_modder "Defined Inlined File [%s] (length %d)\n"
                   newd (String.length contents) ;
-                Hashtbl.add inlined_files (Arch.backslash_to_slash newd) contents
+                Hashtbl.replace inlined_files (Arch.backslash_to_slash newd) contents
               end;
               let newd1 = if pl = [] then newd else "tb#compile_patches/" ^ newd in
               if pl <> [] then begin
@@ -1675,7 +1675,7 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
                   process_patch2 d game acc elt) contents pl in
                 log_only_modder "Defined Inlined File [%s] (length %d)\n"
                   newd1 (String.length contents) ;
-                Hashtbl.add inlined_files (Arch.backslash_to_slash newd1) contents
+                Hashtbl.replace inlined_files (Arch.backslash_to_slash newd1) contents
               end;
               (if Modder.enabled "MISSING_EVAL" then
                 check_missing_eval ("COMPILE " ^ d) (load_file newd1);
@@ -1853,7 +1853,7 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
                     let result_buff = Buffer.contents out_buff in
                     log_only_modder "Defined Inlined File [%s] (length %d)\n"
                       dest (String.length result_buff) ;
-                    Hashtbl.add inlined_files (Arch.backslash_to_slash dest) result_buff
+                    Hashtbl.replace inlined_files (Arch.backslash_to_slash dest) result_buff
                   end else begin
                     let out = open_for_writing_internal (do_backup = 0) dest true in
                     List.iter2 (fun orig app ->
@@ -1961,7 +1961,7 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
                   let result_buff = Buffer.contents out_buff in
                   log_only_modder "Defined Inlined File [%s] (length %d)\n"
                     dest (String.length result_buff) ;
-                  Hashtbl.add inlined_files (Arch.backslash_to_slash dest) result_buff
+                  Hashtbl.replace inlined_files (Arch.backslash_to_slash dest) result_buff
                 end else begin
                   let out = open_for_writing_internal (do_backup = 0) dest true in
                   save_to (output_string out);
