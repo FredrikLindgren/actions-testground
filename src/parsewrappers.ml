@@ -133,18 +133,25 @@ let handle_tph_filename filename =
 let handle_tpp_filename filename =
   Tparser.parse_tpp_file (File filename)
 
-let handle_tra_filename filename =
+let get_tra_list_filename filename =
   if file_exists filename || Hashtbl.mem inlined_files filename then begin
-    let result = parse_file true (File filename) "parsing .tra files"
-        (Dparser.tra_file Dlexer.initial) in
-    log_or_print "[%s] has %d translation strings\n" filename
-      (List.length result) ;
-    Dc.notChanged := false ;
-    Stats.time "adding translation strings" Dc.add_trans_strings result
-  end else begin
-    Modder.handle_msg "SETUP_TRA"
-      (Printf.sprintf "%s file not found. Skipping...\n" filename)
-  end
+      let result = parse_file true (File filename) "parsing .tra files"
+                     (Dparser.tra_file Dlexer.initial) in
+      Dc.notChanged := false ;
+      log_or_print "[%s] has %d translation strings\n" filename
+        (List.length result) ;
+      result
+    end else begin
+      Modder.handle_msg "SETUP_TRA"
+        (Printf.sprintf "%s file not found. Skipping...\n" filename) ;
+      []
+    end
+
+let handle_tra_filename filename =
+  let result = get_tra_list_filename filename in
+  (match result with
+   | [] -> ()
+   | tra -> Stats.time "adding translation strings" Dc.add_trans_strings tra)
 
 let resolve_tra_paths_and_load our_lang tra_l =
 (* Resolve %s in the tra path to the directory of the current language,
@@ -158,19 +165,6 @@ let resolve_tra_paths_and_load our_lang tra_l =
         handle_tra_filename tra_file) tra_l
     | _ -> List.iter (fun tra_file ->
         handle_tra_filename (Var.get_string tra_file)) tra_l
-  end
-
-let get_tra_list_filename filename =
-  if file_exists filename || Hashtbl.mem inlined_files filename then begin
-    let result = parse_file true (File filename) "parsing .tra files"
-        (Dparser.tra_file Dlexer.initial) in
-    Dc.notChanged := false ;
-    log_or_print "[%s] has %d translation strings\n" filename
-      (List.length result) ;
-    result
-  end else begin
-    log_and_print_modder "%s file not found. Skipping...\n" filename ;
-    []
   end
 
 let handle_d_filename filename =
