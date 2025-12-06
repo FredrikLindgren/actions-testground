@@ -628,7 +628,7 @@ let list_components list_comp list_comp_lang game =
         with _ -> ()
       done;
       output_theout (Tpstate.sprintf_log game handle_tp2_filename
-                       handle_tra_filename get_tra_list_filename
+                       get_tra_list_filename
                        (List.rev !fake_log) tp2_ht tra_ht false false);
   end
 
@@ -665,7 +665,7 @@ let save_component_name game =
   let old_tp_quick_log = !Tp.quick_log in
   Tp.quick_log := false;
   load_log();
-  Tpstate.save_log game handle_tp2_filename handle_tra_filename get_tra_list_filename;
+  Tpstate.save_log game handle_tp2_filename get_tra_list_filename;
   Tp.quick_log := old_tp_quick_log
 ;;
 

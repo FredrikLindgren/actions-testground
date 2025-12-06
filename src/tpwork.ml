@@ -642,7 +642,7 @@ let rollback_component game tp this_tp2_filename strset_backup_filename
   if List.find_all (fun x -> x = TPM_NotInLog) m.mod_flags = [] && !safe_exit then begin
     let old_tp_quick_log = !Tp.quick_log in
     Tp.quick_log := true;
-    Tpstate.save_log game handle_tp2_filename handle_tra_filename get_tra_list_filename;
+    Tpstate.save_log game handle_tp2_filename get_tra_list_filename;
     Tp.quick_log := old_tp_quick_log;
   end
 
@@ -845,7 +845,7 @@ let rec handle_tp game this_tp2_filename tp =
                   Some(package_name), Installed)];
               let old_tp_quick_log = !Tp.quick_log in
               Tp.quick_log := true;
-              Tpstate.save_log game handle_tp2_filename handle_tra_filename get_tra_list_filename;
+              Tpstate.save_log game handle_tp2_filename get_tra_list_filename;
               Tp.quick_log := old_tp_quick_log;
               the_log := old_log;
             end ;
@@ -1578,7 +1578,7 @@ let rec handle_tp game this_tp2_filename tp =
 
   the_log := result @ !re_installed ;
 
-  save_log game handle_tp2_filename handle_tra_filename get_tra_list_filename ;
+  save_log game handle_tp2_filename get_tra_list_filename ;
 
   Load.allow_missing := old_allow_missing ;
   (match old_script_style with

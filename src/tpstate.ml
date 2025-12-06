@@ -294,7 +294,8 @@ let subcomp_str game the_comp =
   | None    -> ""
   | Some(x) -> "" ^ (Dc.single_string_of_tlk_string_safe game x) ^ " -> ")
 
-let sprintf_log game handle_tp2_filename handle_tra_filename get_tra_list_filename log tp2_ht tra_ht vocal intro =
+let sprintf_log game handle_tp2_filename get_tra_list_filename log
+      tp2_ht tra_ht vocal intro =
   let out = Buffer.create 10000 in
   if vocal then (log_or_print "Saving This Log:\n" ; print_log ());
   if intro then begin
@@ -371,10 +372,11 @@ let sprintf_log game handle_tp2_filename handle_tra_filename get_tra_list_filena
         Printf.bprintf out "// Recently Uninstalled: %s" str) log ;
   Buffer.contents out
 
-let save_log game handle_tp2_filename handle_tra_filename get_tra_list_filename =
+let save_log game handle_tp2_filename get_tra_list_filename =
   let tp2_ht = Hashtbl.create 511 in
   let tra_ht = Hashtbl.create 511 in
-  let s = sprintf_log game handle_tp2_filename handle_tra_filename get_tra_list_filename !the_log tp2_ht tra_ht true true in
+  let s = sprintf_log game handle_tp2_filename
+            get_tra_list_filename !the_log tp2_ht tra_ht true true in
   let out = Case_ins.perv_open_out log_name in
   output_string out s;
   close_out out
