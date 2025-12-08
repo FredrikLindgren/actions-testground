@@ -6,6 +6,23 @@ The version of OCaml needs to be greater than or equal to 4.04 and
 less than or equal to 4.11, and configured without forced safe
 strings.
 
+### The Windows Unicode dilemma
+
+If WeiDU is built with OCaml greater than or equal to 4.06 on Windows
+and the environment variable `WINDOWS_UNICODE_MODE` is not set to
+`ansi` when configuring the OCaml build, the resulting WeiDU will be
+incompatible with mods that rely on "legacy" behaviour, notably the
+mod Infinity Animations.
+
+However, if WeiDU on Windows is built without Unicode-support, mods
+that print Unicode characters to the terminal will be unable to do
+so. This unsurprisingly include many mods that target languages that
+use non-Latin alphabets.
+
+Refer to the relevant section of the [OCaml
+documentation](https://github.com/ocaml/ocaml/blob/trunk/README.win32.adoc#unicode-support)
+for more information.
+
 ### GNU/Linux
 
 - OCaml with native compilers.
