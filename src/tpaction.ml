@@ -50,6 +50,71 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
       raise e
   in
 
+  let kitlist_ex_p buff =
+    (try Str.search_forward (Str.regexp "[\r\n][0-9]+[ \t]+\*[ \t]+\*")
+                            buff 0 ; true
+     with Not_found -> false) in
+
+  let next_kitlist_ex_line buff =
+    let _ = Str.search_forward
+              (Str.regexp "[\r\n][0-9]+[ \t]+\*[ \t]+\*.+$")
+              buff 0 in
+    Str.string_after (Str.matched_string buff) 1 in
+
+  let get_next_kit_number file =
+    let resref, ext = split_resref file in
+    let buff, path = Load.load_resource "getting 2DA lines" game true
+                                        resref ext in
+    if not (kitlist_ex_p buff) then (get_next_line_number file), false else
+      (try
+         let line = next_kitlist_ex_line buff in
+         let number = int_of_string (List.hd (split_apart line)) in
+         number, true
+       with e ->
+         log_and_print "ERROR: cannot find line numbers in %s\n" file ;
+         raise e) in
+
+  let kitlist_action number kit_name lower_index mixed_index help_index
+                     abil_file prof_number unused_class exp =
+    if not exp then begin
+        let append_to_kitlist = Printf.sprintf
+                                  "%d  %s %d %d %d %s %d %s"
+                                  number kit_name lower_index mixed_index
+                                  help_index abil_file prof_number
+                                  unused_class in
+
+        TP_Append("KITLIST.2DA",append_to_kitlist,[],true,false,0) end
+    else begin
+        let row = string_of_int (number + 3) in
+        let patch =
+          TP_PatchIf
+            (PE_GT (get_pe_int "%SOURCE_SIZE%", get_pe_int "0"),
+             (* no measureble performance impact on my machine with
+              * conventional HDD - Wisp *)
+             [TP_Patch2DA(get_pe_int row, get_pe_int "1", get_pe_int "0",
+                          get_pe_int kit_name) ;
+              TP_Patch2DA(get_pe_int row, get_pe_int "2", get_pe_int "0",
+                          get_pe_int (string_of_int lower_index)) ;
+              TP_Patch2DA(get_pe_int row, get_pe_int "3", get_pe_int "0",
+                          get_pe_int (string_of_int mixed_index)) ;
+              TP_Patch2DA(get_pe_int row, get_pe_int "4", get_pe_int "0",
+                          get_pe_int (string_of_int help_index)) ;
+              TP_Patch2DA(get_pe_int row, get_pe_int "5", get_pe_int "0",
+                          get_pe_int abil_file) ;
+              TP_Patch2DA(get_pe_int row, get_pe_int "6", get_pe_int "0",
+                          get_pe_int (string_of_int prof_number)) ;
+              TP_Patch2DA(get_pe_int row, get_pe_int "7", get_pe_int "0",
+                          get_pe_int unused_class)], []) in
+        TP_Copy ({copy_get_existing = true ;
+                  copy_use_regexp = false ;
+                  copy_use_glob = false ;
+                  copy_file_list = ["kitlist.2da", "override"] ;
+                  copy_patch_list = [patch] ;
+                  copy_constraint_list = [] ;
+                  copy_backup = true ;
+                  copy_at_end = false ;
+                  copy_save_inlined = false}) end in
+
   let when_exists file when_list existing game =
     if List.mem TP_IfExists when_list then begin
       if not existing then
@@ -1283,24 +1348,20 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
               Dlg.TLK_Index(i) -> i
             | _ -> log_and_print "ERROR: cannot resolve KIT help string\n" ;
                 failwith "resolve" in
-            let this_kit_number = get_next_line_number "KITLIST.2DA" in
+            let this_kit_number, exp = get_next_kit_number "KITLIST.2DA" in
             if this_kit_number > 0x500 then begin
-              failwith ("The game cannot currently support more than 1280 kits.\n" ^
-                        "Ask Ascension64 to further increase the limit in ToBEx");
-            end;
+                failwith ("The game cannot currently support more than " ^
+                            "1280 kits.\n" ^ "Ask Ascension64 to further " ^
+                              "increase the limit in ToBEx") end ;
             if this_kit_number > 0x100 then begin
               if not (check_enhanced_engine game (None) (Some 20) true false) then begin
                 failwith "The game requires ToBEx or GemRB to support more than 256 kits."
               end
             end;
             let this_kit_prof_number = get_next_col_number "WEAPPROF.2DA" in
-            let append_to_kitlist = Printf.sprintf
-                "%d  %s %d %d %d %s %d %s"
-                this_kit_number k.kit_name
-                lower_index mixed_index help_index
-                abil_file_no_ext this_kit_prof_number
-                k.unused_class in
-            let a8 = TP_Append("KITLIST.2DA",append_to_kitlist,[],true,false,0) in
+            let a8 = kitlist_action this_kit_number k.kit_name lower_index
+                                    mixed_index help_index abil_file_no_ext
+                                    this_kit_prof_number k.unused_class exp in
             let include_actions = List.map (fun file ->
               let num = get_next_line_number (file ^ ".2DA" ) in
               let str = Printf.sprintf "%d      %d" num this_kit_number in
