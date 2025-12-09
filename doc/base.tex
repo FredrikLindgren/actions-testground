@@ -3184,8 +3184,8 @@ MOVE (~sourceDirectory~ ~^[A-M].*\.itm$~) ~destinationDirectory
       then reloads the automatic ones (\ttref{TP2!AUTHOR},
       \ttref{TP2!FILE!NAME}, \ttref{TP2!BASE!NAME}, \ttref{MOD!FOLDER},
       \ttref{LANGUAGE}, \ttref{WEIDU!VER}, \ttref{WEIDU!ARCH},
-      \ttref{WEIDU!OS}, \ttref{COMPONENT!NUMBER}, all numeric constants
-      such as \t{NAME1}, the soundsets, or
+      \ttref{WEIDU!OS}, \ttref{WEIDU!EXECUTABLE}, \ttref{COMPONENT!NUMBER},
+      all numeric constants such as \t{NAME1}, the soundsets, or
       \t{SCRIPT!OVERRIDE}). \ttref{INTERACTIVE} is automatically set when
       you call the next component. \emph{Do not use this feature without a
       real reason.} \\
@@ -5831,6 +5831,9 @@ determine the architecture of the WeiDU binary. \\
 or & \t{\%}\DEFINE{WEIDU!OS}\t{\%} & The special variable \t{WEIDU!OS} is set to either
 \t{"win32"} or \t{"osx"} or \t{"unix"} at WeiDU startup and can be used to
 determine the operating system for which the WeiDU binary was compiled. \\
+
+or & \t{\%}\DEFINE{WEIDU!EXECUTABLE}\t{\%} & The special variable
+\t{WEIDU!EXECUTABLE} is set to the name of the running WeiDU instance.
 
 or & \t{\%}\DEFINE{COMPONENT!NUMBER}\t{\%} & The special variable \t{COMPONENT!NUMBER}
 is set to the number of the component being installed. \\
