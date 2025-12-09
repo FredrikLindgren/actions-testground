@@ -468,6 +468,8 @@ nonterm(Tp.tp_action) Tp_Action {
   -> OUTER_SET PLUS_PLUS e1:Patch_String_Left [ Tp.TP_Outer_Set(e1,(Tp.PE_Add(Tp.PE_String e1, Tp.get_pe_int "1"))) ]
   -> OUTER_SET MINUS_MINUS e1:Patch_String_Left [ Tp.TP_Outer_Set(e1,(Tp.PE_Sub(Tp.PE_String e1, Tp.get_pe_int "1"))) ]
   -> OUTER_SPRINT e1:Patch_String_Left e2:Dlg_Or_Patch_String_Right [ Tp.TP_Outer_Sprint(e1,e2) ]
+  -> OUTER_SPRINTF e1:Patch_String_Left e2:Dlg_Or_Patch_String_Right LPAREN e3:Patch_Exp_List RPAREN
+       [Tp.TP_Outer_Sprintf(e1,e2,e3)]
   -> OUTER_TEXT_SPRINT e1:Patch_String_Left e2:Patch_String_Right [ Tp.TP_Outer_Text_Sprint(e1,e2) ]
   -> OUTER_SNPRINT e1:Patch_Exp e2:Patch_String_Left e3:Dlg_Or_Patch_String_Right [ Tp.TP_Outer_Snprint(e1,e2,e3) ]
   -> ACTION_DEFINE_ASSOCIATIVE_ARRAY e1:Patch_String_Left BEGIN e2:Associative_String_List END

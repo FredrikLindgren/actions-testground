@@ -169,6 +169,9 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
       | TP_Outer_Sprint(name,msg) ->
           run_patch (TP_PatchSprint(name,msg))
 
+      | TP_Outer_Sprintf(name,msg,vars) ->
+          run_patch (TP_PatchSprintf(name,msg,vars))
+
       | TP_Outer_Text_Sprint (var,str) ->
           run_patch (TP_PatchTextSprint(var,str))
 

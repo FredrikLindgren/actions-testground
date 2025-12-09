@@ -209,6 +209,7 @@ let action_to_str a = match a with
 | TP_Outer_Inner_Buff_Save _ -> "OUTER_INNER_PATCH_SAVE"
 | TP_Outer_Set _ -> "OUTER_SET"
 | TP_Outer_Sprint _ -> "OUTER_SPRINT"
+| TP_Outer_Sprintf _ -> "OUTER_SPRINTF"
 | TP_Outer_Text_Sprint _ -> "OUTER_TEXT_SPRINT"
 | TP_Outer_Snprint _ -> "OUTER_SNPRINT"
 | TP_ActionDefineAssociativeArray _ -> "ACTION_DEFINE_ASSOCIATIVE_ARRAY"
