@@ -1115,6 +1115,26 @@ let test_output_tlk game pause_at_end =
     | None -> None
     | Some df -> Some (df.Load.path))]) [] game.Load.dialogs)
 
+ let check_component_args file_list force_install_these_main
+                          force_uninstall_these_main =
+   let tp_list = List.map handle_tp2_filename file_list in
+   List.iter (fun tp_file ->
+       let comp_list = List.filter (fun comp ->
+                           not comp.Tp.deprecated)
+                                   (Tpstate.get_component_list tp_file) in
+       let comp_nums = List.map (fun comp ->
+                           comp.Tp.number) comp_list in
+       let remainder = List.filter (fun num ->
+                           not (List.mem num comp_nums))
+                                   (List.append force_install_these_main
+                                                force_uninstall_these_main) in
+       if remainder <> [] then begin
+           exit_status := StatusArgumentWarning ;
+           List.iter (fun num ->
+               log_and_print "WARNING: mod %s does not have a component %d\n"
+                             tp_file.Tp.tp_filename num)
+                     remainder end) tp_list
+
 let do_tp2_files tp_list force_install_these_main force_uninstall_these_main pause_at_end game =
   pause_at_end := true ;
   if !Tp.always_uninstall then pause_at_end := false ;
@@ -1124,6 +1144,8 @@ let do_tp2_files tp_list force_install_these_main force_uninstall_these_main pau
   Tp.force_uninstall_these := force_uninstall_these_main ;
   if !Tp.force_install_these <> [] then pause_at_end := false ;
   if !Tp.force_uninstall_these <> [] then pause_at_end := false ;
+  ignore (check_component_args tp_list force_install_these_main
+                               force_uninstall_these_main) ;
   load_log () ;
   List.iter (fun tp_file -> Queue.add tp_file tp2_queues) tp_list ;
   while not (Queue.is_empty tp2_queues) do
