@@ -1,0 +1,149 @@
+name: main
+on:
+  push:
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+jobs:
+  build-macos:
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            include: /opt/homebrew/opt
+            elkhound_name: mac-arm-elkhound
+          - os: macos-15-intel
+            include: /usr/local/opt
+            elkhound_name: mac-elkhound
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@main
+      - name: fetch elkhound
+        run: |
+          mkdir -p bin
+          curl -Lv https://github.com/The-Mod-Elephant/elkhound/releases/download/1.0.3/${{ matrix.elkhound_name }} -o bin/elkhound
+          chmod +x bin/elkhound
+          ./bin/elkhound
+      - name: Set-up OCaml
+        uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: ocaml-variants.4.14.2+options,ocaml-option-default-unsafe-string
+      - name: Set-up Zip and Upx
+        run: |
+          export HOMEBREW_NO_AUTO_UPDATE=1
+          brew install zip upx
+      - name: build weidu
+        run: |
+          export PATH="$PATH:$PWD/bin"
+          mkdir -p obj/x86_LINUX
+          mkdir -p obj/.depend
+          opam switch
+          eval $(opam env)
+          mv sample.Configuration Configuration
+          make
+          make osx_zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os }}
+          path: WeiDU-Mac-*.zip
+          if-no-files-found: error
+  build-linux:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@main
+      - name: fetch elkhound
+        run: |
+          mkdir -p bin
+          curl -Lv https://github.com/The-Mod-Elephant/elkhound/releases/download/1.0.3/lin-elkhound -o bin/elkhound
+          chmod +x bin/elkhound
+          ./bin/elkhound
+      - name: Set-up OCaml
+        uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: 4.08.1+default-unsafe-string
+      - name: build weidu
+        run: |
+          export PATH="$PATH:$PWD/bin"
+          mkdir -p obj/x86_LINUX
+          mkdir -p obj/.depend
+          opam switch
+          eval $(opam env)
+          mv sample.Configuration Configuration
+          make
+          make linux_zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ubuntu-22.04
+          path: WeiDU-Linux-*.zip
+          if-no-files-found: error
+  build-windows:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@main
+      - name: fetch windows elkhound
+        run: |
+          curl -Lv https://github.com/The-Mod-Elephant/elkhound/releases/download/1.0.3/elkhound.exe -o elkhound.exe
+      - name: Set-up OCaml
+        uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: ocaml-variants.4.14.2+options,ocaml-option-default-unsafe-string
+      - name: Set-up Zip and Upx
+        run: choco install upx zip
+      - name: build weidu
+        run: |
+          mv elkhound.exe D:/a/weidu/weidu/_opam/bin/elkhound.exe
+          opam switch
+          (& opam env) -split '\r?\n' | ForEach-Object { Invoke-Expression $_ }
+          mv sample.Configuration Configuration
+          make
+          make windows_zip
+      - name: upload windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-latest
+          path: WeiDU-Windows-*.zip
+          if-no-files-found: error
+  trigger-nightly-release:
+    needs: [build-macos, build-linux, build-windows]
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@main
+      - name: generate_version
+        id: generate_version
+        run: |
+          major_version=$(grep 'version =' src/version.ml | cut -d'"' -f2 | cut -c-3)
+          minor_version=$(grep 'version =' src/version.ml | cut -d'"' -f2 | cut -c4-)
+          echo "version=${major_version}.${minor_version}" >> "$GITHUB_OUTPUT"
+      - name: create tag
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const short_sha = context.sha.substring(0, 7);
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/v${{ steps.generate_version.outputs.version }}-nightly-${short_sha}`,
+              sha: context.sha,
+            });
+      - name: trigger
+        run: |
+            short_sha=$(git rev-parse --short ${{ github.sha }})
+            ref=$(echo "v${{ steps.generate_version.outputs.version }}-nightly-${short_sha}")
+            echo "${ref}"
+            gh workflow run release.yaml --ref "${ref}" -f run_id=${{ github.run_id }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+  trigger-release:
+    needs: [build-macos, build-linux, build-windows]
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@main
+      - name: trigger
+        run: |
+            gh workflow run release.yaml --ref ${{ github.ref_name }} -f run_id=${{ github.run_id }}
+        env:
+          GH_TOKEN: ${{ github.token }}

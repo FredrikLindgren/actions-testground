@@ -20,3 +20,7 @@ diffs/*
 .paths
 .settings/
 /Configuration
+*.zip
+WeiDU-Linux
+WeiDU-Windows
+WeiDU-Mac
