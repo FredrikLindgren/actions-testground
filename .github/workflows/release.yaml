@@ -83,3 +83,4 @@ jobs:
         with:
           artifacts: "*zip"
           prerelease: ${{ contains(github.ref_name, 'nightly') }}
+          generateReleaseNotes: true
