@@ -74,8 +74,11 @@ jobs:
           mv macos-arm/WeiDU-*.zip .
           mv windows/*.zip .
           for file in $(ls *zip); do
-            echo "Adding README-WeiDU.html to ${file}"
-            zip -ur ${file} README-WeiDU.html
+            platform=$(echo "${file}" | awk -F '-' '{ print $1"-"$2}')
+            echo "Adding README-WeiDU.html to ${platform}/${file}"
+            mkdir -p ${platform}
+            cp README-WeiDU.html ${platform}/. || true
+            zip -ur ${file} ${platform}
           done
       - name: Create Release
         id: create_release
