@@ -46,6 +46,6 @@ BEGIN
   WITH
     DEFAULT
       OUTER_SET success = 0
-      OUTER_SPRINT message = "tests failed in test_decomp_biff: %ERROR_MESSAGE%"
+      OUTER_SPRINT message "tests failed in test_decomp_biff: %ERROR_MESSAGE%"
   END
 END
