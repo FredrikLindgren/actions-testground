@@ -137,7 +137,7 @@ information on obtaining a copy of WeiDU that works under OS X.
 \end{enumerate}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\label{DLG}\section{\ttref{D} and \DEFINE{DLG} File Concepts}
+\label{DLG}\section{\ttref{D} and \tt{DLG} File Concepts}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 This section is a gentle introduction to how Infinity Engine \ttref{DLG}
@@ -1008,9 +1008,9 @@ skips the others (cumulative). \\
 skips the others (cumulative). \\
 \DEFINE{--force-uninstall-list} \t{X Y...} & uninstalls component number X Y...,
 skips the others (cumulative). \\
-\DEFINE{--quick-menu} \t{X} & installs the \ttref{QUICK_MENU} selection X. Can be combined with
---force-install and friends, but only if the latter components are defined in ALWAYS_ASK.
-\\
+\DEFINE{--quick-menu} \t{X} & installs the \ttref{QUICK!MENU}
+selection X. Can be combined with --force-install and friends, but
+only if the latter components are defined in ALWAYS!ASK.  \\
 \DEFINE{--skip-at-view} & AT!* ~VIEW this~ actions (and the extra chromosome versions like
 ~NOTEPAD this~) aren't processed, while still processing batch files and similia. \\
 \DEFINE{--safe-exit} & Save weidu.log every time a component installation is begun.
@@ -2619,7 +2619,9 @@ backslash so WeiDU doesn't confuse them with a regular expression.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 This tutorial was thoughtfully provided by CamDawg.
 
-ALTER_TRANS is a more compatibility-friendly way of changing transitions in an existing dialogue state. This is best illustrated with an example; let's use state 9 from doghma.dlg in BG2:
+ALTER!TRANS is a more compatibility-friendly way of changing
+transitions in an existing dialogue state. This is best illustrated
+with an example; let's use state 9 from doghma.dlg in BG2:
 
 \begin{verbatim}
 IF ~~ THEN BEGIN 9 SAY #45751
@@ -2636,7 +2638,9 @@ END
 \end{verbatim}
 
 
-The problem lies in transition 3, which should have an OR(4) before those four PartyHasItem checks. Before ALTER_TRANS, the least destructive way to fix it would be
+The problem lies in transition 3, which should have an OR(4) before
+those four PartyHasItem checks. Before ALTER!TRANS, the least
+destructive way to fix it would be
 
 \begin{verbatim}
 ADD_TRANS_TRIGGER DOGHMA 9 ~False()~ DO 3
@@ -2651,7 +2655,14 @@ END
 \end{verbatim}
 
 
-This presents some compatibility issues though. If another mod has altered this transition (for example, a new action via ADD_TRANS_ACTION) then those changes are lost via this method. It also reorders the replies as they're displayed on-screen--not a big issue for transitions involving replies, but it is a big issue for non-reply transitions where they're evaluated from the bottom-up. It's also an issue for other mods that target this transition, as the False() essentially eliminates it. Enter ALTER_TRANS:
+This presents some compatibility issues though. If another mod has
+altered this transition (for example, a new action via
+ADD!TRANS!ACTION) then those changes are lost via this method. It also
+reorders the replies as they're displayed on-screen--not a big issue
+for transitions involving replies, but it is a big issue for non-reply
+transitions where they're evaluated from the bottom-up. It's also an
+issue for other mods that target this transition, as the False()
+essentially eliminates it. Enter ALTER!TRANS:
 
 \begin{verbatim}
 ALTER_TRANS DOGHMA // file name
@@ -2713,7 +2724,7 @@ END
 \end{verbatim}
 
 
-With ALTER_TRANS, it becomes much easier:
+With ALTER!TRANS, it becomes much easier:
 
 \begin{verbatim}
 ALTER_TRANS BVICONI BEGIN 103 END BEGIN 1 END BEGIN "EPILOGUE" ~GOTO 368~ END
@@ -2749,7 +2760,7 @@ Here is the context-free grammar syntax for the \ttref{TP2} file format:
 
 \begin{tabular}{cp{10in}|p{10in}}
 
-\DEFINE{TP2 File}\label{TP2} & &
+\DEFINE{TP2 File} & &
   A \ttref{TP2 File} is a text file that contains a number of
   mod \ttref{Component}s. \ttref{TP2 File}s tell WeiDU how to install
   various parts of your mod on an end-user's computer. \\
@@ -3814,21 +3825,21 @@ SNPRINT 3 myvar "1:%author%"
 or & \DEFINE{OUTER!SET} \ttref{variable} \t{=} \ttref{value} &
   Update \ttref{variable} so that it is equal to \ttref{value}. \\
 or & \ttref{OUTER!SET} \ttref{variable} \t{+=} \ttref{value} &
-  Equivalent to \t{OUTER_SET variable = variable + value}. \\
+  Equivalent to \t{OUTER!SET variable = variable + value}. \\
 or & \ttref{OUTER!SET} \ttref{variable} \t{-=} \ttref{value} &
-  Equivalent to \t{OUTER_SET variable = variable - value}. \\
+  Equivalent to \t{OUTER!SET variable = variable - value}. \\
 or & \ttref{OUTER!SET} \ttref{variable} \t{*=} \ttref{value} &
-  Equivalent to \t{OUTER_SET variable = variable * value}. \\
+  Equivalent to \t{OUTER!SET variable = variable * value}. \\
 or & \ttref{OUTER!SET} \ttref{variable} \t{/=} \ttref{value} &
-  Equivalent to \t{OUTER_SET variable = variable / value}. \\
+  Equivalent to \t{OUTER!SET variable = variable / value}. \\
 or & \ttref{OUTER!SET} \ttref{variable} \t{\&=} \ttref{value} &
-  Equivalent to \t{OUTER_SET variable = variable BAND value}. \\
+  Equivalent to \t{OUTER!SET variable = variable BAND value}. \\
 or & \ttref{OUTER!SET} \ttref{variable} \t{|=} \ttref{value} &
-  Equivalent to \t{OUTER_SET variable = variable BOR value}. \\
+  Equivalent to \t{OUTER!SET variable = variable BOR value}. \\
 or & \ttref{OUTER!SET} \ttref{variable} \t{<<=} \ttref{value} &
-  Equivalent to \t{OUTER_SET variable = variable BLSL value}. \\
+  Equivalent to \t{OUTER!SET variable = variable BLSL value}. \\
 or & \ttref{OUTER!SET} \ttref{variable} \t{>>=} \ttref{value} &
-  Equivalent to \t{OUTER_SET variable = variable BLSR value}. \\
+  Equivalent to \t{OUTER!SET variable = variable BLSR value}. \\
 or & \DEFINE{OUTER!INNER!PATCH} buffString \t{BEGIN} \ttref{patch} \Slist \t{END} &
   Any WeiDU variables inside \t{\%}s within buffString are replaced by
   their values. All of the \ttref{patch}es given are evaluated as if the
@@ -3934,11 +3945,11 @@ or & \DEFINE{REINCLUDE} \t{\ttref{String}} \Slist &
 or & \DEFINE{ACTION!REINCLUDE} \t{\ttref{String}} \Slist &
     A synonym of \ttref{REINCLUDE}.
     \\
-  or & \t{<<<<<<<<} fileName fileBody \t{>>>>>>>>} &
+  or & \t{<<<<<<<<} fileName fileBody \t{>>>>>>>>}\label{inlined} &
     (That's eight (8) angle brackets on each side.)
     For the purposes of copying and compiling files, WeiDU will pretend
     that fileName is a real file with contents fileBody. This allows you to
-    define \DEFINE{inlined}\label{inlined} files inside your TP2 file. Such definitions
+    define \t{inlined} files inside your TP2 file. Such definitions
     must be executed before the \ttref{inlined} file is used. Other operations
     on fileName (such as \ttref{FILE!EXISTS}, \ttref{FILE!MD5} or
     \ttref{FILE!SIZE}) are undefined. Inlined files will be skipped by
@@ -4929,13 +4940,13 @@ or & \DEFINE{ADD!STORE!ITEM} \Ob \t{+} \Oe itemName \Ob position \Oe
   \t{limited} or \t{unlimited} and controls whether the store should
   carry an inexhaustible stack of the new item, or not. \t{limited} is
   the default behaviour. See the \ahrefloc{sec-add-store-item}{\t{ADD!STORE!ITEM} tutorial} for
-  more information. \textbf{Note:} The patch function \ttref{ADD_STORE_ITEM_EX}
+  more information. \textbf{Note:} The patch function \ttref{ADD!STORE!ITEM!EX}
   offers similar functionality. \\
 
 or & \DEFINE{REMOVE!STORE!ITEM} itmName \Slist &
   Remove the listed items from the current store. Does nothing if an item is not for sale.
 	Multiple instances are removed. \textbf{Note:} The patch function
-  \ttref{REMOVE_STORE_ITEM_EX} offers similar functionality. \\
+  \ttref{REMOVE!STORE!ITEM!EX} offers similar functionality. \\
 
 or & \DEFINE{READ!2DA!ENTRY} \ttref{value} \ttref{value} \ttref{value}
 \ttref{variable} &
@@ -5470,7 +5481,7 @@ or & \ttref{value} \DEFINE{BAND} \ttref{value} & Bitwise And.
 or & \ttref{value} \DEFINE{BOR} \ttref{value} & Bitwise Or.
 \t{0b101 BOR 0b110 = 0b111}. Synonym: \DEFSYN{\textpipe}. \\
 or & \ttref{value} \DEFINE{BXOR} \ttref{value} & Bitwise Exclusive Or.
-\t{0b101 BXOR 0b110 = 0b011}. Synonym: \DEFSYN{^^}.  \\
+\t{0b101 BXOR 0b110 = 0b011}. Synonym: \DEFSYN{\verb+^^+}.  \\
 or & \DEFINE{BNOT} \ttref{value} & Bitwise Not.
 \t{BNOT 0b111 = 0b1111111111111111111111111111000}. Synonym: \DEFSYN{\verb+`+}. \\
 or & \ttref{value} \DEFINE{BLSL} \ttref{value} & Bitwise Logical Shift Left.
@@ -7556,7 +7567,7 @@ prepended to the file name, to make sure the two strings can never be
 identical.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\label{macros}\subsection{\t{DEFINE,LAUNCH,LOCAL} and everything else about personal \DEFINE{macros} (Last Update: v188)}
+\subsection{\t{DEFINE,LAUNCH,LOCAL} and everything else about personal \DEFINE{macros} (Last Update: v188)}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Macros were originally intended as a way to repeat a certain tp2 block
@@ -7801,7 +7812,7 @@ organize the mod as needed. A few other items of note:
 for install if and only if none of its member groups are selected
 \item You could, in theory, have two components in the same SUBCOMPONENT
 grouping but different GROUPs. Don't do this.
-\item You can give a GROUP a condition, by adding a patch_expression after the
+\item You can give a GROUP a condition, by adding a \ttref{value} after the
 GROUP definition. This way, the user will not be asked about that GROUP (and
 its components will be automatically skipped). If you give different conditions
 to the components in a GROUP, these conditions are OR()red.
@@ -7940,40 +7951,41 @@ should deactivate them. In all other cases, using FAIL or WARN is a case of pers
 preference (for example, use WARN early in the development process and FAIL when you're
 near the beta status).
 \begin{itemize}
-\item setup_tra: a dialogue/script uses @references that aren't available from
+\item SETUP!TRA: a dialogue/script uses @references that aren't available from
      its own tra file, but are taken instead from the tp2-level setup.tra.
      \\
      When to use NONE: you're knowingly using references from
      setup.tra into scripts and/or dialogues, rather than using file-specific TRA files.
-\item area_variables: the variable scope in a BAF/D \verb+*Global*("varname","scope")+
+\item AREA!VARIABLES: the variable scope in a BAF/D \verb+*Global*("varname","scope")+
      statement is six characters long, but not GLOBAL, MYAREA, LOCALS, or a valid area name.
      \\
      When to use NONE: you biff your .are files using bat files, or you copy them to
 		 the override after compiling your scripts.
-\item missing_extern: an EXTERN transition in a D file references a DLG file that
+\item MISSING!EXTERN: an EXTERN transition in a D file references a DLG file that
      doesn't exist, nor is created in the current file.
      \\
      When to use NONE: you have two separate D files that EXTERN to each other.
-\item missing_resref: a file referenced by a scripting command (EG a CRE file for a
+\item MISSING!RESREF: a file referenced by a scripting command (EG a CRE file for a
      CreateCreature action) is not available.
      \\
      When to use NONE: you biff your files using bat files, or you copy them to
 		 the override after compiling your scripts.
-\item ict2_actions: you call an I_C_T2 into a state which has different actions.
+\item ICT2!ACTIONS: you call an I!C!T2 into a state which has different actions.
 		 If the different actions look like they're caused by another mod ICT2'ing in
 		 the same state, only the warning is printed, further actions are not processed.
      \\
      When to use NONE: you want to ICT2 into a state with different exit actions.
-\item missing_eval: WeiDU thinks that you forgot to use EVALUATE_BUFFER to evaluate
-     variables in a command. Currently used for:
+\item MISSING!EVAL: WeiDU thinks that you forgot to use
+  EVALUATE!BUFFER to evaluate variables in a command. Currently used
+  for:
      \begin{itemize}
-     \item WRITE_ASCII (vs. WRITE_ASCIIE)
-     \item STR_VAR
+     \item WRITE!ASCII (vs. WRITE!ASCIIE)
+     \item STR!VAR
      \item COMPILE
      \item arrays
      \end{itemize}
-\item overwriting_file: you are writing to a file that exists (physically and/or in biffs).
-\item fun_args: functions are launched with \verb+INT_VAR+s or \verb+STR_VAR+s
+\item OVERWRITING!FILE: you are writing to a file that exists (physically and/or in biffs).
+\item FUN!ARGS: functions are launched with \verb+INT!VAR+s or \verb+STR!VAR+s
   that and not included in the function's definition. Note that some functions
   want arrays passed to them variable by variable and MODDER will flag these
   variables as not part of the function definition (because they aren't). You
@@ -8093,8 +8105,8 @@ BUT_ONLY_IF_IT_CHANGES
 \end{verbatim}
 
 That is the basics on asking for information from the user and then applying that
-information later on in the install process.  PATCH_READLN works just like
-ACTION_READLN only it's location of use within the tp2 is different.
+information later on in the install process.  PATCH!READLN works just like
+ACTION!READLN only it's location of use within the tp2 is different.
 
 \\
 
@@ -8179,7 +8191,7 @@ LAUNCH!ACTION!FUNCTION (action) / LAUNCH!PATCH!FUNCTION (patch).
 
 Before you can use a function you have to DEFINE it:
 \begin{verbatim}
-DEFINE_PATCH_FUNCTION count_spells INT_VAR level = 1 STR_VAR type = "WI" RET num BEGIN
+DEFINE_PATCH_FUNCTION count_spells INT!VAR level = 1 STR!VAR type = "WI" RET num BEGIN
     SET num = 0
     PATCH_IF (~%SOURCE_EXT%~ STRING_EQUAL_CASE ~CRE~) THEN BEGIN
         // do some magic here that actually counts the number of spells and sets
@@ -8200,7 +8212,7 @@ COPY_EXISTING ~my.cre~ ~override~
     // count number of level 1 wizard spells (default arguments of the function)
     LAUNCH_PATCH_FUNCTION count_spells RET lvl1_wizard = num END
     // and now the level 5 priest spells
-    LAUNCH_PATCH_FUNCTION count_spells INT_VAR level = 5 STR_VAR type = "PR" RET lvl5_priest = num END
+    LAUNCH_PATCH_FUNCTION count_spells INT!VAR level = 5 STR!VAR type = "PR" RET lvl5_priest = num END
 
     PATCH_PRINT ~This CRE has %lvl1_wizard% level 1 wizard spells and %lvl5_priest% level 5 priest spells~
 \end{verbatim}
@@ -8248,7 +8260,7 @@ END
 
 If you don't need certain features simply omit them:
 \begin{verbatim}
-DEFINE_ACTION_FUNCTION xyz INT_VAR x = 1 y = 2 z = 3 BEGIN
+DEFINE_ACTION_FUNCTION xyz INT!VAR x = 1 y = 2 z = 3 BEGIN
     PRINT ~x: %x%, y: %y%, z: %z%~
 END
 
@@ -8259,14 +8271,14 @@ Starting from V210, you can also specify a variable that will be local to the
 function environment, without being passed back to the calling environment,
 by adding either STR!VAR or INT!VAR to the LAUNCH bit:
 \begin{verbatim}
-DEFINE_ACTION_FUNCTION xyz INT_VAR x = 1 y = 2 z = 3 BEGIN
+DEFINE_ACTION_FUNCTION xyz INT!VAR x = 1 y = 2 z = 3 BEGIN
     PRINT ~x: %x%, y: %y%, z: %z%~
 END
 
-LAUNCH_ACTION_FUNCTION xyz INT_VAR x = 0 END
+LAUNCH_ACTION_FUNCTION xyz INT!VAR x = 0 END
 
 OUTER_SET y = 5
-LAUNCH_ACTION_FUNCTION xyz INT_VAR y END // synonym for INT_VAR y = y
+LAUNCH_ACTION_FUNCTION xyz INT!VAR y END // synonym for INT!VAR y = y
 \end{verbatim}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -8550,18 +8562,18 @@ If the user chooses to install a pre-defined selection, then its components
 will be installed, and ALL other components of the mod will be uninstalled
 if already installed.
 
-Components in ALWAYS_ASK will always be asked for individually if the user
+Components in ALWAYS!ASK will always be asked for individually if the user
 chose to install one of the pre-defined selections (or, of course, if he chose
 [A]). If the user chose [S], [R] or [U] the same action will be applied to the
-components in ALWAYS_ASK.
+components in ALWAYS!ASK.
 
 Caveats:
 \begin{itemize}
-\item If a component is in both ALWAYS_ASK and a pre-defined selection the mod
+\item If a component is in both ALWAYS!ASK and a pre-defined selection the mod
 will refuse to install.
 \item Because of a complex problem whose details are too technical for this
 document, component 0 of your mod must be empty (or your mod will refuse to
-install), must not be in any pre-defined selection or in ALWAYS_ASK (or your
+install), must not be in any pre-defined selection or in ALWAYS!ASK (or your
 mod will refuse to install) and will always be (re)installed (unless the user
 chooses [S]kip all).
 
@@ -8622,7 +8634,7 @@ look for audio, oggdec.exe and SoX. So, for instance, if you keep your
 sounds in \verb+mymod/sound+ you would configure \verb+HANDLE_AUDIO+
 like so:
 \begin{verbatim}
-LAF HANDLE_AUDIO STR_VAR audio_path = ~mymod/sound~ END
+LAF HANDLE_AUDIO STR!VAR audio_path = ~mymod/sound~ END
 \end{verbatim}
 If you want \verb+HANDLE_AUDIO+ to look for oggdec.exe or SoX in
 another directory than \verb+audio_path+, you can use the
@@ -8632,15 +8644,15 @@ have your voice-overs in \verb+mymod/audio/vo+, your music in
 you could install it like so:
 \begin{verbatim}
 LAF HANDLE_AUDIO
-  STR_VAR
+  STR!VAR
     audio_path = ~mymod/audio/vo~
     oggdec_path = ~mymod/audio~
     sox_path = ~mymod/audio~
 END
 LAF HANDLE_AUDIO
-  INT_VAR
+  INT!VAR
     music = 1
-  STR_VAR
+  STR!VAR
     audio_path = ~mymod/audio/music~
     oggdec_path = ~mymod/audio~
     sox_path = ~mymod/audio~
@@ -8676,7 +8688,7 @@ OS\begin{rawhtml}&nbsp;\end{rawhtml}X in \verb+mymod/bin/osx+ you
 could install your tilesets like so:
 \begin{verbatim}
 LAF HANDLE_TILESETS
-  STR_VAR
+  STR!VAR
     tiz_path = ~mymod/tilesets~
     tisunpack_path = ~mymod/bin~
 END
@@ -9084,9 +9096,9 @@ interface together with \ttref{MODDER} \verb+fun_args+.
 \end{itemize}
 This is a PATCH function.
 \begin{itemize}
-\item INT_VAR \verb+do_message+ to 1 if you want explicit an explicit message regarding the cre invalidity. Defaults to 0.
-\item INT_VAR \verb+do_reindex+ to 0 if you don't want the creature file to be reindexed. Defaults to 1.
-\item INT_VAR \verb+do_eff+ to 0 if you don't want EFFv1 <-> EFFv2 conversion to be applied. Defaults to 1.
+\item INT!VAR \verb+do_message+ to 1 if you want explicit an explicit message regarding the cre invalidity. Defaults to 0.
+\item INT!VAR \verb+do_reindex+ to 0 if you don't want the creature file to be reindexed. Defaults to 1.
+\item INT!VAR \verb+do_eff+ to 0 if you don't want EFFv1 <-> EFFv2 conversion to be applied. Defaults to 1.
 \item RET \verb+valid+ returns 1 if the CRE is well-formed, 0 otherwise.
 \end{itemize}
 
@@ -9094,17 +9106,22 @@ This is a PATCH function.
 \verb+FJ_CRE_REINDEX+ and allows you to use the conventional function
 interface together with \ttref{MODDER} \verb+fun_args+.
 
-\verb+FJ_CRE_REINDEX+: reorders creatures with nonstandard offset orders. Called by FJ_CRE_VALIDITY automatically if relevant.\\\\
+\verb+FJ_CRE_REINDEX+: reorders creatures with nonstandard offset
+orders. Called by FJ!CRE!VALIDITY automatically if relevant.\\\\
 This is a PATCH function.
 \begin{itemize}
-\item INT_VAR \verb+do_reindex+ to 0 if you don't want the creature file to be reindexed. Defaults to 1.
-\item INT_VAR \verb+do_eff+ to 0 if you don't want EFFv1 <-> EFFv2 conversion to be applied. Defaults to 1.
+\item INT!VAR \verb+do_reindex+ to 0 if you don't want the creature file to be reindexed. Defaults to 1.
+\item INT!VAR \verb+do_eff+ to 0 if you don't want EFFv1 <-> EFFv2 conversion to be applied. Defaults to 1.
 \end{itemize}
 
-\verb+FJ_CRE_EFF_V2+: Converts creatures using version 1 effects to version 2. Called by FJ_CRE_VALIDITY or FJ_CRE_REINDEX automatically if relevant.\\
+\verb+FJ_CRE_EFF_V2+: Converts creatures using version 1 effects to
+version 2. Called by FJ!CRE!VALIDITY or FJ!CRE!REINDEX automatically
+if relevant.\\
 This is a PATCH function.
 
-\verb+T-CRE_EFF_V1+: Converts creatures using version 2 effects to version 1. Called by FJ_CRE_VALIDITY or FJ_CRE_REINDEX automatically if relevant.\\
+\verb+T-CRE_EFF_V1+: Converts creatures using version 2 effects to
+version 1. Called by FJ!CRE!VALIDITY or FJ!CRE!REINDEX automatically
+if relevant.\\
 This is a PATCH function.
 
 \verb+ADD_AREA_REGION_TRIGGER+: adds an area region to the current are file.
@@ -9179,11 +9196,12 @@ This is an ACTION and PATCH macro and function.
 
 \verb+GET_UNIQUE_FILE_NAME+: Creates a file name that is currently unallocated.
 This is a PATCH and ACTION function.
-This function will create a filename using __ as a prefix. __ is reserved by
-The Bigg and writeable by anybody, as long as you dynamically create the file
-name (either by using this function or other code of your devising). The algorithm
-creates file names in base 36, going from __0000.ext to __zzzz.ext; this allows for
-36 ^ 4 = 1679616 unique file names.
+This function will create a filename using \verb+__+ as a
+prefix. \verb+__+ is reserved by The Bigg and writeable by anybody, as
+long as you dynamically create the file name (either by using this
+function or other code of your devising). The algorithm creates file
+names in base 36, going from \verb+__0000.ext+ to \verb+__zzzz.ext+;
+this allows for $36^4 = 1679616$ unique file names.
 
 
 
@@ -9194,8 +9212,8 @@ them a spellbook, base should contain your modder prefix, an identifier for the 
 of the call, and the file name you're working on, for instance:
 \verb+~tb#spellbooks_%SOURCE_RES%~+
 \begin{itemize}
-\item STR_VAR \verb+extension+ to the desired extension (required).
-\item STR_VAR \verb+base+ to a string unique to your mod and current file (optional).
+\item STR!VAR \verb+extension+ to the desired extension (required).
+\item STR!VAR \verb+base+ to a string unique to your mod and current file (optional).
 \item RET \verb+filename+ the currently unallocated file name (sans the extension).
 \end{itemize}
 \\
@@ -9203,156 +9221,156 @@ of the call, and the file name you're working on, for instance:
 \verb+ALTER_AREA_ENTRANCE+: patch coordinates and orientation of \ahref{\url{http://gibberlings3.net/iesdp/file_formats/ie_formats/are_v1.htm#formAREAV1_0_Entrance}}{area party entrance points}.
 This is a PATCH function. For all integer variables, a negative value results in no change to that field and the default value is -1. The variable \verb+entrance_name+ is required.
 \begin{itemize}
-\item INT_VAR \verb+x_coord+ to the new X coordinate.
-\item INT_VAR \verb+y_coord+ to the new Y coordinate.
-\item INT_VAR \verb+orient+ to the new orientation.
-\item STR_VAR \verb+entrance_name+ to the name of the entrance point to be altered. This variable is required.
+\item INT!VAR \verb+x_coord+ to the new X coordinate.
+\item INT!VAR \verb+y_coord+ to the new Y coordinate.
+\item INT!VAR \verb+orient+ to the new orientation.
+\item STR!VAR \verb+entrance_name+ to the name of the entrance point to be altered. This variable is required.
 \end{itemize}
 \\
 
 \verb+ALTER_AREA_REGION+: patch \ahref{\url{http://gibberlings3.net/iesdp/file_formats/ie_formats/are_v1.htm#formAREAV1_0_Info}}{area regions}, also known as area triggers.
 This is a PATCH function. For all integer variables except \verb+info_point+, a negative value results in no change and the default value is -1. The variable \verb+info_point+ results in no change if it has the default value 99999999. In the case of flags, a value of 1 will set the flag and a value of 0 will unset it. For all string variables except \verb+region_name+, the default value is the string "same", which results in no change to that field. The variable \verb+region_name+ is required.
 \begin{itemize}
-\item INT_VAR \verb+type+ to the new type of the region.
-\item INT_VAR \verb+cursor+ to the new cursor index to be used.
-\item INT_VAR \verb+trap_detect+ to the new difficulty of trap detection.
-\item INT_VAR \verb+trap_remove+ to the new difficulty of trap removal.
-\item INT_VAR \verb+trapped+ to whether the region should be trapped.
-\item INT_VAR \verb+detected+ to whether the trap should be detected.
-\item INT_VAR \verb+flag_locked+ to the new value of the flag known as \t{locked} or \t{invisible trap} (bit 0).
-\item INT_VAR \verb+flag_resets+ to the new value of the flag known as \t{trap resets} (bit 1).
-\item INT_VAR \verb+flag_party_required+ to the new value of the flag known as \t{party is required} (bit 2).
-\item INT_VAR \verb+flag_trap_detectable+ to the new value of the flag known as \t{trap is detectable} (bit 3).
-\item INT_VAR \verb+flag_trap_enemies+ to the new value of the flag known as \t{trap can be set off by enemies} (bit 4).
-\item INT_VAR \verb+flag_tutorial+ to the new value of the flag known as \t{tutorial trigger} (bit 5).
-\item INT_VAR \verb+flag_trap_npcs+ to the new value of the flag known as \t{trap can be set off by NPCs} (bit 6).
-\item INT_VAR \verb+flag_silent+ to the new value of the flag known as \t{silent trigger} (bit 7).
-\item INT_VAR \verb+flag_deactivated+ to the new value of the flag known as \t{deactivated} (bit 8).
-\item INT_VAR \verb+flag_impassable_npc+ to the new value of the flag known as \t{cannot be passed by NPCs} (bit 9).
-\item INT_VAR \verb+flag_activation_point+ to the new value of the flag known as \t{use activation point} (bit 10).
-\item INT_VAR \verb+flag_connect_to_door+ to the new value of the flag known as \t{connected to door} (bit 11).
-\item INT_VAR \verb+bounding_left+ to the new value of the left edge of the bounding box. The vertices remain unchanged.
-\item INT_VAR \verb+bounding_top+ to the new value of the top edge of the bounding box. The vertices remain unchanged.
-\item INT_VAR \verb+bounding_right+ to the new value of the right edge of the bounding box. The vertices remain unchanged.
-\item INT_VAR \verb+bounding_bottom+ to the new value of the bottom edge of the bounding box. The vertices remain unchanged.
-\item INT_VAR \verb+info_point+ to the new string reference of the info point.
-\item INT_VAR \verb+launch_x+ to the new x coordinate of the launch point.
-\item INT_VAR \verb+launch_y+ to the new y coordinate of the launch point.
-\item INT_VAR \verb+activate_x+ to the new x coordinate of the activation point.
-\item INT_VAR \verb+activate_y+ to the new y coordinate of the activation point.
-\item STR_VAR \verb+region_name+ to the name of the region to be patched. This variable is required.
-\item STR_VAR \verb+destination_area+ to the resref of the new destination area.
-\item STR_VAR \verb+entrance_name+ to the new entrance name of the destination area.
-\item STR_VAR \verb+region_key+ to the resref of the key item.
-\item STR_VAR \verb+region_script+ to the resref of the region script.
+\item INT!VAR \verb+type+ to the new type of the region.
+\item INT!VAR \verb+cursor+ to the new cursor index to be used.
+\item INT!VAR \verb+trap_detect+ to the new difficulty of trap detection.
+\item INT!VAR \verb+trap_remove+ to the new difficulty of trap removal.
+\item INT!VAR \verb+trapped+ to whether the region should be trapped.
+\item INT!VAR \verb+detected+ to whether the trap should be detected.
+\item INT!VAR \verb+flag_locked+ to the new value of the flag known as \t{locked} or \t{invisible trap} (bit 0).
+\item INT!VAR \verb+flag_resets+ to the new value of the flag known as \t{trap resets} (bit 1).
+\item INT!VAR \verb+flag_party_required+ to the new value of the flag known as \t{party is required} (bit 2).
+\item INT!VAR \verb+flag_trap_detectable+ to the new value of the flag known as \t{trap is detectable} (bit 3).
+\item INT!VAR \verb+flag_trap_enemies+ to the new value of the flag known as \t{trap can be set off by enemies} (bit 4).
+\item INT!VAR \verb+flag_tutorial+ to the new value of the flag known as \t{tutorial trigger} (bit 5).
+\item INT!VAR \verb+flag_trap_npcs+ to the new value of the flag known as \t{trap can be set off by NPCs} (bit 6).
+\item INT!VAR \verb+flag_silent+ to the new value of the flag known as \t{silent trigger} (bit 7).
+\item INT!VAR \verb+flag_deactivated+ to the new value of the flag known as \t{deactivated} (bit 8).
+\item INT!VAR \verb+flag_impassable_npc+ to the new value of the flag known as \t{cannot be passed by NPCs} (bit 9).
+\item INT!VAR \verb+flag_activation_point+ to the new value of the flag known as \t{use activation point} (bit 10).
+\item INT!VAR \verb+flag_connect_to_door+ to the new value of the flag known as \t{connected to door} (bit 11).
+\item INT!VAR \verb+bounding_left+ to the new value of the left edge of the bounding box. The vertices remain unchanged.
+\item INT!VAR \verb+bounding_top+ to the new value of the top edge of the bounding box. The vertices remain unchanged.
+\item INT!VAR \verb+bounding_right+ to the new value of the right edge of the bounding box. The vertices remain unchanged.
+\item INT!VAR \verb+bounding_bottom+ to the new value of the bottom edge of the bounding box. The vertices remain unchanged.
+\item INT!VAR \verb+info_point+ to the new string reference of the info point.
+\item INT!VAR \verb+launch_x+ to the new x coordinate of the launch point.
+\item INT!VAR \verb+launch_y+ to the new y coordinate of the launch point.
+\item INT!VAR \verb+activate_x+ to the new x coordinate of the activation point.
+\item INT!VAR \verb+activate_y+ to the new y coordinate of the activation point.
+\item STR!VAR \verb+region_name+ to the name of the region to be patched. This variable is required.
+\item STR!VAR \verb+destination_area+ to the resref of the new destination area.
+\item STR!VAR \verb+entrance_name+ to the new entrance name of the destination area.
+\item STR!VAR \verb+region_key+ to the resref of the key item.
+\item STR!VAR \verb+region_script+ to the resref of the region script.
 \end{itemize}
 \\
 
 \verb+ALTER_AREA_ACTOR+: patch \ahref{\url{http://gibberlings3.net/iesdp/file_formats/ie_formats/are_v1.htm#formAREAV1_0_Actor}}{area actors}.
 This is a PATCH function. All integer variables, except \verb+expiry+, default to the value -1 and a negative value results in no change to the corresponding field. The variable \verb+expiry+ instead has a default value of -2. In the case of flags, a value of 1 will set the flag and a value of 0 will unset it. All string variables except \verb+actor_name+ default to the string "same", which results in no change to the corresponding field. The variable \verb+actor_name+ is required.
 \begin{itemize}
-\item INT_VAR \verb+x_coord+ to the new x coordinate. Unless \verb+dest_x+ is defined, \verb+x_coord+ is used as the x-value of the destination, as well.
-\item INT_VAR \verb+y_coord+ to the new y coordinate. Unless \verb+dest_y+ is defined, \verb+y_coord+ is used as the y-value of the destination, as well.
-\item INT_VAR \verb+dest_x+ to the new x destination.
-\item INT_VAR \verb+dest_y+ to the new y destination.
-\item INT_VAR \verb+spawned+ to the new spawned value.
-\item INT_VAR \verb+animation+ to the new animation value.
-\item INT_VAR \verb+orient+ to the new facing direction.
-\item INT_VAR \verb+expiry+ to the new expiration time.
-\item INT_VAR \verb+wander+ to the new wander-distance value.
-\item INT_VAR \verb+follow+ to the new follow-distance value.
-\item INT_VAR \verb+times_talked+ to the new number of times the actor has been talked to.
-\item INT_VAR \verb+flag_cre_unattached+ to the new value of the flag known as \t{CRE attached} (bit 0).
-\item INT_VAR \verb+flag_seen_party+ to the new value of the flag known as \t{has seen party} (bit 1).
-\item INT_VAR \verb+flag_invulnerable+ to the new value of the flag known as \t{invulnerable} (bit 2).
-\item INT_VAR \verb+flag_override_script_name+ to the new value of the flag known as {override script name} (bit 3).
-\item INT_VAR \verb+flag_time_0+ through \verb+flag_time_23+ to the new values of the actor's appearance schedule.
-\item STR_VAR \verb+actor_name+ to the name of the actor to be patched. This variable is required.
-\item STR_VAR \verb+dlg_file+ to the resref of the new dialogue file.
-\item STR_VAR \verb+script_override+ to the resref of the new override script.
-\item STR_VAR \verb+script_general+ to the resref of the new general script.
-\item STR_VAR \verb+script_class+ to the resref of the new class script.
-\item STR_VAR \verb+script_race+ to the resref of the new race script.
-\item STR_VAR \verb+script_default+ to the resref of the new default script.
-\item STR_VAR \verb+script_specifics+ to the resref of the new specifics script.
-\item STR_VAR \verb+cre_file+ to the resref of the new creature file.
+\item INT!VAR \verb+x_coord+ to the new x coordinate. Unless \verb+dest_x+ is defined, \verb+x_coord+ is used as the x-value of the destination, as well.
+\item INT!VAR \verb+y_coord+ to the new y coordinate. Unless \verb+dest_y+ is defined, \verb+y_coord+ is used as the y-value of the destination, as well.
+\item INT!VAR \verb+dest_x+ to the new x destination.
+\item INT!VAR \verb+dest_y+ to the new y destination.
+\item INT!VAR \verb+spawned+ to the new spawned value.
+\item INT!VAR \verb+animation+ to the new animation value.
+\item INT!VAR \verb+orient+ to the new facing direction.
+\item INT!VAR \verb+expiry+ to the new expiration time.
+\item INT!VAR \verb+wander+ to the new wander-distance value.
+\item INT!VAR \verb+follow+ to the new follow-distance value.
+\item INT!VAR \verb+times_talked+ to the new number of times the actor has been talked to.
+\item INT!VAR \verb+flag_cre_unattached+ to the new value of the flag known as \t{CRE attached} (bit 0).
+\item INT!VAR \verb+flag_seen_party+ to the new value of the flag known as \t{has seen party} (bit 1).
+\item INT!VAR \verb+flag_invulnerable+ to the new value of the flag known as \t{invulnerable} (bit 2).
+\item INT!VAR \verb+flag_override_script_name+ to the new value of the flag known as {override script name} (bit 3).
+\item INT!VAR \verb+flag_time_0+ through \verb+flag_time_23+ to the new values of the actor's appearance schedule.
+\item STR!VAR \verb+actor_name+ to the name of the actor to be patched. This variable is required.
+\item STR!VAR \verb+dlg_file+ to the resref of the new dialogue file.
+\item STR!VAR \verb+script_override+ to the resref of the new override script.
+\item STR!VAR \verb+script_general+ to the resref of the new general script.
+\item STR!VAR \verb+script_class+ to the resref of the new class script.
+\item STR!VAR \verb+script_race+ to the resref of the new race script.
+\item STR!VAR \verb+script_default+ to the resref of the new default script.
+\item STR!VAR \verb+script_specifics+ to the resref of the new specifics script.
+\item STR!VAR \verb+cre_file+ to the resref of the new creature file.
 \end{itemize}
 \\
 
 \verb+ALTER_AREA_CONTAINER+: patch \ahref{\url{http://gibberlings3.net/iesdp/file_formats/ie_formats/are_v1.htm#formAREAV1_0_Container}}{area containers}, but not their contents. This is a PATCH function. All integer variables default to -1 and negative values result in no change to the corresponding field. In the case of flags, a value of 1 will set the flag and a value of 0 will unset it. All string variables except \verb+container_name+ default to the string "same", which results in no change to the corresponding field. The variable \verb+container_name+ is required.
 \begin{itemize}
-\item INT_VAR \verb+coord_x+ to the new x coordinate.
-\item INT_VAR \verb+coord_y+ to the new y coordinate.
-\item INT_VAR \verb+container_type+ to the new type of the container.
-\item INT_VAR \verb+trapped+ to whether the container should be trapped.
-\item INT_VAR \verb+detected+ to whether the container trap should be detected.
-\item INT_VAR \verb+launch_x+ to the new x coordinate of the launch point.
-\item INT_VAR \verb+launch_y+ to the new y coordinate of the launch point.
-\item INT_VAR \verb+bounding_left+ to the new value of the left edge of the bounding box. The vertices remain unchanged.
-\item INT_VAR \verb+bounding_top+ to the new value of the top edge of the bounding box. The vertices remain unchanged.
-\item INT_VAR \verb+bounding_right+ to the new value of the right edge of the bounding box. The vertices remain unchanged.
-\item INT_VAR \verb+bounding_bottom+ to the new value of the bottom edge of the bounding box. The vertices remain unchanged.
-\item INT_VAR \verb+range+ to the new trigger-range value.
-\item INT_VAR \verb+lockpick_strref+ to the new strref of the lockpick string.
-\item INT_VAR \verb+lock_difficulty+ to the new difficulty of the lock.
-\item INT_VAR \verb+trap_detect+ to the new difficulty of trap detection.
-\item INT_VAR \verb+trap_remove+ to the new difficulty of trap removal.
-\item INT_VAR \verb+flag_locked+ to the new value of the flag known as \t{locked} (bit 0).
-\item INT_VAR \verb+flag_mlocked+ to the new value of the flag known as \t{magical lock} (bit 2).
-\item INT_VAR \verb+flag_resets+ to the new value of the flag known as \t{trap resets} (bit 3).
-\item INT_VAR \verb+flag_disabled+ to the new value of the flag known as \t{disabled} (bit 5).
-\item STR_VAR \verb+container_name+ to the name of the container to be patched. This variable is required.
-\item STR_VAR \verb+container_script+ to the resref of the new container script.
-\item STR_VAR \verb+container_key+ to the resref of the new container key.
+\item INT!VAR \verb+coord_x+ to the new x coordinate.
+\item INT!VAR \verb+coord_y+ to the new y coordinate.
+\item INT!VAR \verb+container_type+ to the new type of the container.
+\item INT!VAR \verb+trapped+ to whether the container should be trapped.
+\item INT!VAR \verb+detected+ to whether the container trap should be detected.
+\item INT!VAR \verb+launch_x+ to the new x coordinate of the launch point.
+\item INT!VAR \verb+launch_y+ to the new y coordinate of the launch point.
+\item INT!VAR \verb+bounding_left+ to the new value of the left edge of the bounding box. The vertices remain unchanged.
+\item INT!VAR \verb+bounding_top+ to the new value of the top edge of the bounding box. The vertices remain unchanged.
+\item INT!VAR \verb+bounding_right+ to the new value of the right edge of the bounding box. The vertices remain unchanged.
+\item INT!VAR \verb+bounding_bottom+ to the new value of the bottom edge of the bounding box. The vertices remain unchanged.
+\item INT!VAR \verb+range+ to the new trigger-range value.
+\item INT!VAR \verb+lockpick_strref+ to the new strref of the lockpick string.
+\item INT!VAR \verb+lock_difficulty+ to the new difficulty of the lock.
+\item INT!VAR \verb+trap_detect+ to the new difficulty of trap detection.
+\item INT!VAR \verb+trap_remove+ to the new difficulty of trap removal.
+\item INT!VAR \verb+flag_locked+ to the new value of the flag known as \t{locked} (bit 0).
+\item INT!VAR \verb+flag_mlocked+ to the new value of the flag known as \t{magical lock} (bit 2).
+\item INT!VAR \verb+flag_resets+ to the new value of the flag known as \t{trap resets} (bit 3).
+\item INT!VAR \verb+flag_disabled+ to the new value of the flag known as \t{disabled} (bit 5).
+\item STR!VAR \verb+container_name+ to the name of the container to be patched. This variable is required.
+\item STR!VAR \verb+container_script+ to the resref of the new container script.
+\item STR!VAR \verb+container_key+ to the resref of the new container key.
 \end{itemize}
 \\
 
 \verb+ALTER_AREA_DOOR+: patch \ahref{\url{http://gibberlings3.net/iesdp/file_formats/ie_formats/are_v1.htm#formAREAV1_0_Door}}{area doors.} This is a PATCH function. All integer variables, except \verb+string_unlock+ and \verb+string_speaker+, default to -1 and negative values result in no change to the corresponding field. The variables \verb+string_unlock+ and \verb+string_speaker+ instead default to 99999999. In the case of flags, a value of 1 will set the flag and a value of 0 will unset it. All string variables except \verb+door_name+ default to the string "same", which results in no change to the corresponding field. The variable \verb+door_name+ is required.
 \begin{itemize}
-\item INT_VAR \verb+bounding_open_left+ to the new value of the left edge of the open-state bounding box. The vertices remain unchanged.
-\item INT_VAR \verb+bounding_open_top+ to the new value of the top edge of the open-state bounding box. The vertices remain unchanged.
-\item INT_VAR \verb+bounding_open_right+ to the new value of the right edge of the open-state bounding box. The vertices remain unchanged.
-\item INT_VAR \verb+bounding_open_bottom+ to the new value of the bottom edge of the open-state bounding box. The vertices remain unchanged.
-\item INT_VAR \verb+bounding_closed_left+ to the new value of the left edge of the closed-state bounding box. The vertices remain unchanged.
-\item INT_VAR \verb+bounding_closed_top+ to the new value of the top edge of the closed-state bounding box. The vertices remain unchanged.
-\item INT_VAR \verb+bounding_closed_right+ to the new value of the right edge of the closed-state bounding box. The vertices remain unchanged.
-\item INT_VAR \verb+bounding_closed_bottom+ to the new value of the bottom edge of the closed-state bounding box. The vertices remain unchanged.
-\item INT_VAR \verb+door_hp+ to the new hit-point value.
-\item INT_VAR \verb+door_ac+ to the new armor-class value.
-\item INT_VAR \verb+cursor+ to the new cursor index.
-\item INT_VAR \verb+trap_detect+ to the new difficulty of trap detection.
-\item INT_VAR \verb+trap_remove+ to the new difficulty of trap removal.
-\item INT_VAR \verb+trapped+ to whether the door should be trapped.
-\item INT_VAR \verb+detected+ to whether the door trap should be detected.
-\item INT_VAR \verb+launch_x+ to the new x coordinate of the launch point.
-\item INT_VAR \verb+launch_y+ to the new y coordinate of the launch point.
-\item INT_VAR \verb+door_detect+ to the new difficulty of door detection.
-\item INT_VAR \verb+lock_difficulty+ to the new difficulty of the lock.
-\item INT_VAR \verb+open_x+ to the new x coordinate of the opening point.
-\item INT_VAR \verb+open_y+ to the new y coordinate of the opening point.
-\item INT_VAR \verb+close_x+ to the new x coordinate of the closing point.
-\item INT_VAR \verb+close_y+ to the new y coordinate of the closing point.
-\item INT_VAR \verb+string_unlock+ to the new string reference of the unlock message.
-\item INT_VAR \verb+string_speaker+ to the new string reference of the dialogue-speaker name.
-\item INT_VAR \verb+flag_open+ to the new value of the flag known as \t{door open} (bit 0).
-\item INT_VAR \verb+flag_locked+ to the new value of the flag known as \t{door locked} (bit 1).
-\item INT_VAR \verb+flag_resets+ to the new value of the flag known as \t{reset trap} (bit 2).
-\item INT_VAR \verb+flag_detectable+ to the new value of the flag known as \t{trap detectable} (bit 3).
-\item INT_VAR \verb+flag_forced+ to the new value of the flag known as \t{broken} (bit 4).
-\item INT_VAR \verb+flag_no_close+ to the new value of the flag known as \t{can't close} (bit 5).
-\item INT_VAR \verb+flag_located+ to the new value of the flag known as \t{linked} (bit 6).
-\item INT_VAR \verb+flag_secret+ to the new value of the flag known as \t{door hidden} (bit 7).
-\item INT_VAR \verb+flag_detected+ to the new value of the flag known as \t{door found} (bit 8).
-\item INT_VAR \verb+flag_no_look+ to the new value of the flag known as \t{don't block line of sight} (bit 9).
-\item INT_VAR \verb+flag_uses_key+ to the new value of the flag known as \t{remove key} (bit 10).
-\item INT_VAR \verb+flag_sliding+ to the new value of the flag known as \t{ignore obstacles when closing} (bit 11).
-\item STR_VAR \verb+door_name+ to the name of the door to be patched. This variable is required.
-\item STR_VAR \verb+door_open_sound+ to the resource reference of the opening sound.
-\item STR_VAR \verb+door_close_sound+ to the resource reference of the closing sound.
-\item STR_VAR \verb+door_key+ to the resref of the new door key.
-\item STR_VAR \verb+door_script+ to the resref of the new door script.
-\item STR_VAR \verb+travel_trigger+ to the new travel-trigger name. This field is 24 bytes in length.
-\item STR_VAR \verb+dialogue+ to the new resource reference of the dialogue file.
+\item INT!VAR \verb+bounding_open_left+ to the new value of the left edge of the open-state bounding box. The vertices remain unchanged.
+\item INT!VAR \verb+bounding_open_top+ to the new value of the top edge of the open-state bounding box. The vertices remain unchanged.
+\item INT!VAR \verb+bounding_open_right+ to the new value of the right edge of the open-state bounding box. The vertices remain unchanged.
+\item INT!VAR \verb+bounding_open_bottom+ to the new value of the bottom edge of the open-state bounding box. The vertices remain unchanged.
+\item INT!VAR \verb+bounding_closed_left+ to the new value of the left edge of the closed-state bounding box. The vertices remain unchanged.
+\item INT!VAR \verb+bounding_closed_top+ to the new value of the top edge of the closed-state bounding box. The vertices remain unchanged.
+\item INT!VAR \verb+bounding_closed_right+ to the new value of the right edge of the closed-state bounding box. The vertices remain unchanged.
+\item INT!VAR \verb+bounding_closed_bottom+ to the new value of the bottom edge of the closed-state bounding box. The vertices remain unchanged.
+\item INT!VAR \verb+door_hp+ to the new hit-point value.
+\item INT!VAR \verb+door_ac+ to the new armor-class value.
+\item INT!VAR \verb+cursor+ to the new cursor index.
+\item INT!VAR \verb+trap_detect+ to the new difficulty of trap detection.
+\item INT!VAR \verb+trap_remove+ to the new difficulty of trap removal.
+\item INT!VAR \verb+trapped+ to whether the door should be trapped.
+\item INT!VAR \verb+detected+ to whether the door trap should be detected.
+\item INT!VAR \verb+launch_x+ to the new x coordinate of the launch point.
+\item INT!VAR \verb+launch_y+ to the new y coordinate of the launch point.
+\item INT!VAR \verb+door_detect+ to the new difficulty of door detection.
+\item INT!VAR \verb+lock_difficulty+ to the new difficulty of the lock.
+\item INT!VAR \verb+open_x+ to the new x coordinate of the opening point.
+\item INT!VAR \verb+open_y+ to the new y coordinate of the opening point.
+\item INT!VAR \verb+close_x+ to the new x coordinate of the closing point.
+\item INT!VAR \verb+close_y+ to the new y coordinate of the closing point.
+\item INT!VAR \verb+string_unlock+ to the new string reference of the unlock message.
+\item INT!VAR \verb+string_speaker+ to the new string reference of the dialogue-speaker name.
+\item INT!VAR \verb+flag_open+ to the new value of the flag known as \t{door open} (bit 0).
+\item INT!VAR \verb+flag_locked+ to the new value of the flag known as \t{door locked} (bit 1).
+\item INT!VAR \verb+flag_resets+ to the new value of the flag known as \t{reset trap} (bit 2).
+\item INT!VAR \verb+flag_detectable+ to the new value of the flag known as \t{trap detectable} (bit 3).
+\item INT!VAR \verb+flag_forced+ to the new value of the flag known as \t{broken} (bit 4).
+\item INT!VAR \verb+flag_no_close+ to the new value of the flag known as \t{can't close} (bit 5).
+\item INT!VAR \verb+flag_located+ to the new value of the flag known as \t{linked} (bit 6).
+\item INT!VAR \verb+flag_secret+ to the new value of the flag known as \t{door hidden} (bit 7).
+\item INT!VAR \verb+flag_detected+ to the new value of the flag known as \t{door found} (bit 8).
+\item INT!VAR \verb+flag_no_look+ to the new value of the flag known as \t{don't block line of sight} (bit 9).
+\item INT!VAR \verb+flag_uses_key+ to the new value of the flag known as \t{remove key} (bit 10).
+\item INT!VAR \verb+flag_sliding+ to the new value of the flag known as \t{ignore obstacles when closing} (bit 11).
+\item STR!VAR \verb+door_name+ to the name of the door to be patched. This variable is required.
+\item STR!VAR \verb+door_open_sound+ to the resource reference of the opening sound.
+\item STR!VAR \verb+door_close_sound+ to the resource reference of the closing sound.
+\item STR!VAR \verb+door_key+ to the resref of the new door key.
+\item STR!VAR \verb+door_script+ to the resref of the new door script.
+\item STR!VAR \verb+travel_trigger+ to the new travel-trigger name. This field is 24 bytes in length.
+\item STR!VAR \verb+dialogue+ to the new resource reference of the dialogue file.
 \end{itemize}
 \\
 
@@ -9360,28 +9378,28 @@ This is a PATCH function. All integer variables, except \verb+expiry+, default t
 
 Note that both \verb+check_globals+ and \verb+check_headers+ are 0 by default, so you need to change one or both of these to 1 to perform any patching at all. If you patch headers, you can further target by using type to target melee, ranged, or magical headers. \verb+match_opcode+ can be left at -1 to match all effects on your targeted range or targeted to a specific opcode. If the opcode itself needs to be changed, you can use \verb+match_opcode+ to target the existing effect and \verb+new_opcode+ as the new opcode to use. \verb+duration_high+ is an alternative to \verb+duration+, mainly for changing the overall duration of an item's effects. The idea is to allow you to mass patch effects to new durations while leaving the one-time only cosmetics and visuals--which are usual instant or only run for a few seconds--unchanged.
 \begin{itemize}
-\item INT_VAR \verb+check_globals+ to whether to check global (on-equip) effects (0 for no, 1 for yes). (default 0)
-\item INT_VAR \verb+check_headers+ to whether to check effects on extended headers (0 for no, 1 for yes). (default 0)
-\item INT_VAR \verb+header+ to the number of the ability header that should be altered. A value of 0 matches all headers. (default 0)
-\item INT_VAR \verb+header_type+ to which type of header that should be checked. If this variable is -1, all header types will be checked.
-\item INT_VAR \verb+match_opcode+ to which type of opcode to match. If this variable is -1, all opcodes are a match.
-\item INT_VAR \verb+new_opcode+ to the value the matched opcode should be changed into.
-\item INT_VAR \verb+target+ to the new target.
-\item INT_VAR \verb+power+ to the new power.
-\item INT_VAR \verb+parameter1+ to the new parameter1.
-\item INT_VAR \verb+parameter2+ to the new parameter2.
-\item INT_VAR \verb+timing+ to the new timing mode.
-\item INT_VAR \verb+resist_dispel+ to the new resist/dispel.
-\item INT_VAR \verb+duration+ to the new duration.
-\item INT_VAR \verb+duration_high+ to the new duration, but is only written if the existing duration is greater than 5.
-\item INT_VAR \verb+probability1+ to the new probability1 (the upper bound).
-\item INT_VAR \verb+probability2+ to the new probability2 (the lower bound).
-\item INT_VAR \verb+dicenumber+ to the new number of dice. This field is instead used for maximum hit-dice (HD) by some opcodes.
-\item INT_VAR \verb+dicesize+ to the new size of dice. This field is also instead for minimum hit-dice (HD) by some opcodes.
-\item INT_VAR \verb+savingthrow+ to the new saving-throw type.
-\item INT_VAR \verb+savebonus+ to the new saving-throw bonus/penalty. This variable can take negative values down to -10 while still writing to the corresponding field. (default -11)
-\item INT_VAR \verb+special+ to the new special parameter.
-\item STR_VAR \verb+resource+ to the new resource reference.
+\item INT!VAR \verb+check_globals+ to whether to check global (on-equip) effects (0 for no, 1 for yes). (default 0)
+\item INT!VAR \verb+check_headers+ to whether to check effects on extended headers (0 for no, 1 for yes). (default 0)
+\item INT!VAR \verb+header+ to the number of the ability header that should be altered. A value of 0 matches all headers. (default 0)
+\item INT!VAR \verb+header_type+ to which type of header that should be checked. If this variable is -1, all header types will be checked.
+\item INT!VAR \verb+match_opcode+ to which type of opcode to match. If this variable is -1, all opcodes are a match.
+\item INT!VAR \verb+new_opcode+ to the value the matched opcode should be changed into.
+\item INT!VAR \verb+target+ to the new target.
+\item INT!VAR \verb+power+ to the new power.
+\item INT!VAR \verb+parameter1+ to the new parameter1.
+\item INT!VAR \verb+parameter2+ to the new parameter2.
+\item INT!VAR \verb+timing+ to the new timing mode.
+\item INT!VAR \verb+resist_dispel+ to the new resist/dispel.
+\item INT!VAR \verb+duration+ to the new duration.
+\item INT!VAR \verb+duration_high+ to the new duration, but is only written if the existing duration is greater than 5.
+\item INT!VAR \verb+probability1+ to the new probability1 (the upper bound).
+\item INT!VAR \verb+probability2+ to the new probability2 (the lower bound).
+\item INT!VAR \verb+dicenumber+ to the new number of dice. This field is instead used for maximum hit-dice (HD) by some opcodes.
+\item INT!VAR \verb+dicesize+ to the new size of dice. This field is also instead for minimum hit-dice (HD) by some opcodes.
+\item INT!VAR \verb+savingthrow+ to the new saving-throw type.
+\item INT!VAR \verb+savebonus+ to the new saving-throw bonus/penalty. This variable can take negative values down to -10 while still writing to the corresponding field. (default -11)
+\item INT!VAR \verb+special+ to the new special parameter.
+\item STR!VAR \verb+resource+ to the new resource reference.
 \end{itemize}
 \\
 
@@ -9390,44 +9408,44 @@ Note that both \verb+check_globals+ and \verb+check_headers+ are 0 by default, s
 \verb+header_type+ is used to limit the scope of matching. The default value of -1 will match all types of headers while values of 0-4 will match headers with those values. If \verb+match_icon+ is 1, the icon resource reference will be match with the \verb+icon+ variable as an additional qualifier. This is useful for items which have multiple magic abilities. \verb+header+ can also be used to limit patching to the Nth header, counting from 1 as the first header. The default is 0, which will match all headers.
 
 \begin{itemize}
-\item INT_VAR \verb+header_type+ to the type of header to be matched. If this variable is -1, all headers will be a match. (default -1)
-\item INT_VAR \verb+match_icon+ to whether to match the ability icon (0 for no, 1 for yes). (default 0)
-\item INT_VAR \verb+header+ to the number of the ability header (starting from 1) that should be altered. A value of 0 matches all header. (default 0)
-\item INT_VAR \verb+new_header_type+ to the value the matched header should be changed into.
-\item INT_VAR \verb+identify+ to the new identification requirement.
-\item INT_VAR \verb+location+ to the new new ability location.
-\item INT_VAR \verb+target+ to the new target.
-\item INT_VAR \verb+target_count+ to the new target count.
-\item INT_VAR \verb+range+ to the new range.
-\item INT_VAR \verb+launcher+ to the new required launcher.
-\item INT_VAR \verb+speed+ to the new speed factor.
-\item INT_VAR \verb+thac0_bonus+ to the new THAC0 bonus.
-\item INT_VAR \verb+dicesize+ to the new dice size.
-\item INT_VAR \verb+primary_type+ to the new primary type (school).
-\item INT_VAR \verb+dicenumber+ to the new number of dice.
-\item INT_VAR \verb+secondary_type+ to the new secondary type.
-\item INT_VAR \verb+damage_bonus+ to the new damage bonus.
-\item INT_VAR \verb+damage_type+ to the new damage type.
-\item INT_VAR \verb+charges+ to the new number of charges.
-\item INT_VAR \verb+drained+ to the new charge-depletion behaviour.
-\item INT_VAR \verb+projectile+ to the new projectile.
-\item INT_VAR \verb+animation_overhand+ to the new overhand animation percentage.
-\item INT_VAR \verb+animation_backhand+ to the new backhand animation percentage.
-\item INT_VAR \verb+animation_thrust+ to the new thrust animation percentage.
-\item INT_VAR \verb+arrow+ to the new arrow qualifier.
-\item INT_VAR \verb+bolt+ to the new bolt qualifier.
-\item INT_VAR \verb+bullet+ to the new bullet qualifier.
-\item INT_VAR \verb+flag_strength+ to the new value of the flag known as \t{add strength bonus} (bit 0).
-\item INT_VAR \verb+flag_break+ to the new value of the flag known as \t{breakable} (bit 1).
-\item INT_VAR \verb+flag_strength_damage+ to the new value of the flag known as \t{add strength bonus to damage only} (bit 2). This flag is not available in all games.
-\item INT_VAR \verb+flag_strength_thac0+ to the new value of the flag known as \t{add strength bonus to THAC0 only} (bit 3). This flag is not available in all games.
-\item INT_VAR \verb+flag_hostile+ to the new value of the flag known as \t{hostile} (bit 10).
-\item INT_VAR \verb+flag_recharge+ to the new value of the flag known as \t{recharges} (bit 11).
-\item INT_VAR \verb+flag_bypass+ to the new value of the flag known as \t{bypass armor} (bit 16). This flag is not available in all games.
-\item INT_VAR \verb+flag_keenedge+ to the new value of the flag known as \t{keen edge} (bit 17). This flag is not available in all games.
-\item INT_VAR \verb+flag_backstab+ to the new value of the flag known as \t{toggle backstab} (bit 25). This flag is not available in all games.
-\item INT_VAR \verb+flag_noinvisible+ to the new value of the flag known as \t{cannot target invisible} (bit 26). This flag is not available in all games.
-\item STR_VAR \verb+icon+ to the resource reference to be used for matching if \verb+match_icon+ is 1, or the new ability icon if \verb+match_icon+ is 0.
+\item INT!VAR \verb+header_type+ to the type of header to be matched. If this variable is -1, all headers will be a match. (default -1)
+\item INT!VAR \verb+match_icon+ to whether to match the ability icon (0 for no, 1 for yes). (default 0)
+\item INT!VAR \verb+header+ to the number of the ability header (starting from 1) that should be altered. A value of 0 matches all header. (default 0)
+\item INT!VAR \verb+new_header_type+ to the value the matched header should be changed into.
+\item INT!VAR \verb+identify+ to the new identification requirement.
+\item INT!VAR \verb+location+ to the new new ability location.
+\item INT!VAR \verb+target+ to the new target.
+\item INT!VAR \verb+target_count+ to the new target count.
+\item INT!VAR \verb+range+ to the new range.
+\item INT!VAR \verb+launcher+ to the new required launcher.
+\item INT!VAR \verb+speed+ to the new speed factor.
+\item INT!VAR \verb+thac0_bonus+ to the new THAC0 bonus.
+\item INT!VAR \verb+dicesize+ to the new dice size.
+\item INT!VAR \verb+primary_type+ to the new primary type (school).
+\item INT!VAR \verb+dicenumber+ to the new number of dice.
+\item INT!VAR \verb+secondary_type+ to the new secondary type.
+\item INT!VAR \verb+damage_bonus+ to the new damage bonus.
+\item INT!VAR \verb+damage_type+ to the new damage type.
+\item INT!VAR \verb+charges+ to the new number of charges.
+\item INT!VAR \verb+drained+ to the new charge-depletion behaviour.
+\item INT!VAR \verb+projectile+ to the new projectile.
+\item INT!VAR \verb+animation_overhand+ to the new overhand animation percentage.
+\item INT!VAR \verb+animation_backhand+ to the new backhand animation percentage.
+\item INT!VAR \verb+animation_thrust+ to the new thrust animation percentage.
+\item INT!VAR \verb+arrow+ to the new arrow qualifier.
+\item INT!VAR \verb+bolt+ to the new bolt qualifier.
+\item INT!VAR \verb+bullet+ to the new bullet qualifier.
+\item INT!VAR \verb+flag_strength+ to the new value of the flag known as \t{add strength bonus} (bit 0).
+\item INT!VAR \verb+flag_break+ to the new value of the flag known as \t{breakable} (bit 1).
+\item INT!VAR \verb+flag_strength_damage+ to the new value of the flag known as \t{add strength bonus to damage only} (bit 2). This flag is not available in all games.
+\item INT!VAR \verb+flag_strength_thac0+ to the new value of the flag known as \t{add strength bonus to THAC0 only} (bit 3). This flag is not available in all games.
+\item INT!VAR \verb+flag_hostile+ to the new value of the flag known as \t{hostile} (bit 10).
+\item INT!VAR \verb+flag_recharge+ to the new value of the flag known as \t{recharges} (bit 11).
+\item INT!VAR \verb+flag_bypass+ to the new value of the flag known as \t{bypass armor} (bit 16). This flag is not available in all games.
+\item INT!VAR \verb+flag_keenedge+ to the new value of the flag known as \t{keen edge} (bit 17). This flag is not available in all games.
+\item INT!VAR \verb+flag_backstab+ to the new value of the flag known as \t{toggle backstab} (bit 25). This flag is not available in all games.
+\item INT!VAR \verb+flag_noinvisible+ to the new value of the flag known as \t{cannot target invisible} (bit 26). This flag is not available in all games.
+\item STR!VAR \verb+icon+ to the resource reference to be used for matching if \verb+match_icon+ is 1, or the new ability icon if \verb+match_icon+ is 0.
 \end{itemize}
 \\
 
@@ -9436,7 +9454,7 @@ Note that both \verb+check_globals+ and \verb+check_headers+ are 0 by default, s
 This function will delete one or more ability headers, along with all of their associated effects, and properly re-index the file.
 
 \begin{itemize}
-\item INT_VAR \verb+header_type+ to the header type to delete. If this variable is -1, all header types will be a match. (default 0)
+\item INT!VAR \verb+header_type+ to the header type to delete. If this variable is -1, all header types will be a match. (default 0)
 \end{itemize}
 \\
 
@@ -9444,28 +9462,28 @@ This function will delete one or more ability headers, along with all of their a
 
 The function will by default only check effects on headers. You can change this by changing the values of the variables \verb+check_globals+ and \verb+check_headers+. If you patch headers, you can further target by using type to target melee, ranged, or magical headers. \verb+match_opcode+ can be left at -1 to match all effects on your targeted range or targeted to a specific opcode. If the opcode itself needs to be changed, you can use \verb+match_opcode+ to target the existing effect and \verb+new_opcode+ as the new opcode to use. \verb+duration_high+ is an alternative to \verb+duration+, mainly for changing the overall duration of an item's effects. The idea is to allow you to mass patch effects to new durations while leaving the one-time only cosmetics and visuals--which are usual instant or only run for a few seconds--unchanged.
 \begin{itemize}
-\item INT_VAR \verb+check_globals+ to whether to check global effects (0 for no, 1 for yes). (default 0)
-\item INT_VAR \verb+check_headers+ to whether to check effects on extended headers (0 for no, 1 for yes). (default 1)
-\item INT_VAR \verb+header+ to the number of the ability header that should be altered. A value of 0 matches all headers. (default 0)
-\item INT_VAR \verb+header_type+ to which type of header that should be checked. If this variable is -1, all header types will be checked.
-\item INT_VAR \verb+match_opcode+ to which type of opcode to match. If this variable is -1, all opcodes are a match.
-\item INT_VAR \verb+new_opcode+ to the value the matched opcode should be changed into.
-\item INT_VAR \verb+target+ to the new target.
-\item INT_VAR \verb+power+ to the new power.
-\item INT_VAR \verb+parameter1+ to the new parameter1.
-\item INT_VAR \verb+parameter2+ to the new parameter2.
-\item INT_VAR \verb+timing+ to the new timing mode.
-\item INT_VAR \verb+resist_dispel+ to the new resist/dispel.
-\item INT_VAR \verb+duration+ to the new duration.
-\item INT_VAR \verb+duration_high+ to the new duration, but is only written if the existing duration is greater than 5.
-\item INT_VAR \verb+probability1+ to the new probability1 (the upper bound).
-\item INT_VAR \verb+probability2+ to the new probability2 (the lower bound).
-\item INT_VAR \verb+dicenumber+ to the new number of dice. This field is instead used for maximum hit-dice (HD) by some opcodes.
-\item INT_VAR \verb+dicesize+ to the new size of dice. This field is also instead for minimum hit-dice (HD) by some opcodes.
-\item INT_VAR \verb+savingthrow+ to the new saving-throw type.
-\item INT_VAR \verb+savebonus+ to the new saving-throw bonus/penalty. This variable can take negative values down to -10 while still writing to the corresponding field. (default -11)
-\item INT_VAR \verb+special+ to the new special parameter.
-\item STR_VAR \verb+resource+ to the new resource reference.
+\item INT!VAR \verb+check_globals+ to whether to check global effects (0 for no, 1 for yes). (default 0)
+\item INT!VAR \verb+check_headers+ to whether to check effects on extended headers (0 for no, 1 for yes). (default 1)
+\item INT!VAR \verb+header+ to the number of the ability header that should be altered. A value of 0 matches all headers. (default 0)
+\item INT!VAR \verb+header_type+ to which type of header that should be checked. If this variable is -1, all header types will be checked.
+\item INT!VAR \verb+match_opcode+ to which type of opcode to match. If this variable is -1, all opcodes are a match.
+\item INT!VAR \verb+new_opcode+ to the value the matched opcode should be changed into.
+\item INT!VAR \verb+target+ to the new target.
+\item INT!VAR \verb+power+ to the new power.
+\item INT!VAR \verb+parameter1+ to the new parameter1.
+\item INT!VAR \verb+parameter2+ to the new parameter2.
+\item INT!VAR \verb+timing+ to the new timing mode.
+\item INT!VAR \verb+resist_dispel+ to the new resist/dispel.
+\item INT!VAR \verb+duration+ to the new duration.
+\item INT!VAR \verb+duration_high+ to the new duration, but is only written if the existing duration is greater than 5.
+\item INT!VAR \verb+probability1+ to the new probability1 (the upper bound).
+\item INT!VAR \verb+probability2+ to the new probability2 (the lower bound).
+\item INT!VAR \verb+dicenumber+ to the new number of dice. This field is instead used for maximum hit-dice (HD) by some opcodes.
+\item INT!VAR \verb+dicesize+ to the new size of dice. This field is also instead for minimum hit-dice (HD) by some opcodes.
+\item INT!VAR \verb+savingthrow+ to the new saving-throw type.
+\item INT!VAR \verb+savebonus+ to the new saving-throw bonus/penalty. This variable can take negative values down to -10 while still writing to the corresponding field. (default -11)
+\item INT!VAR \verb+special+ to the new special parameter.
+\item STR!VAR \verb+resource+ to the new resource reference.
 \end{itemize}
 \\
 
@@ -9474,24 +9492,24 @@ The function will by default only check effects on headers. You can change this 
 \verb+header_type+ is used to limit the scope of matching. The default value of -1 will match all types of headers while values of 0-4 will match headers with those values. If \verb+match_icon+ is 1, the icon resource reference will be match with the \verb+icon+ variable as an additional qualifier. This is useful for items which have multiple magic abilities. \verb+header+ can also be used to limit patching to the Nth header, counting from 1 as the first header. The default is 0, which will match all headers.
 
 \begin{itemize}
-\item INT_VAR \verb+header_type+ to the type of header to be matched. If this variable is -1, all headers will be a match. (default -1)
-\item INT_VAR \verb+match_icon+ to whether to match the ability icon (0 for no, 1 for yes). (default 0)
-\item INT_VAR \verb+header+ to the number of the ability header (starting from 1) that should be altered. A value of 0 matches all header. (default 0)
-\item INT_VAR \verb+new_header_type+ to the value the matched header should be changed into.
-\item INT_VAR \verb+location+ to the new new ability location.
-\item INT_VAR \verb+target+ to the new target.
-\item INT_VAR \verb+target_count+ to the new target count.
-\item INT_VAR \verb+range+ to the new range.
-\item INT_VAR \verb+min_level+ to the new required minimum level.
-\item INT_VAR \verb+speed+ to the new speed factor.
-\item INT_VAR \verb+thac0_bonus+ to the new THAC0 bonus.
-\item INT_VAR \verb+dicesize+ to the new dice size.
-\item INT_VAR \verb+dicenumber+ to the new number of dice.
-\item INT_VAR \verb+damage_bonus+ to the new damage bonus.
-\item INT_VAR \verb+damage_type+ to the new damage type.
-\item INT_VAR \verb+charges+ to the new number of charges.
-\item INT_VAR \verb+projectile+ to the new projectile.
-\item STR_VAR \verb+icon+ to the resource reference to be used for matching if \verb+match_icon+ is 1, or the new ability icon if \verb+match_icon+ is 0.
+\item INT!VAR \verb+header_type+ to the type of header to be matched. If this variable is -1, all headers will be a match. (default -1)
+\item INT!VAR \verb+match_icon+ to whether to match the ability icon (0 for no, 1 for yes). (default 0)
+\item INT!VAR \verb+header+ to the number of the ability header (starting from 1) that should be altered. A value of 0 matches all header. (default 0)
+\item INT!VAR \verb+new_header_type+ to the value the matched header should be changed into.
+\item INT!VAR \verb+location+ to the new new ability location.
+\item INT!VAR \verb+target+ to the new target.
+\item INT!VAR \verb+target_count+ to the new target count.
+\item INT!VAR \verb+range+ to the new range.
+\item INT!VAR \verb+min_level+ to the new required minimum level.
+\item INT!VAR \verb+speed+ to the new speed factor.
+\item INT!VAR \verb+thac0_bonus+ to the new THAC0 bonus.
+\item INT!VAR \verb+dicesize+ to the new dice size.
+\item INT!VAR \verb+dicenumber+ to the new number of dice.
+\item INT!VAR \verb+damage_bonus+ to the new damage bonus.
+\item INT!VAR \verb+damage_type+ to the new damage type.
+\item INT!VAR \verb+charges+ to the new number of charges.
+\item INT!VAR \verb+projectile+ to the new projectile.
+\item STR!VAR \verb+icon+ to the resource reference to be used for matching if \verb+match_icon+ is 1, or the new ability icon if \verb+match_icon+ is 0.
 \end{itemize}
 \\
 
@@ -9500,8 +9518,8 @@ The function will by default only check effects on headers. You can change this 
 This function will delete one or more ability headers, along with all of their associated effects, and properly re-index the file.
 
 \begin{itemize}
-\item INT_VAR \verb+header_type+ to the header type to delete. If this variable is -1, all header types will be a match. (default 0)
-\item INT_VAR \verb+min_level+ to the minimum level to be matched. If this variable is negative, it will not be used for matching. (default -1)
+\item INT!VAR \verb+header_type+ to the header type to delete. If this variable is -1, all header types will be a match. (default 0)
+\item INT!VAR \verb+min_level+ to the minimum level to be matched. If this variable is negative, it will not be used for matching. (default -1)
 \end{itemize}
 \\
 
@@ -9510,38 +9528,38 @@ This function will delete one or more ability headers, along with all of their a
 The first batch of variables are meta-variables which will help determine the scope of the function:
 
 \begin{itemize}
-\item INT_VAR \verb+check_globals+ to whether the function should loop through global effects on items (also known as equipping effects) and spells (default is 1). Creature effects are all global effects, so this variable will always be considered to be one when this function is run on a creature.
-\item INT_VAR \verb+check_headers+ to whether the function should loop through effects on extended headers on items and spells if set to 1 (default is 1). Creatures have no extended headers, so this variable is ignored when used on creatures.
-\item INT_VAR \verb+header+ to whether the function should target effects on one specific header, counting the first header as zero. A negative value will match all headers (default is -1). Creatures have no extended headers, so this variable is ignored when used on creatures.
-\item INT_VAR \verb+header_type+ to whether the function should only clone effects on extended headers of the specified type (1 - melee, 2 - ranged, etc.). Negative values will look at effects on all headers (default is -1). Creatures have no extended headers, so this variable is ignored when used on creatures.
-\item INT_VAR \verb+multi_match+ to the number of effects to clone in the active stack. If you just want to match the first effect and have the function stop, use 1. Otherwise the function will continue matching until the number of cloned effects matches this value. The function will always make at least one change (e.g. 0 or negative values are treated as 1). (default is 999).
-\item INT_VAR \verb+verbose+ to whether the function should provide some rudimentary information on how many effects were added (default is 0).
-\item INT_VAR \verb+silent+ to whether the function should suppress warnings when no effects were added. This option also suppresses the \t{verbose} option (default is 0).
-\item STR_VAR \verb+insert+ to the relative position the cloned effect should be inserted at. A value of 'below' puts the new, cloned effect immediately below the matched effect. Values of 'first' or last' will put the new effect at the top or bottom of the effect stack, respectively. All other values will default to 'above', where the effect is added immediately before the matched effect (default is 'above').
+\item INT!VAR \verb+check_globals+ to whether the function should loop through global effects on items (also known as equipping effects) and spells (default is 1). Creature effects are all global effects, so this variable will always be considered to be one when this function is run on a creature.
+\item INT!VAR \verb+check_headers+ to whether the function should loop through effects on extended headers on items and spells if set to 1 (default is 1). Creatures have no extended headers, so this variable is ignored when used on creatures.
+\item INT!VAR \verb+header+ to whether the function should target effects on one specific header, counting the first header as zero. A negative value will match all headers (default is -1). Creatures have no extended headers, so this variable is ignored when used on creatures.
+\item INT!VAR \verb+header_type+ to whether the function should only clone effects on extended headers of the specified type (1 - melee, 2 - ranged, etc.). Negative values will look at effects on all headers (default is -1). Creatures have no extended headers, so this variable is ignored when used on creatures.
+\item INT!VAR \verb+multi_match+ to the number of effects to clone in the active stack. If you just want to match the first effect and have the function stop, use 1. Otherwise the function will continue matching until the number of cloned effects matches this value. The function will always make at least one change (e.g. 0 or negative values are treated as 1). (default is 999).
+\item INT!VAR \verb+verbose+ to whether the function should provide some rudimentary information on how many effects were added (default is 0).
+\item INT!VAR \verb+silent+ to whether the function should suppress warnings when no effects were added. This option also suppresses the \t{verbose} option (default is 0).
+\item STR!VAR \verb+insert+ to the relative position the cloned effect should be inserted at. A value of 'below' puts the new, cloned effect immediately below the matched effect. Values of 'first' or last' will put the new effect at the top or bottom of the effect stack, respectively. All other values will default to 'above', where the effect is added immediately before the matched effect (default is 'above').
 \end{itemize}
 
 The next batch of variables sets the function boundaries on matching an effect to clone. Any variables not specified will not be used to determine a match. The function will only determine an effect is a match only if ALL of the variables specified are matched.
 
 \begin{itemize}
-\item INT_VAR \verb+match_opcode+ to the opcode of effects to be matched (default -1).
-\item INT_VAR \verb+match_target+ to the target of effects to be matched (default -1).
-\item INT_VAR \verb+match_power+ to the power of effects to be matched (default -1).
-\item INT_VAR \verb+match_parameter1+ to parameter1 of effects to be matched (default -1).
-\item INT_VAR \verb+match_parameter2+ to parameter2 of effects to be matched (default -1).
-\item INT_VAR \verb+match_timing+ to the timing of effects to be matched (default -1).
-\item INT_VAR \verb+match_resist_dispel+ to the resist/dispel setting of effects to be matched (default -1).
-\item INT_VAR \verb+match_duration+ to the duration of effects to be matched (default -1).
-\item INT_VAR \verb+match_probability1+ to probability1 (the upper bound) of effects to be matched (default -1).
-\item INT_VAR \verb+match_probability2+ to probability2 (the lower bound) of effects to be matched (default -1).
-\item INT_VAR \verb+match_dicenumber+ to the number of dice of effects to be matched (default -1). This field is instead used for maximum hit-dice (HD) by some opcodes.
-\item INT_VAR \verb+match_dicesize+ to the size of dice of effects to be matched (default -1). This field is used instead for minimum hit-dice (HD) by some opcodes.
-\item INT_VAR \verb+match_savingthrow+ to the saving throw type of effects to be matched (default -1).
-\item INT_VAR \verb+match_savebonus+ to the saving throw bonus of effects to be matched (default -11). Since saving throws can range into negative values, this variable can match all the way down to -10.
-\item INT_VAR \verb+match_special+  to the special field of effects to be matched (default -1). The special field is used by some EE effects.
-\item STR_VAR \verb+match_resource+ to the resource of effects to be matched (default "SAME").
+\item INT!VAR \verb+match_opcode+ to the opcode of effects to be matched (default -1).
+\item INT!VAR \verb+match_target+ to the target of effects to be matched (default -1).
+\item INT!VAR \verb+match_power+ to the power of effects to be matched (default -1).
+\item INT!VAR \verb+match_parameter1+ to parameter1 of effects to be matched (default -1).
+\item INT!VAR \verb+match_parameter2+ to parameter2 of effects to be matched (default -1).
+\item INT!VAR \verb+match_timing+ to the timing of effects to be matched (default -1).
+\item INT!VAR \verb+match_resist_dispel+ to the resist/dispel setting of effects to be matched (default -1).
+\item INT!VAR \verb+match_duration+ to the duration of effects to be matched (default -1).
+\item INT!VAR \verb+match_probability1+ to probability1 (the upper bound) of effects to be matched (default -1).
+\item INT!VAR \verb+match_probability2+ to probability2 (the lower bound) of effects to be matched (default -1).
+\item INT!VAR \verb+match_dicenumber+ to the number of dice of effects to be matched (default -1). This field is instead used for maximum hit-dice (HD) by some opcodes.
+\item INT!VAR \verb+match_dicesize+ to the size of dice of effects to be matched (default -1). This field is used instead for minimum hit-dice (HD) by some opcodes.
+\item INT!VAR \verb+match_savingthrow+ to the saving throw type of effects to be matched (default -1).
+\item INT!VAR \verb+match_savebonus+ to the saving throw bonus of effects to be matched (default -11). Since saving throws can range into negative values, this variable can match all the way down to -10.
+\item INT!VAR \verb+match_special+  to the special field of effects to be matched (default -1). The special field is used by some EE effects.
+\item STR!VAR \verb+match_resource+ to the resource of effects to be matched (default "SAME").
 \end{itemize}
 
-Once a matching effect is found, a new effect is created (STR_VAR
+Once a matching effect is found, a new effect is created (STR!VAR
 \verb+insert+ determines its placement) with all of the same
 specifications as the matched effect. The next series of variables
 allows the function to change the fields to new values in the
@@ -9551,22 +9569,22 @@ less than or equal to the default value, the new effect inherits the
 corresponding value of the matched effect.
 
 \begin{itemize}
-\item INT_VAR \verb+opcode+ to the value the of the new effect's opcode.
-\item INT_VAR \verb+target+ to the new effect's target.
-\item INT_VAR \verb+power+ to the new effect's power.
-\item INT_VAR \verb+parameter1+ to the new effect's parameter1.
-\item INT_VAR \verb+parameter2+ to the new effect's parameter2.
-\item INT_VAR \verb+timing+ to the new effect's timing mode.
-\item INT_VAR \verb+resist_dispel+ to the new effect's resist/dispel setting.
-\item INT_VAR \verb+duration+ to the new effect's duration.
-\item INT_VAR \verb+probability1+ to the new effect's probability1 (the upper bound).
-\item INT_VAR \verb+probability2+ to the new effect's probability2 (the lower bound).
-\item INT_VAR \verb+dicenumber+ to the new effect's number of dice. This field is instead used for maximum hit-dice (HD) by some opcodes.
-\item INT_VAR \verb+dicesize+ to the new effect's size of dice. This field is also instead for minimum hit-dice (HD) by some opcodes.
-\item INT_VAR \verb+savingthrow+ to the new effect's saving-throw type.
-\item INT_VAR \verb+savebonus+ to the new effect's saving-throw bonus/penalty. This variable can take negative values down to -10 while still writing to the corresponding field.
-\item INT_VAR \verb+special+ to the new effect's special field. The special field is used by many EE effects.
-\item STR_VAR \verb+resource+ to the new effect's resource reference.
+\item INT!VAR \verb+opcode+ to the value the of the new effect's opcode.
+\item INT!VAR \verb+target+ to the new effect's target.
+\item INT!VAR \verb+power+ to the new effect's power.
+\item INT!VAR \verb+parameter1+ to the new effect's parameter1.
+\item INT!VAR \verb+parameter2+ to the new effect's parameter2.
+\item INT!VAR \verb+timing+ to the new effect's timing mode.
+\item INT!VAR \verb+resist_dispel+ to the new effect's resist/dispel setting.
+\item INT!VAR \verb+duration+ to the new effect's duration.
+\item INT!VAR \verb+probability1+ to the new effect's probability1 (the upper bound).
+\item INT!VAR \verb+probability2+ to the new effect's probability2 (the lower bound).
+\item INT!VAR \verb+dicenumber+ to the new effect's number of dice. This field is instead used for maximum hit-dice (HD) by some opcodes.
+\item INT!VAR \verb+dicesize+ to the new effect's size of dice. This field is also instead for minimum hit-dice (HD) by some opcodes.
+\item INT!VAR \verb+savingthrow+ to the new effect's saving-throw type.
+\item INT!VAR \verb+savebonus+ to the new effect's saving-throw bonus/penalty. This variable can take negative values down to -10 while still writing to the corresponding field.
+\item INT!VAR \verb+special+ to the new effect's special field. The special field is used by many EE effects.
+\item STR!VAR \verb+resource+ to the new effect's resource reference.
 \end{itemize}
 \\
 
@@ -9575,33 +9593,33 @@ corresponding value of the matched effect.
 The first batch of variables are meta-variables which will help determine the scope of the function:
 
 \begin{itemize}
-\item INT_VAR \verb+check_globals+ to whether the function should loop through global effects on items (also known as equipping effects) and spells (default is 1). Creature effects are all global effects, so this variable will always be considered to be one when this function is run on a creature.
-\item INT_VAR \verb+check_headers+ to whether the function should loop through effects on extended headers on items and spells (default is 1). Creatures have no extended headers, so this variable is ignored when used on creatures.
-\item INT_VAR \verb+header+ to whether the function should target effects on one specific header, counting the first header as zero. A negative value will match all headers (default is -1). Creatures have no extended headers, so this variable is ignored when used on creatures.
-\item INT_VAR \verb+header_type+ to whether the function should only delete effects on extended headers of the specified type (1 - melee, 2 - ranged, etc.). Negative values will look at effects on all headers (default is -1). Creatures have no extended headers, so this variable is ignored when used on creatures.
-\item INT_VAR \verb+multi_match+ to the number of effects to delete in the active stack. If you just want to match the first effect and have the function stop, use 1. Otherwise the function will continue matching until the number of deleted effects matches this value. The function will always make at least one change (e.g. 0 or negative values are treated as 1). (default is 999).
-\item INT_VAR \verb+verbose+ to whether the function should provide some rudimentary information on how many effects were deleted (default is 0).
+\item INT!VAR \verb+check_globals+ to whether the function should loop through global effects on items (also known as equipping effects) and spells (default is 1). Creature effects are all global effects, so this variable will always be considered to be one when this function is run on a creature.
+\item INT!VAR \verb+check_headers+ to whether the function should loop through effects on extended headers on items and spells (default is 1). Creatures have no extended headers, so this variable is ignored when used on creatures.
+\item INT!VAR \verb+header+ to whether the function should target effects on one specific header, counting the first header as zero. A negative value will match all headers (default is -1). Creatures have no extended headers, so this variable is ignored when used on creatures.
+\item INT!VAR \verb+header_type+ to whether the function should only delete effects on extended headers of the specified type (1 - melee, 2 - ranged, etc.). Negative values will look at effects on all headers (default is -1). Creatures have no extended headers, so this variable is ignored when used on creatures.
+\item INT!VAR \verb+multi_match+ to the number of effects to delete in the active stack. If you just want to match the first effect and have the function stop, use 1. Otherwise the function will continue matching until the number of deleted effects matches this value. The function will always make at least one change (e.g. 0 or negative values are treated as 1). (default is 999).
+\item INT!VAR \verb+verbose+ to whether the function should provide some rudimentary information on how many effects were deleted (default is 0).
 \end{itemize}
 
 The next batch of variables sets the function boundaries on matching an effect to delete. Any variables not specified will not be used to determine a match. The function will only determine an effect is a match only if ALL of the variables specified are matched.
 
 \begin{itemize}
-\item INT_VAR \verb+match_opcode+ to the opcode of effects to be matched (default -1).
-\item INT_VAR \verb+match_target+ to the target of effects to be matched (default -1).
-\item INT_VAR \verb+match_power+ to the power of effects to be matched (default -1).
-\item INT_VAR \verb+match_parameter1+ to parameter1 of effects to be matched (default -1).
-\item INT_VAR \verb+match_parameter2+ to parameter2 of effects to be matched (default -1).
-\item INT_VAR \verb+match_timing+ to the timing of effects to be matched (default -1).
-\item INT_VAR \verb+match_resist_dispel+ to the resist/dispel setting of effects to be matched (default -1).
-\item INT_VAR \verb+match_duration+ to the duration of effects to be matched (default -1).
-\item INT_VAR \verb+match_probability1+ to probability1 (the upper bound) of effects to be matched (default -1).
-\item INT_VAR \verb+match_probability2+ to probability2 (the lower bound) of effects to be matched (default -1).
-\item INT_VAR \verb+match_dicenumber+ to the number of dice of effects to be matched (default -1). This field is instead used for maximum hit-dice (HD) by some opcodes.
-\item INT_VAR \verb+match_dicesize+ to the size of dice of effects to be matched (default -1). This field is used instead for minimum hit-dice (HD) by some opcodes.
-\item INT_VAR \verb+match_savingthrow+ to the saving throw type of effects to be matched (default -1).
-\item INT_VAR \verb+match_savebonus+ to the saving throw bonus effects to be matched (default -11). Since saving throws can range into negative values, this variable can match all the way down to -10.
-\item INT_VAR \verb+match_special+  to the special field of effects to be matched (default -1). The special field is used by some EE effects.
-\item STR_VAR \verb+match_resource+ to the resource of effects to be matched (default "SAME").
+\item INT!VAR \verb+match_opcode+ to the opcode of effects to be matched (default -1).
+\item INT!VAR \verb+match_target+ to the target of effects to be matched (default -1).
+\item INT!VAR \verb+match_power+ to the power of effects to be matched (default -1).
+\item INT!VAR \verb+match_parameter1+ to parameter1 of effects to be matched (default -1).
+\item INT!VAR \verb+match_parameter2+ to parameter2 of effects to be matched (default -1).
+\item INT!VAR \verb+match_timing+ to the timing of effects to be matched (default -1).
+\item INT!VAR \verb+match_resist_dispel+ to the resist/dispel setting of effects to be matched (default -1).
+\item INT!VAR \verb+match_duration+ to the duration of effects to be matched (default -1).
+\item INT!VAR \verb+match_probability1+ to probability1 (the upper bound) of effects to be matched (default -1).
+\item INT!VAR \verb+match_probability2+ to probability2 (the lower bound) of effects to be matched (default -1).
+\item INT!VAR \verb+match_dicenumber+ to the number of dice of effects to be matched (default -1). This field is instead used for maximum hit-dice (HD) by some opcodes.
+\item INT!VAR \verb+match_dicesize+ to the size of dice of effects to be matched (default -1). This field is used instead for minimum hit-dice (HD) by some opcodes.
+\item INT!VAR \verb+match_savingthrow+ to the saving throw type of effects to be matched (default -1).
+\item INT!VAR \verb+match_savebonus+ to the saving throw bonus effects to be matched (default -11). Since saving throws can range into negative values, this variable can match all the way down to -10.
+\item INT!VAR \verb+match_special+  to the special field of effects to be matched (default -1). The special field is used by some EE effects.
+\item STR!VAR \verb+match_resource+ to the resource of effects to be matched (default "SAME").
 \end{itemize}
 
 Once a matching effect is found it is deleted. The function will continue to delete effects from the stack until the number of effects deleted matches the \verb+multi_match+ variable.\\
@@ -9612,34 +9630,34 @@ Once a matching effect is found it is deleted. The function will continue to del
 The first batch of variables are meta-variables which will help determine the scope of the function:
 
 \begin{itemize}
-\item INT_VAR \verb+check_globals+ to whether the function should loop through global effects on items (also known as equipping effects) and spells (default is 1). Creature effects are all global effects, so this variable will always be considered to be one when this function is run on a creature.
-\item INT_VAR \verb+check_headers+ to whether the function should loop through effects on extended headers on items and spells (default is 1). Creatures have no extended headers, so this variable is ignored when used on creatures.
-\item INT_VAR \verb+header+ to whether the function should target effects on one specific header, counting the first header as zero. A negative value will match all headers (default is -1). Creatures have no extended headers, so this variable is ignored when used on creatures.
-\item INT_VAR \verb+header_type+ to whether the function should only alter effects on extended headers of the specified type (1 - melee, 2 - ranged, etc.). Negative values will look at effects on all headers (default is -1). Creatures have no extended headers, so this variable is ignored when used on creatures.
-\item INT_VAR \verb+multi_match+ to the number of effects to alter in the active stack. If you just want to match the first effect and have the function stop, use 1. Otherwise the function will continue matching until the number of altered effects matches this value. The function will always make at least one change (e.g. 0 or negative values are treated as 1). (default is 999).
-\item INT_VAR \verb+verbose+ to whether the function should provide some rudimentary information on how many effects were added (default is 0).
-\item INT_VAR \verb+silent+ to whether the function should suppress warnings when no effects were altered. This option also suppresses the \t{verbose} option (default is 0).
+\item INT!VAR \verb+check_globals+ to whether the function should loop through global effects on items (also known as equipping effects) and spells (default is 1). Creature effects are all global effects, so this variable will always be considered to be one when this function is run on a creature.
+\item INT!VAR \verb+check_headers+ to whether the function should loop through effects on extended headers on items and spells (default is 1). Creatures have no extended headers, so this variable is ignored when used on creatures.
+\item INT!VAR \verb+header+ to whether the function should target effects on one specific header, counting the first header as zero. A negative value will match all headers (default is -1). Creatures have no extended headers, so this variable is ignored when used on creatures.
+\item INT!VAR \verb+header_type+ to whether the function should only alter effects on extended headers of the specified type (1 - melee, 2 - ranged, etc.). Negative values will look at effects on all headers (default is -1). Creatures have no extended headers, so this variable is ignored when used on creatures.
+\item INT!VAR \verb+multi_match+ to the number of effects to alter in the active stack. If you just want to match the first effect and have the function stop, use 1. Otherwise the function will continue matching until the number of altered effects matches this value. The function will always make at least one change (e.g. 0 or negative values are treated as 1). (default is 999).
+\item INT!VAR \verb+verbose+ to whether the function should provide some rudimentary information on how many effects were added (default is 0).
+\item INT!VAR \verb+silent+ to whether the function should suppress warnings when no effects were altered. This option also suppresses the \t{verbose} option (default is 0).
 \end{itemize}
 
 The next batch of variables sets the function boundaries on matching an effect to alter. Any variables not specified will not be used to determine a match. The function will only determine an effect is a match only if ALL of the variables specified are matched.
 
 \begin{itemize}
-\item INT_VAR \verb+match_opcode+ to the opcode of effects to be matched (default is -1).
-\item INT_VAR \verb+match_target+ to the target of effects to be matched (default is -1).
-\item INT_VAR \verb+match_power+ to the power of effects to be matched (default is -1).
-\item INT_VAR \verb+match_parameter1+ to parameter1 of effects to be matched (default is -1).
-\item INT_VAR \verb+match_parameter2+ to parameter2 of effects to be matched (default is -1).
-\item INT_VAR \verb+match_timing+ to the timing of effects to be matched (default is -1).
-\item INT_VAR \verb+match_resist_dispel+ to the resist/dispel setting of effects to be matched (default is -1).
-\item INT_VAR \verb+match_duration+ to the duration of effects to be matched (default is -1).
-\item INT_VAR \verb+match_probability1+ to probability1 (the upper bound) of effects to be matched (default is -1).
-\item INT_VAR \verb+match_probability2+ to probability2 (the lower bound) of effects to be matched (default is -1).
-\item INT_VAR \verb+match_dicenumber+ to the number of dice of effects to be matched (default is -1). This field is instead used for maximum hit-dice (HD) by some opcodes.
-\item INT_VAR \verb+match_dicesize+ to the size of dice of effects to be matched (default is -1). This field is used instead for minimum hit-dice (HD) by some opcodes.
-\item INT_VAR \verb+match_savingthrow+ to the saving throw type of effects to be matched (default is -1).
-\item INT_VAR \verb+match_savebonus+ to the saving trow bonus effects to be matched (default is -11). Since saving throws can range into negative values, this variable can match all the way down to -10.
-\item INT_VAR \verb+match_special+ to the special field of effects to be matched (default is -1). The special field is used by some EE effects.
-\item STR_VAR \verb+match_resource+ to the resource of effects to be matched (default is "SAME").
+\item INT!VAR \verb+match_opcode+ to the opcode of effects to be matched (default is -1).
+\item INT!VAR \verb+match_target+ to the target of effects to be matched (default is -1).
+\item INT!VAR \verb+match_power+ to the power of effects to be matched (default is -1).
+\item INT!VAR \verb+match_parameter1+ to parameter1 of effects to be matched (default is -1).
+\item INT!VAR \verb+match_parameter2+ to parameter2 of effects to be matched (default is -1).
+\item INT!VAR \verb+match_timing+ to the timing of effects to be matched (default is -1).
+\item INT!VAR \verb+match_resist_dispel+ to the resist/dispel setting of effects to be matched (default is -1).
+\item INT!VAR \verb+match_duration+ to the duration of effects to be matched (default is -1).
+\item INT!VAR \verb+match_probability1+ to probability1 (the upper bound) of effects to be matched (default is -1).
+\item INT!VAR \verb+match_probability2+ to probability2 (the lower bound) of effects to be matched (default is -1).
+\item INT!VAR \verb+match_dicenumber+ to the number of dice of effects to be matched (default is -1). This field is instead used for maximum hit-dice (HD) by some opcodes.
+\item INT!VAR \verb+match_dicesize+ to the size of dice of effects to be matched (default is -1). This field is used instead for minimum hit-dice (HD) by some opcodes.
+\item INT!VAR \verb+match_savingthrow+ to the saving throw type of effects to be matched (default is -1).
+\item INT!VAR \verb+match_savebonus+ to the saving trow bonus effects to be matched (default is -11). Since saving throws can range into negative values, this variable can match all the way down to -10.
+\item INT!VAR \verb+match_special+ to the special field of effects to be matched (default is -1). The special field is used by some EE effects.
+\item STR!VAR \verb+match_resource+ to the resource of effects to be matched (default is "SAME").
 \end{itemize}
 
 Once a matching effect is found, the next series of variables allows
@@ -9650,22 +9668,22 @@ fields if the value of the corresponding value is less than or equal
 to the default value.
 
 \begin{itemize}
-\item INT_VAR \verb+opcode+ to the value the of the altered effect's opcode.
-\item INT_VAR \verb+target+ to the altered effect's target.
-\item INT_VAR \verb+power+ to the altered effect's power.
-\item INT_VAR \verb+parameter1+ to the altered effect's parameter1.
-\item INT_VAR \verb+parameter2+ to the altered effect's parameter2.
-\item INT_VAR \verb+timing+ to the altered effect's timing mode.
-\item INT_VAR \verb+resist_dispel+ to the altered effect's resist/dispel setting.
-\item INT_VAR \verb+duration+ to the altered effect's duration.
-\item INT_VAR \verb+probability1+ to the altered effect's probability1 (the upper bound).
-\item INT_VAR \verb+probability2+ to the altered effect's probability2 (the lower bound).
-\item INT_VAR \verb+dicenumber+ to the altered effect's number of dice. This field is instead used for maximum hit-dice (HD) by some opcodes.
-\item INT_VAR \verb+dicesize+ to the altered effect's size of dice. This field is also instead for minimum hit-dice (HD) by some opcodes.
-\item INT_VAR \verb+savingthrow+ to the altered effect's saving-throw type.
-\item INT_VAR \verb+savebonus+ to the altered effect's saving-throw bonus/penalty. This variable can take negative values down to -10 while still writing to the corresponding field.
-\item INT_VAR \verb+special+ to the new effect's special field. The special field is used by many EE effects.
-\item STR_VAR \verb+resource+ to the altered effect's resource reference.
+\item INT!VAR \verb+opcode+ to the value the of the altered effect's opcode.
+\item INT!VAR \verb+target+ to the altered effect's target.
+\item INT!VAR \verb+power+ to the altered effect's power.
+\item INT!VAR \verb+parameter1+ to the altered effect's parameter1.
+\item INT!VAR \verb+parameter2+ to the altered effect's parameter2.
+\item INT!VAR \verb+timing+ to the altered effect's timing mode.
+\item INT!VAR \verb+resist_dispel+ to the altered effect's resist/dispel setting.
+\item INT!VAR \verb+duration+ to the altered effect's duration.
+\item INT!VAR \verb+probability1+ to the altered effect's probability1 (the upper bound).
+\item INT!VAR \verb+probability2+ to the altered effect's probability2 (the lower bound).
+\item INT!VAR \verb+dicenumber+ to the altered effect's number of dice. This field is instead used for maximum hit-dice (HD) by some opcodes.
+\item INT!VAR \verb+dicesize+ to the altered effect's size of dice. This field is also instead for minimum hit-dice (HD) by some opcodes.
+\item INT!VAR \verb+savingthrow+ to the altered effect's saving-throw type.
+\item INT!VAR \verb+savebonus+ to the altered effect's saving-throw bonus/penalty. This variable can take negative values down to -10 while still writing to the corresponding field.
+\item INT!VAR \verb+special+ to the new effect's special field. The special field is used by many EE effects.
+\item STR!VAR \verb+resource+ to the altered effect's resource reference.
 \end{itemize}
 \\
 
@@ -9673,9 +9691,9 @@ to the default value.
 
 The function will fail with an error if either \verb+start+ or \verb+length+ are negative or if any of \verb+start+, \verb+length+ or the sum of the two is greater than the length of \verb+string+.
 \begin{itemize}
-\item INT_VAR \verb+start+ to the string index (0 based) from which the start of the substring should be read.
-\item INT_VAR \verb+length+ to the length of the substring to be read.
-\item STR_VAR \verb+string+ to the string the substring should be read from.
+\item INT!VAR \verb+start+ to the string index (0 based) from which the start of the substring should be read.
+\item INT!VAR \verb+length+ to the length of the substring to be read.
+\item STR!VAR \verb+string+ to the string the substring should be read from.
 \item RET \verb+substring+ the substring read from the provided string.
 \end{itemize}
 \\
@@ -9684,9 +9702,9 @@ The function will fail with an error if either \verb+start+ or \verb+length+ are
 
 The function will fail with an error if the file being patched does not have a signature (first 3 bytes) that case-sensitively equals \t{CRE}, if either \verb+offset_start+ or \verb+offset_end+ are negative, if \verb+offset_end+ is less than \verb+offset_start+ or if \verb+offset_end+ is greater than the size of the file being patched.
 \begin{itemize}
-\item INT_VAR \verb+offset_start+ to the offset from which the search for an empty slot should start. (default \verb+SCRIPT_OVERRIDE+)
-\item INT_VAR \verb+offset_end+ to the offset at which the search should end. (default \verb+SCRIPT_DEFAULT+)
-\item STR_VAR \verb+script+ to the resource reference of the script to be assigned.
+\item INT!VAR \verb+offset_start+ to the offset from which the search for an empty slot should start. (default \verb+SCRIPT_OVERRIDE+)
+\item INT!VAR \verb+offset_end+ to the offset at which the search should end. (default \verb+SCRIPT_DEFAULT+)
+\item STR!VAR \verb+script+ to the resource reference of the script to be assigned.
 \item RET \verb+success+ a return value indicating whether the script was successfully assigned. 1 signifies success and 0 signifies that no empty slot was found. A harmless warning will be printed if the function was unsuccessful.
 \end{itemize}
 \\
@@ -9702,12 +9720,12 @@ If the audio files need to be decompressed, this function will use oggdec.exe on
 If the decompression utility cannot be found, the user is warned that the audio files were not installed.
 
 \begin{itemize}
-\item INT_VAR \verb+music+ if this variable is not 0 and the game is BG:EE, the audio files are given the extension .acm instead of .wav. This variable has no effect if the game is not BG:EE. By default its value is 0.
-\item INT_VAR \verb+quiet+ if this variable is 1, the function will suppress output from oggdec and sox. By default this is 0.
-\item STR_VAR \verb+audio_path+ to the path your .ogg files are stored in. By default this variable is \verb+~%MOD_FOLDER%/audio~+.
-\item STR_VAR \verb+oggdec_path+ to the path oggdec is located in. By default this variable is \verb+~%audio_path%~+.
-\item STR_VAR \verb+sox_path+ to the path SoX is located in. By default this variable is \verb+~%audio_path%~+.
-\item STR_VAR \verb+output_path+ to the path the audio should be installed into. By default this variable is \t{override}.
+\item INT!VAR \verb+music+ if this variable is not 0 and the game is BG:EE, the audio files are given the extension .acm instead of .wav. This variable has no effect if the game is not BG:EE. By default its value is 0.
+\item INT!VAR \verb+quiet+ if this variable is 1, the function will suppress output from oggdec and sox. By default this is 0.
+\item STR!VAR \verb+audio_path+ to the path your .ogg files are stored in. By default this variable is \verb+~%MOD_FOLDER%/audio~+.
+\item STR!VAR \verb+oggdec_path+ to the path oggdec is located in. By default this variable is \verb+~%audio_path%~+.
+\item STR!VAR \verb+sox_path+ to the path SoX is located in. By default this variable is \verb+~%audio_path%~+.
+\item STR!VAR \verb+output_path+ to the path the audio should be installed into. By default this variable is \t{override}.
 \end{itemize}
 \\
 
@@ -9720,9 +9738,9 @@ This function expects to find tisunpack for one or more of Windows, OS\begin{raw
 If tisunpack for the user's platform could not be found, the installation fails.
 
 \begin{itemize}
-\item STR_VAR \verb+tiz_path+ to the path your .tiz files are stored in. By default this variable is \verb+~%MOD_FOLDER%/tiz~+.
-\item STR_VAR \verb+tisunpack_path+ to the common directory where the subdirectories \t{win32}, \t{osx} and \t{unix} are located. By default this variable is \verb+~%tiz_path%~+.
-\item STR_VAR \verb+output_path+ to the path the tilesets should be installed into. By default this variable is \t{override}.
+\item STR!VAR \verb+tiz_path+ to the path your .tiz files are stored in. By default this variable is \verb+~%MOD_FOLDER%/tiz~+.
+\item STR!VAR \verb+tisunpack_path+ to the common directory where the subdirectories \t{win32}, \t{osx} and \t{unix} are located. By default this variable is \verb+~%tiz_path%~+.
+\item STR!VAR \verb+output_path+ to the path the tilesets should be installed into. By default this variable is \t{override}.
 \end{itemize}
 \\
 
@@ -9737,20 +9755,20 @@ In order to function, \verb+HANDLE_CHARSETS+ needs to know a few things. First, 
 Unless \verb+convert_array+ is specified, \verb+HANDLE_CHARSETS+ will recursively convert all \t{TRA} files in \verb+tra_path+ except those listed in \verb+noconvert_array+. If \verb+convert_array+ is specified, only those \t{TRA} files listed in the array will be converted. \verb+convert_array+ may contain references to \t{TRA} files in subdirectories of \verb+tra_path+.
 
 \begin{itemize}
-\item INT_VAR \verb+infer_charsets+ to whether \verb+HANDLE_CHARSETS+ should try to infer which language-dependent character set is used by the language in which the mod is being installed. It uses the contents of the \t{\%language\%} variable (\textit{vide infra}). If the contents of the variable can be recognised, \verb+HANDLE_CHARSETS+ will use the character set used by the localised version of BG2 for this language. If the contents of the variable cannot be recognised, or if the \t{TRA} files use a different character set than the expected one, \verb+HANDLE_CHARSETS+ will fail. Refer to the compatibility matrix below for additional information. \verb+infer_charsets+ overrides \verb+charset_table+. Defaults to 0.
-\item INT_VAR \verb+from_utf8+ to whether the function should assume the source \t{TRA} files are in UTF-8 or not. The default value is 0, that is, the function assumes the \t{TRA} files use language-dependent charater sets and should be converted into UTF-8 when the mod is installed on EE-type games; the function produces no results on the original editions of the games. If set to 1, the source \t{TRA} files are assumed to be in UTF-8 and are to be converted into language-dependent character sets when the mod is installed on original editions of the games; the function produces no results when installed on EE-type games.
-\item INT_VAR \verb+verbose+ to whether the function should print debug information. Defaults to 0.
-\item STR_VAR \verb+language+ to the name of the language directory you wish to convert. The default value of this variable is \t{\%LANGUAGE\%}, in other words, the directory corresponding to the language the user selected at the start of the installation. You should never need to alter the value of this variable.
-\item STR_VAR \verb+default_language+ to the name of the directory used by the default language of your mod, if your mod has one. The default language is typically one for which the translation is always complete and up to date and which you use to guard against incomplete translations. \verb+HANDLE_CHARSETS+ will convert the \t{TRA} files of the default language in addition to those of the user-selected language. Should these two languages be the same, the \t{TRA} files will only be converted once. Additionally, any \t{TRA} files listed in the \verb+reload_array+ (\textit{vide infra}) will be reloaded for the default language before they are reloaded for the user-selected language. The default value of this variable is \verb+~~+ (the empty string).
-\item STR_VAR \verb+tra_path+ to the path where your mod's language directories are located. \verb+%tra_path%/%language%+ should be a valid directory containing \t{TRA} files.
-\item STR_VAR \verb+out_path+ to the path to which the converted files should be directed. The default value of this variable is \verb+%tra_path%+, that is, the converted files reversibly overwrite the originals and the conversion is transparent to the rest of your mod. Note that if \verb+%tra_path+ and \verb+out_path+ are the same directory, the conversion will naturally happen only once regardless of how many times \verb+HANDLE_CHARSETS+ are invoked, but if the directories are different, the conversion will happen for every invocation (notably, if \verb+HANDLE_CHARSETS+ is invoked among the \ttref{ALWAYS} actions).
-\item STR_VAR \verb+iconv_path+ to the path where iconv.exe is located. Defaults to \verb+%tra_path%/iconv+.
-\item STR_VAR \verb+charset_table+ to the name of an associative array where the keys are the names of your language directories and the corresponding values are the character sets used by the respective language. The keys must be entirely in lowercase. \verb+charset_table+ is not used if you also specify \verb+infer_charsets+.
-\item STR_VAR \verb+noconvert_array+ to the name of an array indexed by monotonically increasing integers starting from 0. The values should be the names of \t{TRA} files that should not be converted into \t{UTF-8}. All \t{TRA} files in the language directory and its subdirectories except the ones listed in \verb+noconvert_array+ will be converted. The .tra file extension is optional. This variable should not be provided if you also provide \verb+convert_array+.
-\item STR_VAR \verb+convert_array+ to the name of an array indexed by monotonically increasing integers starting from 0. The values should be the names of \t{TRA} files that should be converted into \t{UTF-8}. Only those \t{TRA} files in the language directory or its subdirectories which are listed in \verb+convert_array+ will be converted. The .tra file extension is optional. If this variable is provided, \verb+noconvert_array+ will not be used.
-\item STR_VAR \verb+reload_array+ to the name of an array indexed by monotonically increasing integers starting from 0. The values should be the names of \t{TRA} files which should be reloaded after they have been converted. The .tra file extension is optional. You should use this variable for reloading those \t{TRA} files loaded by \ttref{LANGUAGE} which should also be converted.
-\item STR_VAR \verb+exclude_directories+ to the name of an array indexed by monotonically increasing integers starting from 0. The values should be the names of directories whose contents should not be converted. The directories should be subdirectories within \verb+%tra_path%/%language%+ or its subdirectories. Only the directory name itself should be specified, not its path.
-\item STR_VAR \verb+file_regexp+ to a regexp expression with the file names that must be converted. Defaults to \verb+~+\t{.+\textbackslash.tra}\verb+~+.
+\item INT!VAR \verb+infer_charsets+ to whether \verb+HANDLE_CHARSETS+ should try to infer which language-dependent character set is used by the language in which the mod is being installed. It uses the contents of the \t{\%language\%} variable (\textit{vide infra}). If the contents of the variable can be recognised, \verb+HANDLE_CHARSETS+ will use the character set used by the localised version of BG2 for this language. If the contents of the variable cannot be recognised, or if the \t{TRA} files use a different character set than the expected one, \verb+HANDLE_CHARSETS+ will fail. Refer to the compatibility matrix below for additional information. \verb+infer_charsets+ overrides \verb+charset_table+. Defaults to 0.
+\item INT!VAR \verb+from_utf8+ to whether the function should assume the source \t{TRA} files are in UTF-8 or not. The default value is 0, that is, the function assumes the \t{TRA} files use language-dependent charater sets and should be converted into UTF-8 when the mod is installed on EE-type games; the function produces no results on the original editions of the games. If set to 1, the source \t{TRA} files are assumed to be in UTF-8 and are to be converted into language-dependent character sets when the mod is installed on original editions of the games; the function produces no results when installed on EE-type games.
+\item INT!VAR \verb+verbose+ to whether the function should print debug information. Defaults to 0.
+\item STR!VAR \verb+language+ to the name of the language directory you wish to convert. The default value of this variable is \t{\%LANGUAGE\%}, in other words, the directory corresponding to the language the user selected at the start of the installation. You should never need to alter the value of this variable.
+\item STR!VAR \verb+default_language+ to the name of the directory used by the default language of your mod, if your mod has one. The default language is typically one for which the translation is always complete and up to date and which you use to guard against incomplete translations. \verb+HANDLE_CHARSETS+ will convert the \t{TRA} files of the default language in addition to those of the user-selected language. Should these two languages be the same, the \t{TRA} files will only be converted once. Additionally, any \t{TRA} files listed in the \verb+reload_array+ (\textit{vide infra}) will be reloaded for the default language before they are reloaded for the user-selected language. The default value of this variable is \verb+~~+ (the empty string).
+\item STR!VAR \verb+tra_path+ to the path where your mod's language directories are located. \verb+%tra_path%/%language%+ should be a valid directory containing \t{TRA} files.
+\item STR!VAR \verb+out_path+ to the path to which the converted files should be directed. The default value of this variable is \verb+%tra_path%+, that is, the converted files reversibly overwrite the originals and the conversion is transparent to the rest of your mod. Note that if \verb+%tra_path+ and \verb+out_path+ are the same directory, the conversion will naturally happen only once regardless of how many times \verb+HANDLE_CHARSETS+ are invoked, but if the directories are different, the conversion will happen for every invocation (notably, if \verb+HANDLE_CHARSETS+ is invoked among the \ttref{ALWAYS} actions).
+\item STR!VAR \verb+iconv_path+ to the path where iconv.exe is located. Defaults to \verb+%tra_path%/iconv+.
+\item STR!VAR \verb+charset_table+ to the name of an associative array where the keys are the names of your language directories and the corresponding values are the character sets used by the respective language. The keys must be entirely in lowercase. \verb+charset_table+ is not used if you also specify \verb+infer_charsets+.
+\item STR!VAR \verb+noconvert_array+ to the name of an array indexed by monotonically increasing integers starting from 0. The values should be the names of \t{TRA} files that should not be converted into \t{UTF-8}. All \t{TRA} files in the language directory and its subdirectories except the ones listed in \verb+noconvert_array+ will be converted. The .tra file extension is optional. This variable should not be provided if you also provide \verb+convert_array+.
+\item STR!VAR \verb+convert_array+ to the name of an array indexed by monotonically increasing integers starting from 0. The values should be the names of \t{TRA} files that should be converted into \t{UTF-8}. Only those \t{TRA} files in the language directory or its subdirectories which are listed in \verb+convert_array+ will be converted. The .tra file extension is optional. If this variable is provided, \verb+noconvert_array+ will not be used.
+\item STR!VAR \verb+reload_array+ to the name of an array indexed by monotonically increasing integers starting from 0. The values should be the names of \t{TRA} files which should be reloaded after they have been converted. The .tra file extension is optional. You should use this variable for reloading those \t{TRA} files loaded by \ttref{LANGUAGE} which should also be converted.
+\item STR!VAR \verb+exclude_directories+ to the name of an array indexed by monotonically increasing integers starting from 0. The values should be the names of directories whose contents should not be converted. The directories should be subdirectories within \verb+%tra_path%/%language%+ or its subdirectories. Only the directory name itself should be specified, not its path.
+\item STR!VAR \verb+file_regexp+ to a regexp expression with the file names that must be converted. Defaults to \verb+~+\t{.+\textbackslash.tra}\verb+~+.
 \end{itemize}
 
 Compatibility matrix for \verb+infer_charsets+.
@@ -9758,18 +9776,18 @@ Compatibility matrix for \verb+infer_charsets+.
 \hline
 Language & \verb+%LANGUAGE%+ contains & Inferred character set \\
 \hline
-Simplified Chinese & schinese, zh_CN & CP936 \\
+Simplified Chinese & schinese, zh!CN & CP936 \\
 Traditional Chinese & tchinese & CP950 \\
-Czech & czech, cs_CZ & CP1250 \\
-English & english, american, en_US & CP1252 \\
-French & french, francais, fr_FR & CP1252 \\
-German & german, deutsch, de_DE & CP1252 \\
-Italian & italian, italiano, it_IT & CP1252 \\
-Japanese & japanese, ja_JP & CP932 \\
-Korean & korean, ko_KR & CP949 \\
-Polish & polish, polski, pl_PL & CP1250 \\
-Russian & russian, ru_RU & CP1251 \\
-Spanish & spanish, castilian, espanol, castellano, es_ES & CP1252 \\
+Czech & czech, cs!CZ & CP1250 \\
+English & english, american, en!US & CP1252 \\
+French & french, francais, fr!FR & CP1252 \\
+German & german, deutsch, de!DE & CP1252 \\
+Italian & italian, italiano, it!IT & CP1252 \\
+Japanese & japanese, ja!JP & CP932 \\
+Korean & korean, ko!KR & CP949 \\
+Polish & polish, polski, pl!PL & CP1250 \\
+Russian & russian, ru!RU & CP1251 \\
+Spanish & spanish, castilian, espanol, castellano, es!ES & CP1252 \\
 \hline
 \end{tabular}
 \\
@@ -9779,9 +9797,9 @@ Spanish & spanish, castilian, espanol, castellano, es_ES & CP1252 \\
 This function will delete links from one specified area to another. Links can be deleted from all four directional nodes (north, east, south, west) or from a specific node. Links connecting the areas in the opposite direction will not be deleted.
 
 \begin{itemize}
-\item STR_VAR \verb+from_area+ to the area from which the links that are to be deleted originate.
-\item STR_VAR \verb+from_node+ to the directional node from which the links that are to be deleted originate. Legal values for this variable are ``north'', ``n'', ``east'', ``e'', ``south'', ``s'', ``west'', ``w''. Values are not case sensitive. Links are deleted from all four nodes by default.
-\item STR_VAR \verb+to_area+ to the area to which the links that are to be deleted lead.
+\item STR!VAR \verb+from_area+ to the area from which the links that are to be deleted originate.
+\item STR!VAR \verb+from_node+ to the directional node from which the links that are to be deleted originate. Legal values for this variable are ``north'', ``n'', ``east'', ``e'', ``south'', ``s'', ``west'', ``w''. Values are not case sensitive. Links are deleted from all four nodes by default.
+\item STR!VAR \verb+to_area+ to the area to which the links that are to be deleted lead.
 \end{itemize}
 \\
 
@@ -9790,18 +9808,18 @@ This function will delete links from one specified area to another. Links can be
 This function add links from one specified area to another. Links can be added from all four directional nodes (north, east, south, west) or from a specific node. If a link already exists, its metadata (distance scale, random encounters, etc.) will be overwritten. Links connecting the areas in the opposite direction will not be added. If either of the areas do not exist in the worldmap, a warning is printed and no links are added.
 
 \begin{itemize}
-\item INT_VAR \verb+distance_scale+ to the distance scale between the two areas. \verb+distance_scale+ * 4 equals the travel time between the areas (in hours).
-\item INT_VAR \verb+default_entry+ to the default entry location. Legal values for this variable are 1 (northern side), 2 (eastern), 4 (southern) and 8 (western). The default value is 1.
-\item INT_VAR \verb+encounter_probability+ to the probability of a random encounter occurring.
-\item STR_VAR \verb+from_area+ to the area from which the links should originate.
-\item STR_VAR \verb+from_node+ to the directional node from which the links should originate. Legal values for this variable are ``north'', ``n'', ``east'', ``e'', ``south'', ``s'', ``west'' and ``w''. Values are not case sensitive. Links are added to all four nodes by default.
-\item STR_VAR \verb+to_area+ to the area to which the links should lead.
-\item STR_VAR \verb+entry+ to the entry point in \verb+to_area+.
-\item STR_VAR \verb+random_area1+ to the first random-encounter area.
-\item STR_VAR \verb+random_area2+ to the second random-encounter area.
-\item STR_VAR \verb+random_area3+ to the third random-encounter area.
-\item STR_VAR \verb+random_area4+ to the fourth random-encounter area.
-\item STR_VAR \verb+random_area5+ to the fifth random-encounter area.
+\item INT!VAR \verb+distance_scale+ to the distance scale between the two areas. \verb+distance_scale+ * 4 equals the travel time between the areas (in hours).
+\item INT!VAR \verb+default_entry+ to the default entry location. Legal values for this variable are 1 (northern side), 2 (eastern), 4 (southern) and 8 (western). The default value is 1.
+\item INT!VAR \verb+encounter_probability+ to the probability of a random encounter occurring.
+\item STR!VAR \verb+from_area+ to the area from which the links should originate.
+\item STR!VAR \verb+from_node+ to the directional node from which the links should originate. Legal values for this variable are ``north'', ``n'', ``east'', ``e'', ``south'', ``s'', ``west'' and ``w''. Values are not case sensitive. Links are added to all four nodes by default.
+\item STR!VAR \verb+to_area+ to the area to which the links should lead.
+\item STR!VAR \verb+entry+ to the entry point in \verb+to_area+.
+\item STR!VAR \verb+random_area1+ to the first random-encounter area.
+\item STR!VAR \verb+random_area2+ to the second random-encounter area.
+\item STR!VAR \verb+random_area3+ to the third random-encounter area.
+\item STR!VAR \verb+random_area4+ to the fourth random-encounter area.
+\item STR!VAR \verb+random_area5+ to the fifth random-encounter area.
 \end{itemize}
 \\
 
@@ -9810,7 +9828,7 @@ This function add links from one specified area to another. Links can be added f
 This function will update the \t{PVRZ} references in a \t{BAM V2} or \t{MOS V2} resource with the next contiguous block of free \t{PVRZ} indices. This function is intended to be used in combination with the action function \ttref{INSTALL!PVRZ}.
 
 \begin{itemize}
-\item INT_VAR \verb+target_base_index+ is an optional parameter. When specified, the function attempts to use a block of free \t{PVRZ} indices starting at the specified value. The default value is 1000.
+\item INT!VAR \verb+target_base_index+ is an optional parameter. When specified, the function attempts to use a block of free \t{PVRZ} indices starting at the specified value. The default value is 1000.
 \item RET \verb+original_base_index+ returns the lowest \t{PVRZ} index used by the source \t{BAM} or \t{MOS}. Returns -1 on error.
 \item RET \verb+new_base_index+ returns the lowest \t{PVRZ} index used by the target \t{BAM} or \t{MOS}. Returns -1 on error.
 \item RET \verb+index_range+ returns the range of reserved \t{PVRZ} indices, i.e., the difference between the smallest and biggest \t{PVRZ} index, inclusive. Returns 0 on error.
@@ -9822,10 +9840,10 @@ This function will update the \t{PVRZ} references in a \t{BAM V2} or \t{MOS V2} 
 This function copies the specified \t{PVRZ} file into the target folder and updates the \t{PVRZ} index. This function should be used in conjunction with \ttref{UPDATE!PVRZ!INDICES}.
 
 \begin{itemize}
-\item INT_VAR \verb+original_base_index+ to the current base index. This value is returned by the function \ttref{UPDATE!PVRZ!INDICES} as \verb+original_base_index+.
-\item INT_VAR \verb+new_base_index+ to the new base index. This value is returned by the function \ttref{UPDATE!PVRZ!INDICES} as \verb+new_base_index+.
-\item STR_VAR \verb+source_file+ to the source file to copy. The filename must match the regular expression \t{\textasciitilde MOS[0-9]+\textbackslash.PVRZ\textasciitilde} (e.g., MOS0000.PVRZ, mos1592.pvrz or Mos12345.PVRZ). Case is ignored.
-\item STR_VAR \verb+target_folder+ to the target folder to copy the source file into. The default value is "override".
+\item INT!VAR \verb+original_base_index+ to the current base index. This value is returned by the function \ttref{UPDATE!PVRZ!INDICES} as \verb+original_base_index+.
+\item INT!VAR \verb+new_base_index+ to the new base index. This value is returned by the function \ttref{UPDATE!PVRZ!INDICES} as \verb+new_base_index+.
+\item STR!VAR \verb+source_file+ to the source file to copy. The filename must match the regular expression \t{\textasciitilde MOS[0-9]+\textbackslash.PVRZ\textasciitilde} (e.g., MOS0000.PVRZ, mos1592.pvrz or Mos12345.PVRZ). Case is ignored.
+\item STR!VAR \verb+target_folder+ to the target folder to copy the source file into. The default value is "override".
 \item RET \verb+success+ is set to non-zero if the function returned successfully and is set to zero on error.
 \item This function can additionally return all the variables automatically set by \ttref{COPY}.
 \end{itemize}
@@ -9836,8 +9854,8 @@ This function copies the specified \t{PVRZ} file into the target folder and upda
 This function attempts to find the first available free \t{PVRZ} index of a contiguous block which guarantees to fit at least \verb+num_to_reserve+ indices.
 
 \begin{itemize}
-\item INT_VAR \verb+num_to_reserve+ to the minimum required size of the contiguous block of free indices. This number should be no smaller than 1 nor no bigger than 999. The default value is 1.
-\item INT_VAR \verb+start_index+ to the index the search should begin at. The default value is 1000.
+\item INT!VAR \verb+num_to_reserve+ to the minimum required size of the contiguous block of free indices. This number should be no smaller than 1 nor no bigger than 999. The default value is 1.
+\item INT!VAR \verb+start_index+ to the index the search should begin at. The default value is 1000.
 \item RET \verb+free_index+ returns the first available index matching the specified parameters. Returns -1 on errors.
 \end{itemize}
 \\
@@ -9845,28 +9863,28 @@ This function attempts to find the first available free \t{PVRZ} index of a cont
 \DEFINE{\verb+DIRECTORY_OF_FILESPEC+}: returns the directory of a file specification. Compare to \ttref{SOURCE!DIRECTORY}. This is an ACTION and PATCH function.
 
 \begin{itemize}
-\item STR_VAR \verb+filespec+ to the file specification, which must include an identifiable directory, or a warning will be raised.
+\item STR!VAR \verb+filespec+ to the file specification, which must include an identifiable directory, or a warning will be raised.
 \item RET \verb+directory+ returns the directory of the file specification.
 \end{itemize}
 
 \DEFINE{\verb+FILE_OF_FILESPEC+}: returns the file of a file specification. Compare to \ttref{SOURCE!FILE}. This is an ACTION and PATCH function.
 
 \begin{itemize}
-\item STR_VAR \verb+filespec+ to the file specification, which may or may not include a directory.
+\item STR!VAR \verb+filespec+ to the file specification, which may or may not include a directory.
 \item RET \verb+file+ returns the file of the file specification.
 \end{itemize}
 
 \DEFINE{\verb+RES_OF_FILESPEC+}: returns the resource name of a file specification. Compare to \ttref{SOURCE!RES}. This is an ACTION and PATCH function.
 
 \begin{itemize}
-\item STR_VAR \verb+filespec+ to the file specification, which must include an identifiable resource name, or a warning will be raised.
+\item STR!VAR \verb+filespec+ to the file specification, which must include an identifiable resource name, or a warning will be raised.
 \item RET \verb+res+ returns the resource name of the file specification.
 \end{itemize}
 
 \DEFINE{\verb+EXT_OF_FILESPEC+}: returns the resource extension of a file specification. Compare to \ttref{SOURCE!EXT}. This is an ACTION and PATCH function.
 
 \begin{itemize}
-\item STR_VAR \verb+filespec+ to the file specification, which must include an identifiable resource extension, or a warning will be raised.
+\item STR!VAR \verb+filespec+ to the file specification, which must include an identifiable resource extension, or a warning will be raised.
 \item RET \verb+ext+ returns the resource extension of the file specification.
 \end{itemize}
 \\
@@ -9876,15 +9894,15 @@ This function attempts to find the first available free \t{PVRZ} index of a cont
 \DEFINE{\verb+ADD_STORE_ITEM_EX+}: adds an item to the current STO file. This is a PATCH function.
 
 \begin{itemize}
-\item INT_VAR \verb+charge1+ to the number of charges of the 1st ability or quantity for stackables. (Default: 0)
-\item INT_VAR \verb+charge2+ to the number of charges of the 2nd ability. (Default: 0)
-\item INT_VAR \verb+charge3+ to the number of charges of the 3rd ability. (Default: 0)
-\item INT_VAR \verb+stack+ to the number of item instances the store carries in the stack. (Default: 1)
-\item INT_VAR \verb+unlimited+ to non-zero if the store should carry an inexhaustible stack of the new item. (Default: 0)
-\item INT_VAR \verb+overwrite+ to non-zero to overwrite any instances of an existing sale entry of matching item resref when found. (Default: 0)
-\item INT_VAR \verb+expiration+ to the item's expiration time, when it will be replaced with the drained item. (Default: 0)
-\item STR_VAR \verb+item_name+ to the resource name (resref) of the item to add.
-\item STR_VAR \verb+position+ to the desired position of the item in the list of sale entries. The following syntax is supported:
+\item INT!VAR \verb+charge1+ to the number of charges of the 1st ability or quantity for stackables. (Default: 0)
+\item INT!VAR \verb+charge2+ to the number of charges of the 2nd ability. (Default: 0)
+\item INT!VAR \verb+charge3+ to the number of charges of the 3rd ability. (Default: 0)
+\item INT!VAR \verb+stack+ to the number of item instances the store carries in the stack. (Default: 1)
+\item INT!VAR \verb+unlimited+ to non-zero if the store should carry an inexhaustible stack of the new item. (Default: 0)
+\item INT!VAR \verb+overwrite+ to non-zero to overwrite any instances of an existing sale entry of matching item resref when found. (Default: 0)
+\item INT!VAR \verb+expiration+ to the item's expiration time, when it will be replaced with the drained item. (Default: 0)
+\item STR!VAR \verb+item_name+ to the resource name (resref) of the item to add.
+\item STR!VAR \verb+position+ to the desired position of the item in the list of sale entries. The following syntax is supported:
 \begin{verbatim}
 AFTER resref    Will place the new item directly behind the item given by "resref".
                 You can list more than one resref, separated by space. The new item will be
@@ -9899,8 +9917,8 @@ AT value        Will place the new item at the position given by the number "val
                 in reverse order.
 \end{verbatim}
 (Default: FIRST)
-\item STR_VAR \verb+flags+ to numeric values or the following constants: \verb+none+, \verb+identified+, \verb+unstealable+, \verb+stolen+. Constants can be combined by using ampersand (\&) or space as separators (e.g. \verb+identified&unstealable+). (Default: \verb+none+)
-\item STR_VAR \verb+sale_trigger+ Availability trigger (STO V1.1 only). The following syntax is supported:
+\item STR!VAR \verb+flags+ to numeric values or the following constants: \verb+none+, \verb+identified+, \verb+unstealable+, \verb+stolen+. Constants can be combined by using ampersand (\&) or space as separators (e.g. \verb+identified&unstealable+). (Default: \verb+none+)
+\item STR!VAR \verb+sale_trigger+ Availability trigger (STO V1.1 only). The following syntax is supported:
 \begin{verbatim}
 Trigger string          Example: GlobalGT("MyCondition","GLOBAL",0)
 Strref value            Example: #1234
@@ -9914,17 +9932,17 @@ Translation reference   Example: @1000
 \DEFINE{\verb+ADD_STORE_DRINK+}: adds a drink to the current STO file. This is a PATCH function.
 
 \begin{itemize}
-\item INT_VAR \verb+price+ to the price of the drink.
-\item INT_VAR \verb+rate+ to the rate (\%) of displaying a rumor.
-\item INT_VAR \verb+overwrite+ to non-zero to overwrite any instances of an existing drink of matching \verb+drink_name+ when found. (Default: 0)
-\item STR_VAR \verb+drink_name+ to the name of the drink.
+\item INT!VAR \verb+price+ to the price of the drink.
+\item INT!VAR \verb+rate+ to the rate (\%) of displaying a rumor.
+\item INT!VAR \verb+overwrite+ to non-zero to overwrite any instances of an existing drink of matching \verb+drink_name+ when found. (Default: 0)
+\item STR!VAR \verb+drink_name+ to the name of the drink.
 The following syntax is supported:
 \begin{verbatim}
 Literal string          Example: Elminster's Choice Beer
 Strref value            Example: #1234
 Translation reference   Example: @1000
 \end{verbatim}
-\item STR_VAR \verb+position+ to the desired position in the list of drinks. Refer to the table below for supported expressions. The following syntax is supported:
+\item STR!VAR \verb+position+ to the desired position in the list of drinks. Refer to the table below for supported expressions. The following syntax is supported:
 \begin{verbatim}
 AFTER name      Will place the new drink directly behind the drink given by "name". Name can
                 either be a strref value (e.g. #1234) or a translation reference (e.g. @1000).
@@ -9948,10 +9966,10 @@ AT value        Will place the new drink at the position given by the number "va
 \DEFINE{\verb+ADD_STORE_CURE+}: adds a cure to the current STO file. This is a PATCH function.
 
 \begin{itemize}
-\item INT_VAR \verb+price+ to the spell price.
-\item INT_VAR \verb+overwrite+ to non-zero to overwrite any instances of an existing cure entry of matching spell resref when found. (Default: 0)
-\item STR_VAR \verb+spell_name+ to the resource name (resref) of the spell to add.
-\item STR_VAR \verb+position+ to the desired position in the list of cures. Refer to the table below for supported expressions. The following syntax is supported:
+\item INT!VAR \verb+price+ to the spell price.
+\item INT!VAR \verb+overwrite+ to non-zero to overwrite any instances of an existing cure entry of matching spell resref when found. (Default: 0)
+\item STR!VAR \verb+spell_name+ to the resource name (resref) of the spell to add.
+\item STR!VAR \verb+position+ to the desired position in the list of cures. Refer to the table below for supported expressions. The following syntax is supported:
 \begin{verbatim}
 AFTER resref    Will place the new spell directly behind the spell given by "resref".
                 You can list more than one resref, separated by space. The new spell will be
@@ -9972,21 +9990,21 @@ AT value        Will place the new spell at the position given by the number "va
 
 \DEFINE{\verb+ADD_STORE_PURCHASE+}: adds one or more item categories the store will buy to the current STO file. Existing categories will be skipped.
 \begin{itemize}
-\item INT_VAR \verb+category+ to the item category to add. A nearly complete list of supported item category codes can be found \ahref{\url{https://gibberlings3.github.io/iesdp/file_formats/ie_formats/sto_v1.htm#tableItemType}}{here}.
+\item INT!VAR \verb+category+ to the item category to add. A nearly complete list of supported item category codes can be found \ahref{\url{https://gibberlings3.github.io/iesdp/file_formats/ie_formats/sto_v1.htm#tableItemType}}{here}.
 \item RET \verb+index+ returns the index of the added purchase. Returns -1 if the purchase could not be added.
 \item RET \verb+offset+ returns the offset of the added purchase. Returns -1 if the purchase could not be added.
 \end{itemize}
 
 \DEFINE{\verb+REMOVE_STORE_ITEM_EX+}: removes all sale instances matching the specified item name from the current STO file. This is a patch function.
 \begin{itemize}
-\item STR_VAR \verb+item_name+ to the resource name (resref) of the item to remove. Regular expression syntax is supported.
+\item STR!VAR \verb+item_name+ to the resource name (resref) of the item to remove. Regular expression syntax is supported.
 \item RET \verb+index+ returns the index of the first removed entry matching the item name, returns -1 otherwise.
 \item RET \verb+offset+ returns the offset of the first removed entry matching the item name, returns -1 otherwise.
 \end{itemize}
 
 \DEFINE{\verb+REMOVE_STORE_DRINK+}: removes all drink instances matching the specified drink name from the current STO file. This is a patch function.
 \begin{itemize}
-\item STR_VAR \verb+drink_name+ to the name of the drink to remove. The following syntax is supported:
+\item STR!VAR \verb+drink_name+ to the name of the drink to remove. The following syntax is supported:
 \begin{verbatim}
 Literal string          Example: Elminster's Choice Beer
 Strref value            Example: #1234
@@ -9999,289 +10017,289 @@ Note: Regular expression syntax is supported for literal strings.
 
 \DEFINE{\verb+REMOVE_STORE_CURE+}: removes all cure instances matching the specified spell name from the current STO file. This is a patch function.
 \begin{itemize}
-\item STR_VAR \verb+spell_name+ to the resource name (resref) of the spell to remove. Regular expression syntax is supported.
+\item STR!VAR \verb+spell_name+ to the resource name (resref) of the spell to remove. Regular expression syntax is supported.
 \item RET \verb+index+ returns the index of the first removed entry matching the spell name, returns -1 otherwise.
 \item RET \verb+offset+ returns the offset of the first removed entry matching the spell name, returns -1 otherwise.
 \end{itemize}
 
 \DEFINE{\verb+REMOVE_STORE_PURCHASE+}: removes the specified item category from the current STO file. This is a patch function.
 \begin{itemize}
-\item INT_VAR \verb+category+ to the item category to remove. A nearly complete list of supported item category codes can be found \ahref{\url{https://gibberlings3.github.io/iesdp/file_formats/ie_formats/sto_v1.htm#tableItemType}}{here}.
+\item INT!VAR \verb+category+ to the item category to remove. A nearly complete list of supported item category codes can be found \ahref{\url{https://gibberlings3.github.io/iesdp/file_formats/ie_formats/sto_v1.htm#tableItemType}}{here}.
 \item RET \verb+index+ returns the index of the first removed entry matching the category, returns -1 otherwise.
 \item RET \verb+offset+ returns the offset of the first removed entry matching the category, returns -1 otherwise.
 \end{itemize}
 
-\subsection{\DEFINE{fj_are_structure}}
+\subsection{\DEFINE{fj!are!structure}}
 Adds a structure to an area file. All variables are zero or blank by default unless otherwise indicated. Fields designated by an asterisk are typically required; all others are optional.
 This is a PATCH function.
 
 Universal structure variables:
 \begin{itemize}
-\item STR_VAR \verb+fj_structure_type+ to the type of area structure to be added (actor, region, spawn, entrance, container, itm, ambient, variable, door, animation, bitmask, songs, interrupts, note or projectile)*;
-\item INT_VAR \verb+fj_delete_mode+ to the index of the structure to be deleted (if deleting rather than adding a new structure);
-\item INT_VAR \verb+fj_debug+ to 1 to enable feedback
+\item STR!VAR \verb+fj_structure_type+ to the type of area structure to be added (actor, region, spawn, entrance, container, itm, ambient, variable, door, animation, bitmask, songs, interrupts, note or projectile)*;
+\item INT!VAR \verb+fj_delete_mode+ to the index of the structure to be deleted (if deleting rather than adding a new structure);
+\item INT!VAR \verb+fj_debug+ to 1 to enable feedback
 \item RET \verb+fj_return_offset+ returns the position of the structure in the area file;
 \end{itemize}
 Actor structure variables:
 \begin{itemize}
-\item STR_VAR \verb+fj_name+ to the actor's name*;
-\item INT_VAR \verb+fj_loc_x+ to the starting X (horizontal) coordinate*;
-\item INT_VAR \verb+fj_loc_y+ to the starting Y (vertical) coordinate*;
-\item INT_VAR \verb+fj_dest_x+ to the destination X coordinate (by default the same as \verb+fj_loc_x+);
-\item INT_VAR \verb+fj_dest_y+ to the destination Y coordinate (by default the same as \verb+fj_loc_y+);
-\item INT_VAR \verb+fj_loading+ to whether the .cre file is loaded (0=attached, 1=loaded, default 1);
-\item INT_VAR \verb+fj_spawned+ to whether the creature has been spawned (0=no, 1=yes, default 0);
-\item INT_VAR \verb+fj_animation+ to the actor's animation number (from animate.ids, though the engine uses the animation set on the .cre file);
-\item INT_VAR \verb+fj_orientation+ to the facing direction (0-15 where 0=south, 4=west, 8=north, 12=east, default 0);
-\item INT_VAR \verb+fj_expiry+ to the actor removal timer in absolute ticks (default -1 to avoid removal);
-\item INT_VAR \verb+fj_wander_dist_actor+ to the actor's random walk distance limit;
-\item INT_VAR \verb+fj_mvmt_dist_actor+ to the actor's movement distance limit;
-\item INT_VAR \verb+fj_schedule+ to the hourly appearance schedule (bits 0-23, default -1 or always);
-\item INT_VAR \verb+fj_num_talked+ to the NumTimesTalkedTo (in .sav files);
-\item STR_VAR \verb+fj_dlg_resref+ to the actor's dialogue file (normally obtained from .cre files);
-\item STR_VAR \verb+fj_bcs_override+ to the actor's override script (normally obtained from .cre files);
-\item STR_VAR \verb+fj_bcs_general+ to the actor's general script (normally obtained from .cre files);
-\item STR_VAR \verb+fj_bcs_class+ to the actor's class script (normally obtained from .cre files);
-\item STR_VAR \verb+fj_bcs_race+ to the actor's race script (normally obtained from .cre files);
-\item STR_VAR \verb+fj_bcs_default+ to the actor's default script (normally obtained from .cre files);
-\item STR_VAR \verb+fj_bcs_specific+ to the actor's specific script (normally obtained from .cre files);
-\item STR_VAR \verb+fj_cre_resref+ to the actor's resource reference (creature filename)*;
-\item STR_VAR \verb+fj_cre_embedded+ to ~path/to/file.cre~ if embedding a new creature (defaults to \verb+fj_cre_resref+ if not set);
+\item STR!VAR \verb+fj_name+ to the actor's name*;
+\item INT!VAR \verb+fj_loc_x+ to the starting X (horizontal) coordinate*;
+\item INT!VAR \verb+fj_loc_y+ to the starting Y (vertical) coordinate*;
+\item INT!VAR \verb+fj_dest_x+ to the destination X coordinate (by default the same as \verb+fj_loc_x+);
+\item INT!VAR \verb+fj_dest_y+ to the destination Y coordinate (by default the same as \verb+fj_loc_y+);
+\item INT!VAR \verb+fj_loading+ to whether the .cre file is loaded (0=attached, 1=loaded, default 1);
+\item INT!VAR \verb+fj_spawned+ to whether the creature has been spawned (0=no, 1=yes, default 0);
+\item INT!VAR \verb+fj_animation+ to the actor's animation number (from animate.ids, though the engine uses the animation set on the .cre file);
+\item INT!VAR \verb+fj_orientation+ to the facing direction (0-15 where 0=south, 4=west, 8=north, 12=east, default 0);
+\item INT!VAR \verb+fj_expiry+ to the actor removal timer in absolute ticks (default -1 to avoid removal);
+\item INT!VAR \verb+fj_wander_dist_actor+ to the actor's random walk distance limit;
+\item INT!VAR \verb+fj_mvmt_dist_actor+ to the actor's movement distance limit;
+\item INT!VAR \verb+fj_schedule+ to the hourly appearance schedule (bits 0-23, default -1 or always);
+\item INT!VAR \verb+fj_num_talked+ to the NumTimesTalkedTo (in .sav files);
+\item STR!VAR \verb+fj_dlg_resref+ to the actor's dialogue file (normally obtained from .cre files);
+\item STR!VAR \verb+fj_bcs_override+ to the actor's override script (normally obtained from .cre files);
+\item STR!VAR \verb+fj_bcs_general+ to the actor's general script (normally obtained from .cre files);
+\item STR!VAR \verb+fj_bcs_class+ to the actor's class script (normally obtained from .cre files);
+\item STR!VAR \verb+fj_bcs_race+ to the actor's race script (normally obtained from .cre files);
+\item STR!VAR \verb+fj_bcs_default+ to the actor's default script (normally obtained from .cre files);
+\item STR!VAR \verb+fj_bcs_specific+ to the actor's specific script (normally obtained from .cre files);
+\item STR!VAR \verb+fj_cre_resref+ to the actor's resource reference (creature filename)*;
+\item STR!VAR \verb+fj_cre_embedded+ to ~path/to/file.cre~ if embedding a new creature (defaults to \verb+fj_cre_resref+ if not set);
 \end{itemize}
 Region structure variables:
 \begin{itemize}
-\item STR_VAR \verb+fj_name+ to the region's name*;
-\item INT_VAR \verb+fj_type+ to the region type (0=trap, 1=info, 2=travel)*;
-\item INT_VAR \verb+fj_box_left+ to the leftmost X coordinate of the region's bounding box*;
-\item INT_VAR \verb+fj_box_top+ to the topmost Y coordinate of the region's bounding box*;
-\item INT_VAR \verb+fj_box_right+ to the rightmost X coordinate of the region's bounding box*;
-\item INT_VAR \verb+fj_box_bottom+ to the bottommost Y coordinate of the region's bounding box*;
-\item INT_VAR \verb+fj_cursor_idx+ to the region's mouse cursor index (from cursors.bam)*;
-\item STR_VAR \verb+fj_destination_area+ to the destination area resource reference (for travel regions);
-\item STR_VAR \verb+fj_destination_name+ to the entrance name in the destination area (for travel regions);
-\item INT_VAR \verb+fj_flags+ to the bitwise region flags;
-\item INT_VAR \verb+fj_info_point_strref+ to the information text string reference (for info points, default -1);
-\item INT_VAR \verb+fj_trap_detect+ to the trap detection difficulty percentage;
-\item INT_VAR \verb+fj_trap_remove+ to the trap removal difficulty percentage;
-\item INT_VAR \verb+fj_trap_active+ to whether the region is trapped (0=no, 1=yes);
-\item INT_VAR \verb+fj_trap_status+ to whether the trap is detected (0=no, 1=yes);
-\item INT_VAR \verb+fj_loc_x+ to the trap launch X coordinate*;
-\item INT_VAR \verb+fj_loc_y+ to the trap launch Y coordinate*;
-\item STR_VAR \verb+fj_key_resref+ to the filename of the region's key;
-\item STR_VAR \verb+fj_reg_script+ to the region script;
-\item INT_VAR \verb+fj_alt_x+ to the activation point X coordinate;
-\item INT_VAR \verb+fj_alt_y+ to the activation point Y coordinate;
-\item STR_VAR \verb+fj_sound+ to the sound resource reference (ONLY for PST);
-\item INT_VAR \verb+fj_talk_loc_x+ to the talk location point X coordinate (ONLY for PST);
-\item INT_VAR \verb+fj_talk_loc_y+ to the talk location point Y coordinate (ONLY for PST);
-\item INT_VAR \verb+fj_speaker_strref+ to the speaker's name string reference (default -1; ONLY for PST);
-\item STR_VAR \verb+fj_dialog+ to the region's dialogue file (ONLY for PST);
-\item INT_VAR \verb+fj_vertex_0+ to (X coordinate + (Y coordinate << 16)) for each vertex pair*;
+\item STR!VAR \verb+fj_name+ to the region's name*;
+\item INT!VAR \verb+fj_type+ to the region type (0=trap, 1=info, 2=travel)*;
+\item INT!VAR \verb+fj_box_left+ to the leftmost X coordinate of the region's bounding box*;
+\item INT!VAR \verb+fj_box_top+ to the topmost Y coordinate of the region's bounding box*;
+\item INT!VAR \verb+fj_box_right+ to the rightmost X coordinate of the region's bounding box*;
+\item INT!VAR \verb+fj_box_bottom+ to the bottommost Y coordinate of the region's bounding box*;
+\item INT!VAR \verb+fj_cursor_idx+ to the region's mouse cursor index (from cursors.bam)*;
+\item STR!VAR \verb+fj_destination_area+ to the destination area resource reference (for travel regions);
+\item STR!VAR \verb+fj_destination_name+ to the entrance name in the destination area (for travel regions);
+\item INT!VAR \verb+fj_flags+ to the bitwise region flags;
+\item INT!VAR \verb+fj_info_point_strref+ to the information text string reference (for info points, default -1);
+\item INT!VAR \verb+fj_trap_detect+ to the trap detection difficulty percentage;
+\item INT!VAR \verb+fj_trap_remove+ to the trap removal difficulty percentage;
+\item INT!VAR \verb+fj_trap_active+ to whether the region is trapped (0=no, 1=yes);
+\item INT!VAR \verb+fj_trap_status+ to whether the trap is detected (0=no, 1=yes);
+\item INT!VAR \verb+fj_loc_x+ to the trap launch X coordinate*;
+\item INT!VAR \verb+fj_loc_y+ to the trap launch Y coordinate*;
+\item STR!VAR \verb+fj_key_resref+ to the filename of the region's key;
+\item STR!VAR \verb+fj_reg_script+ to the region script;
+\item INT!VAR \verb+fj_alt_x+ to the activation point X coordinate;
+\item INT!VAR \verb+fj_alt_y+ to the activation point Y coordinate;
+\item STR!VAR \verb+fj_sound+ to the sound resource reference (ONLY for PST);
+\item INT!VAR \verb+fj_talk_loc_x+ to the talk location point X coordinate (ONLY for PST);
+\item INT!VAR \verb+fj_talk_loc_y+ to the talk location point Y coordinate (ONLY for PST);
+\item INT!VAR \verb+fj_speaker_strref+ to the speaker's name string reference (default -1; ONLY for PST);
+\item STR!VAR \verb+fj_dialog+ to the region's dialogue file (ONLY for PST);
+\item INT!VAR \verb+fj_vertex_0+ to (X coordinate + (Y coordinate << 16)) for each vertex pair*;
 \end{itemize}
 Spawn structure variables:
 \begin{itemize}
-\item STR_VAR \verb+fj_name+ to the spawn point's name*;
-\item INT_VAR \verb+fj_loc_x+ to the spawning X coordinate*;
-\item INT_VAR \verb+fj_loc_y+ to the spawning Y coordinate*;
-\item STR_VAR \verb+fj_cre_resref0+ to the resource reference of each creature spawned (0-9)*;
-\item INT_VAR \verb+fj_spawn_num+ to the count of spawn creatures*;
-\item INT_VAR \verb+fj_difficulty+ to the base number of creatures to spawn (encounter difficulty)*;
-\item INT_VAR \verb+fj_delay+ to the number of seconds between spawning (default 10);
-\item INT_VAR \verb+fj_method+ to the spawn method;
-\item INT_VAR \verb+fj_duration+ to the creature duration (default 1000);
-\item INT_VAR \verb+fj_wander_dist_spawn+ to the creature's random walk distance limit (default 1000);
-\item INT_VAR \verb+fj_mvmt_dist_spawn+ to the creature's movement distance limit (default 1000);
-\item INT_VAR \verb+fj_max_num+ to the maximum number of creatures to spawn*;
-\item INT_VAR \verb+fj_enable+ to the spawn point status (0=inactive, 1=active, default 1);
-\item INT_VAR \verb+fj_schedule+ to the hourly appearance schedule (bits 0-23, default -1 or always);
-\item INT_VAR \verb+fj_day_prob+ to the spawn point daytime probability (default 100);
-\item INT_VAR \verb+fj_night_prob+ to the spawn point nighttime probability (default 100);
-\item INT_VAR \verb+fj_spawn_freq+ to the spawn frequency in seconds (Enhanced Editions only);
-\item INT_VAR \verb+fj_countdown+ to the spawn countdown (Enhanced Editions only);
-\item INT_VAR \verb+fj_weight0...fj_weight9+ to the weight of the spawn creatures (Enhanced Editions only);
+\item STR!VAR \verb+fj_name+ to the spawn point's name*;
+\item INT!VAR \verb+fj_loc_x+ to the spawning X coordinate*;
+\item INT!VAR \verb+fj_loc_y+ to the spawning Y coordinate*;
+\item STR!VAR \verb+fj_cre_resref0+ to the resource reference of each creature spawned (0-9)*;
+\item INT!VAR \verb+fj_spawn_num+ to the count of spawn creatures*;
+\item INT!VAR \verb+fj_difficulty+ to the base number of creatures to spawn (encounter difficulty)*;
+\item INT!VAR \verb+fj_delay+ to the number of seconds between spawning (default 10);
+\item INT!VAR \verb+fj_method+ to the spawn method;
+\item INT!VAR \verb+fj_duration+ to the creature duration (default 1000);
+\item INT!VAR \verb+fj_wander_dist_spawn+ to the creature's random walk distance limit (default 1000);
+\item INT!VAR \verb+fj_mvmt_dist_spawn+ to the creature's movement distance limit (default 1000);
+\item INT!VAR \verb+fj_max_num+ to the maximum number of creatures to spawn*;
+\item INT!VAR \verb+fj_enable+ to the spawn point status (0=inactive, 1=active, default 1);
+\item INT!VAR \verb+fj_schedule+ to the hourly appearance schedule (bits 0-23, default -1 or always);
+\item INT!VAR \verb+fj_day_prob+ to the spawn point daytime probability (default 100);
+\item INT!VAR \verb+fj_night_prob+ to the spawn point nighttime probability (default 100);
+\item INT!VAR \verb+fj_spawn_freq+ to the spawn frequency in seconds (Enhanced Editions only);
+\item INT!VAR \verb+fj_countdown+ to the spawn countdown (Enhanced Editions only);
+\item INT!VAR \verb+fj_weight0...fj_weight9+ to the weight of the spawn creatures (Enhanced Editions only);
 \end{itemize}
 Entrance structure variables:
 \begin{itemize}
-\item STR_VAR \verb+fj_name+ to the entrance's name*;
-\item INT_VAR \verb+fj_loc_x+ to the X coordinate*;
-\item INT_VAR \verb+fj_loc_y+ to the Y coordinate*;
-\item INT_VAR \verb+fj_orientation+ to the facing direction (0-15 where 0=south, 4=west, 8=north, 12=east)*;
+\item STR!VAR \verb+fj_name+ to the entrance's name*;
+\item INT!VAR \verb+fj_loc_x+ to the X coordinate*;
+\item INT!VAR \verb+fj_loc_y+ to the Y coordinate*;
+\item INT!VAR \verb+fj_orientation+ to the facing direction (0-15 where 0=south, 4=west, 8=north, 12=east)*;
 \end{itemize}
 Container structure variables:
 \begin{itemize}
-\item STR_VAR \verb+fj_name+ to the container's name*;
-\item INT_VAR \verb+fj_loc_x+ to the X coordinate*;
-\item INT_VAR \verb+fj_loc_y+ to the Y coordinate*;
-\item INT_VAR \verb+fj_type+ to the container type (1=bag, 2=chest, 3=drawer, 4=pile, 5=table, 6=shelf, 7=altar, 8=nonvisible, 9=spellbook, 10=body, 11=barrel, 12=crate)*;
-\item INT_VAR \verb+fj_lock_diff+ to the lock difficulty (default 100);
-\item INT_VAR \verb+fj_flags+ to the bitwise container flags (bit0=locked, bit3=trap resets, bit5=disabled);
-\item INT_VAR \verb+fj_trap_detect+ to the trap detection difficulty percentage;
-\item INT_VAR \verb+fj_trap_remove_diff+ to the trap removal difficulty percentage (default 100);
-\item INT_VAR \verb+fj_trap_active+ to whether the container is trapped (0=no, 1=yes);
-\item INT_VAR \verb+fj_trap_status+ to whether the trap is detected (0=no, 1=yes);
-\item INT_VAR \verb+fj_trap_loc_x+ to the trap launch X coordinate*;
-\item INT_VAR \verb+fj_trap_loc_y+ to the trap launch Y coordinate*;
-\item INT_VAR \verb+fj_box_left+ to the leftmost X coordinate of the trap's bounding box;
-\item INT_VAR \verb+fj_box_top+ to the topmost Y coordinate of the trap's bounding box;
-\item INT_VAR \verb+fj_box_right+ to the rightmost X coordinate of the trap's bounding box;
-\item INT_VAR \verb+fj_box_bottom+ to the bottommost Y coordinate of the trap's bounding box;
-\item STR_VAR \verb+fj_trap_script+ to the trap's script;
-\item INT_VAR \verb+fj_vertex_0+ to (X coordinate + (Y coordinate << 16)) for each vertex pair*;
-\item STR_VAR \verb+fj_key_resref+ to the filename of the container's key;
-\item INT_VAR \verb+fj_lockpick_strref+ to the lockpick string reference (default -1);
+\item STR!VAR \verb+fj_name+ to the container's name*;
+\item INT!VAR \verb+fj_loc_x+ to the X coordinate*;
+\item INT!VAR \verb+fj_loc_y+ to the Y coordinate*;
+\item INT!VAR \verb+fj_type+ to the container type (1=bag, 2=chest, 3=drawer, 4=pile, 5=table, 6=shelf, 7=altar, 8=nonvisible, 9=spellbook, 10=body, 11=barrel, 12=crate)*;
+\item INT!VAR \verb+fj_lock_diff+ to the lock difficulty (default 100);
+\item INT!VAR \verb+fj_flags+ to the bitwise container flags (bit0=locked, bit3=trap resets, bit5=disabled);
+\item INT!VAR \verb+fj_trap_detect+ to the trap detection difficulty percentage;
+\item INT!VAR \verb+fj_trap_remove_diff+ to the trap removal difficulty percentage (default 100);
+\item INT!VAR \verb+fj_trap_active+ to whether the container is trapped (0=no, 1=yes);
+\item INT!VAR \verb+fj_trap_status+ to whether the trap is detected (0=no, 1=yes);
+\item INT!VAR \verb+fj_trap_loc_x+ to the trap launch X coordinate*;
+\item INT!VAR \verb+fj_trap_loc_y+ to the trap launch Y coordinate*;
+\item INT!VAR \verb+fj_box_left+ to the leftmost X coordinate of the trap's bounding box;
+\item INT!VAR \verb+fj_box_top+ to the topmost Y coordinate of the trap's bounding box;
+\item INT!VAR \verb+fj_box_right+ to the rightmost X coordinate of the trap's bounding box;
+\item INT!VAR \verb+fj_box_bottom+ to the bottommost Y coordinate of the trap's bounding box;
+\item STR!VAR \verb+fj_trap_script+ to the trap's script;
+\item INT!VAR \verb+fj_vertex_0+ to (X coordinate + (Y coordinate << 16)) for each vertex pair*;
+\item STR!VAR \verb+fj_key_resref+ to the filename of the container's key;
+\item INT!VAR \verb+fj_lockpick_strref+ to the lockpick string reference (default -1);
 \end{itemize}
 Item structure variables:
 \begin{itemize}
-\item STR_VAR \verb+fj_name+ to the item's resource reference (filename)*;
-\item INT_VAR \verb+fj_con_itm_idx+ to the index of the container to which the item is added*;
-\item INT_VAR \verb+fj_itm_expiry+ to the item expiration time (default 0);
-\item INT_VAR \verb+fj_charge0+ to the charges of the 1st ability (item quantity for stackables, default 0);
-\item INT_VAR \verb+fj_charge1+ to the charges of the 2nd ability (default 0);
-\item INT_VAR \verb+fj_charge2+ to the charges of the 3rd ability (default 0);
-\item INT_VAR \verb+fj_flags+ to the bitwise item flags (bit0=identified, bit1=unstealable, bit2=stolen, bit3=undroppable, default 0);
+\item STR!VAR \verb+fj_name+ to the item's resource reference (filename)*;
+\item INT!VAR \verb+fj_con_itm_idx+ to the index of the container to which the item is added*;
+\item INT!VAR \verb+fj_itm_expiry+ to the item expiration time (default 0);
+\item INT!VAR \verb+fj_charge0+ to the charges of the 1st ability (item quantity for stackables, default 0);
+\item INT!VAR \verb+fj_charge1+ to the charges of the 2nd ability (default 0);
+\item INT!VAR \verb+fj_charge2+ to the charges of the 3rd ability (default 0);
+\item INT!VAR \verb+fj_flags+ to the bitwise item flags (bit0=identified, bit1=unstealable, bit2=stolen, bit3=undroppable, default 0);
 \end{itemize}
 Ambient structure variables:
 \begin{itemize}
-\item STR_VAR \verb+fj_name+ to the ambient's name*;
-\item INT_VAR \verb+fj_loc_x+ to the X coordinate*;
-\item INT_VAR \verb+fj_loc_y+ to the Y coordinate*;
-\item INT_VAR \verb+fj_radius+ to the sound radius (default 500);
-\item INT_VAR \verb+fj_loc_z+ to the Z coordinate (height);
-\item INT_VAR \verb+fj_pitch_variance+ to the pitch variance;
-\item INT_VAR \verb+fj_volume_variance+ to the volume variance;
-\item INT_VAR \verb+fj_volume+ to the volume percentage (default 80);
-\item STR_VAR \verb+fj_wav_resref0+ to the resource reference of each sound (0-9)*;
-\item INT_VAR \verb+fj_sound_num+ to the number of sounds*;
-\item INT_VAR \verb+fj_delay+ to the base interval in seconds between sounds from this ambient list;
-\item INT_VAR \verb+fj_variation+ to the base deviation from the base interval;
-\item INT_VAR \verb+fj_schedule+ to the hourly appearance schedule (bits 0-23, default -1 or always);
-\item INT_VAR \verb+fj_flags+ to the bitwise ambient flags*;
+\item STR!VAR \verb+fj_name+ to the ambient's name*;
+\item INT!VAR \verb+fj_loc_x+ to the X coordinate*;
+\item INT!VAR \verb+fj_loc_y+ to the Y coordinate*;
+\item INT!VAR \verb+fj_radius+ to the sound radius (default 500);
+\item INT!VAR \verb+fj_loc_z+ to the Z coordinate (height);
+\item INT!VAR \verb+fj_pitch_variance+ to the pitch variance;
+\item INT!VAR \verb+fj_volume_variance+ to the volume variance;
+\item INT!VAR \verb+fj_volume+ to the volume percentage (default 80);
+\item STR!VAR \verb+fj_wav_resref0+ to the resource reference of each sound (0-9)*;
+\item INT!VAR \verb+fj_sound_num+ to the number of sounds*;
+\item INT!VAR \verb+fj_delay+ to the base interval in seconds between sounds from this ambient list;
+\item INT!VAR \verb+fj_variation+ to the base deviation from the base interval;
+\item INT!VAR \verb+fj_schedule+ to the hourly appearance schedule (bits 0-23, default -1 or always);
+\item INT!VAR \verb+fj_flags+ to the bitwise ambient flags*;
 \end{itemize}
 Variable structure variables:
 \begin{itemize}
-\item STR_VAR \verb+fj_name+ to the variable's name*;
-\item INT_VAR \verb+fj_variable_value+ to the variable's value*;
+\item STR!VAR \verb+fj_name+ to the variable's name*;
+\item INT!VAR \verb+fj_variable_value+ to the variable's value*;
 \end{itemize}
 Door structure variables:
 \begin{itemize}
-\item STR_VAR \verb+fj_name+ to the door's name*;
-\item STR_VAR \verb+fj_door_wed_id+ to the door ID linked to the .wed file*;
-\item INT_VAR \verb+fj_flags+ to the bitwise door flags*;
-\item INT_VAR \verb+fj_open_box_left+ to the leftmost X coordinate of the open door's bounding box*;
-\item INT_VAR \verb+fj_open_box_top+ to the topmost Y coordinate of the open door's bounding box*;
-\item INT_VAR \verb+fj_open_box_right+ to the rightmost X coordinate of the open door's bounding box*;
-\item INT_VAR \verb+fj_open_box_bottom+ to the bottommost Y coordinate of the open door's bounding box*;
-\item INT_VAR \verb+fj_closed_box_left+ to the leftmost X coordinate of the closed door's bounding box*;
-\item INT_VAR \verb+fj_closed_box_top+ to the topmost Y coordinate of the closed door's bounding box*;
-\item INT_VAR \verb+fj_closed_box_right+ to the rightmost X coordinate of the closed door's bounding box*;
-\item INT_VAR \verb+fj_closed_box_bottom+ to the bottommost Y coordinate of the closed door's bounding box*;
-\item INT_VAR \verb+fj_door_open_vert_0+ to (X coordinate + (Y coordinate << 16)) for each vertex pair of the open door*;
-\item INT_VAR \verb+fj_door_closed_vert_0+ to (X coordinate + (Y coordinate << 16)) for each vertex pair of the closed door*;
-\item INT_VAR \verb+fj_cell_open_vert_0+ to (X coordinate + (Y coordinate << 16)) for each impeded search map cell of the open door*;
-\item INT_VAR \verb+fj_cell_closed_vert_0+ to (X coordinate + (Y coordinate << 16)) for each impeded search map cell of the closed door*;
-\item STR_VAR \verb+fj_door_open_wav+ to the door open sound;
-\item STR_VAR \verb+fj_door_close_wav+ to the door closed sound;
-\item INT_VAR \verb+fj_cursor_idx+ to the door's mouse cursor index (from cursors.bam)*;
-\item INT_VAR \verb+fj_trap_detect+ to the trap detection difficulty percentage;
-\item INT_VAR \verb+fj_trap_remove+ to the trap removal difficulty percentage;
-\item INT_VAR \verb+fj_trap_active+ to whether the door is trapped (0=no, 1=yes);
-\item INT_VAR \verb+fj_trap_status+ to whether the trap is detected (0=no, 1=yes);
-\item INT_VAR \verb+fj_trap_loc_x+ to the trap launch X coordinate*;
-\item INT_VAR \verb+fj_trap_loc_y+ to the trap launch Y coordinate*;
-\item STR_VAR \verb+fj_key_resref+ to the filename of the door's key;
-\item STR_VAR \verb+fj_door_script+ to the door script;
-\item INT_VAR \verb+fj_detect_diff+ to the detection difficulty (for secret doors);
-\item INT_VAR \verb+fj_locked_diff+ to the lock difficulty;
-\item INT_VAR \verb+fj_open_loc_x+ to the X coordinate for toggling the door's open state*;
-\item INT_VAR \verb+fj_open_loc_y+ to the Y coordinate for toggling the door's open state*;
-\item INT_VAR \verb+fj_closed_loc_x+ to the X coordinate for toggling the door's closed state*;
-\item INT_VAR \verb+fj_closed_loc_y+ to the Y coordinate for toggling the door's closed state*;
-\item INT_VAR \verb+fj_lockpick_strref+ to the lockpick string reference (default -1);
-\item STR_VAR \verb+fj_travel_trigger+ to the travel region name*;
-\item INT_VAR \verb+fj_dlg_strref+ to the dialogue string reference (default -1);
-\item STR_VAR \verb+fj_dlg_resref+ to the door's dialogue file;
+\item STR!VAR \verb+fj_name+ to the door's name*;
+\item STR!VAR \verb+fj_door_wed_id+ to the door ID linked to the .wed file*;
+\item INT!VAR \verb+fj_flags+ to the bitwise door flags*;
+\item INT!VAR \verb+fj_open_box_left+ to the leftmost X coordinate of the open door's bounding box*;
+\item INT!VAR \verb+fj_open_box_top+ to the topmost Y coordinate of the open door's bounding box*;
+\item INT!VAR \verb+fj_open_box_right+ to the rightmost X coordinate of the open door's bounding box*;
+\item INT!VAR \verb+fj_open_box_bottom+ to the bottommost Y coordinate of the open door's bounding box*;
+\item INT!VAR \verb+fj_closed_box_left+ to the leftmost X coordinate of the closed door's bounding box*;
+\item INT!VAR \verb+fj_closed_box_top+ to the topmost Y coordinate of the closed door's bounding box*;
+\item INT!VAR \verb+fj_closed_box_right+ to the rightmost X coordinate of the closed door's bounding box*;
+\item INT!VAR \verb+fj_closed_box_bottom+ to the bottommost Y coordinate of the closed door's bounding box*;
+\item INT!VAR \verb+fj_door_open_vert_0+ to (X coordinate + (Y coordinate << 16)) for each vertex pair of the open door*;
+\item INT!VAR \verb+fj_door_closed_vert_0+ to (X coordinate + (Y coordinate << 16)) for each vertex pair of the closed door*;
+\item INT!VAR \verb+fj_cell_open_vert_0+ to (X coordinate + (Y coordinate << 16)) for each impeded search map cell of the open door*;
+\item INT!VAR \verb+fj_cell_closed_vert_0+ to (X coordinate + (Y coordinate << 16)) for each impeded search map cell of the closed door*;
+\item STR!VAR \verb+fj_door_open_wav+ to the door open sound;
+\item STR!VAR \verb+fj_door_close_wav+ to the door closed sound;
+\item INT!VAR \verb+fj_cursor_idx+ to the door's mouse cursor index (from cursors.bam)*;
+\item INT!VAR \verb+fj_trap_detect+ to the trap detection difficulty percentage;
+\item INT!VAR \verb+fj_trap_remove+ to the trap removal difficulty percentage;
+\item INT!VAR \verb+fj_trap_active+ to whether the door is trapped (0=no, 1=yes);
+\item INT!VAR \verb+fj_trap_status+ to whether the trap is detected (0=no, 1=yes);
+\item INT!VAR \verb+fj_trap_loc_x+ to the trap launch X coordinate*;
+\item INT!VAR \verb+fj_trap_loc_y+ to the trap launch Y coordinate*;
+\item STR!VAR \verb+fj_key_resref+ to the filename of the door's key;
+\item STR!VAR \verb+fj_door_script+ to the door script;
+\item INT!VAR \verb+fj_detect_diff+ to the detection difficulty (for secret doors);
+\item INT!VAR \verb+fj_locked_diff+ to the lock difficulty;
+\item INT!VAR \verb+fj_open_loc_x+ to the X coordinate for toggling the door's open state*;
+\item INT!VAR \verb+fj_open_loc_y+ to the Y coordinate for toggling the door's open state*;
+\item INT!VAR \verb+fj_closed_loc_x+ to the X coordinate for toggling the door's closed state*;
+\item INT!VAR \verb+fj_closed_loc_y+ to the Y coordinate for toggling the door's closed state*;
+\item INT!VAR \verb+fj_lockpick_strref+ to the lockpick string reference (default -1);
+\item STR!VAR \verb+fj_travel_trigger+ to the travel region name*;
+\item INT!VAR \verb+fj_dlg_strref+ to the dialogue string reference (default -1);
+\item STR!VAR \verb+fj_dlg_resref+ to the door's dialogue file;
 \end{itemize}
 Animation structure variables:
 \begin{itemize}
-\item STR_VAR \verb+fj_name+ to the animation name*;
-\item INT_VAR \verb+fj_loc_x+ to the X coordinate*;
-\item INT_VAR \verb+fj_loc_y+ to the Y coordinate*;
-\item INT_VAR \verb+fj_schedule+ to the hourly appearance schedule (bits 0-23, default -1 or always);
-\item STR_VAR \verb+fj_bam_resref+ to the animation resource reference (filename)*;
-\item INT_VAR \verb+fj_bam_seq+ to the BAM sequence number;
-\item INT_VAR \verb+fj_bam_frame+ to the BAM frame number;
-\item INT_VAR \verb+fj_flags+ to the bitwise animation flags*;
-\item INT_VAR \verb+fj_loc_z+ to the height;
-\item INT_VAR \verb+fj_transparent+ to the BAM transparency;
-\item INT_VAR \verb+fj_init_frame+ to the starting frame;
-\item INT_VAR \verb+fj_loop_chance+ to the chance of looping;
-\item INT_VAR \verb+fj_skip_cycles+ to start delay in frames;
-\item STR_VAR \verb+fj_bmp_resref+ to the palette bitmap;
-\item INT_VAR \verb+fj_width+ to the animation width (only required for WBM and PVRZ resources, Enhanced Editions only);
-\item INT_VAR \verb+fj_height+ to the animation height (only required for WBM and PVRZ resources, Enhanced Editions only);
+\item STR!VAR \verb+fj_name+ to the animation name*;
+\item INT!VAR \verb+fj_loc_x+ to the X coordinate*;
+\item INT!VAR \verb+fj_loc_y+ to the Y coordinate*;
+\item INT!VAR \verb+fj_schedule+ to the hourly appearance schedule (bits 0-23, default -1 or always);
+\item STR!VAR \verb+fj_bam_resref+ to the animation resource reference (filename)*;
+\item INT!VAR \verb+fj_bam_seq+ to the BAM sequence number;
+\item INT!VAR \verb+fj_bam_frame+ to the BAM frame number;
+\item INT!VAR \verb+fj_flags+ to the bitwise animation flags*;
+\item INT!VAR \verb+fj_loc_z+ to the height;
+\item INT!VAR \verb+fj_transparent+ to the BAM transparency;
+\item INT!VAR \verb+fj_init_frame+ to the starting frame;
+\item INT!VAR \verb+fj_loop_chance+ to the chance of looping;
+\item INT!VAR \verb+fj_skip_cycles+ to start delay in frames;
+\item STR!VAR \verb+fj_bmp_resref+ to the palette bitmap;
+\item INT!VAR \verb+fj_width+ to the animation width (only required for WBM and PVRZ resources, Enhanced Editions only);
+\item INT!VAR \verb+fj_height+ to the animation height (only required for WBM and PVRZ resources, Enhanced Editions only);
 \end{itemize}
 Bitmask structure variables:
 \begin{itemize}
-\item STR_VAR \verb+fj_bitmask+ to ~path/to/binary.file~*;
+\item STR!VAR \verb+fj_bitmask+ to ~path/to/binary.file~*;
 \end{itemize}
 Songlist structure variables:
 \begin{itemize}
-\item INT_VAR \verb+fj_song_day+ to the day SONGLIST.2DA entry;
-\item INT_VAR \verb+fj_song_night+ to the night SONGLIST.2DA entry;
-\item INT_VAR \verb+fj_song_victory+ to the victory SONGLIST.2DA entry;
-\item INT_VAR \verb+fj_song_battle+ to the battle SONGLIST.2DA entry;
-\item INT_VAR \verb+fj_song_defeat+ to the defeat SONGLIST.2DA entry;
-\item INT_VAR \verb+fj_song_day_alt+ to the alternative day SONGLIST.2DA entry (default -1, Enhanced Editions only);
-\item INT_VAR \verb+fj_song_night_alt+ to the alternative night SONGLIST.2DA entry (default -1, Enhanced Editions only);
-\item INT_VAR \verb+fj_song_victory_alt+ to the alternative victory SONGLIST.2DA entry (default -1, Enhanced Editions only);
-\item INT_VAR \verb+fj_song_battle_alt+ to the alternative battle SONGLIST.2DA entry (default -1, Enhanced Editions only);
-\item INT_VAR \verb+fj_song_defeat_alt+ to the alternative defeat SONGLIST.2DA entry (default -1, Enhanced Editions only);
-\item STR_VAR \verb+fj_song_day0+ to the day song WAV resref;
-\item STR_VAR \verb+fj_song_day1+ to the night song WAV resref;
-\item INT_VAR \verb+fj_song_day_vol+ to the day songs volume (default 100);
-\item STR_VAR \verb+fj_song_night0+ to the night song WAV resref;
-\item STR_VAR \verb+fj_song_night1+ to the second night song WAV resref;
-\item INT_VAR \verb+fj_song_night_vol+ to the night songs volume (default 100);
+\item INT!VAR \verb+fj_song_day+ to the day SONGLIST.2DA entry;
+\item INT!VAR \verb+fj_song_night+ to the night SONGLIST.2DA entry;
+\item INT!VAR \verb+fj_song_victory+ to the victory SONGLIST.2DA entry;
+\item INT!VAR \verb+fj_song_battle+ to the battle SONGLIST.2DA entry;
+\item INT!VAR \verb+fj_song_defeat+ to the defeat SONGLIST.2DA entry;
+\item INT!VAR \verb+fj_song_day_alt+ to the alternative day SONGLIST.2DA entry (default -1, Enhanced Editions only);
+\item INT!VAR \verb+fj_song_night_alt+ to the alternative night SONGLIST.2DA entry (default -1, Enhanced Editions only);
+\item INT!VAR \verb+fj_song_victory_alt+ to the alternative victory SONGLIST.2DA entry (default -1, Enhanced Editions only);
+\item INT!VAR \verb+fj_song_battle_alt+ to the alternative battle SONGLIST.2DA entry (default -1, Enhanced Editions only);
+\item INT!VAR \verb+fj_song_defeat_alt+ to the alternative defeat SONGLIST.2DA entry (default -1, Enhanced Editions only);
+\item STR!VAR \verb+fj_song_day0+ to the day song WAV resref;
+\item STR!VAR \verb+fj_song_day1+ to the night song WAV resref;
+\item INT!VAR \verb+fj_song_day_vol+ to the day songs volume (default 100);
+\item STR!VAR \verb+fj_song_night0+ to the night song WAV resref;
+\item STR!VAR \verb+fj_song_night1+ to the second night song WAV resref;
+\item INT!VAR \verb+fj_song_night_vol+ to the night songs volume (default 100);
 \end{itemize}
 Rest interrupt structure variables
 \begin{itemize}
-\item STR_VAR \verb+fj_name+ to the name of the rest interrupts (for editor use only);
-\item INT_VAR \verb+fj_cre_strref0...fj_cre_strref9+ to string displayed upon party ambush (default -1);
-\item STR_VAR \verb+fj_cre_resref0...fj_cre_resref9+ to creature resref;
-\item STR_VAR \verb+fj_spawn_num+ to the number of spawned attackers;
-\item STR_VAR \verb+fj_difficulty+ to the difficulty of the encounter;
-\item STR_VAR \verb+fj_duration+ to the creature's duration (default 1000);
-\item STR_VAR \verb+fj_wander_distance+ to the creature's random walk distance limit (default 1000);
-\item STR_VAR \verb+fj_mvmt_distance+ to the creature's movement distance limit (default 1000);
-\item STR_VAR \verb+fj_max_num+ to maximum number of spawned creatures;
-\item STR_VAR \verb+fj_enable+ to whether rest interrupts are enabled (0=no, 1=yes);
-\item STR_VAR \verb+fj_day_prob+ to probability of daytime ambush;
-\item STR_VAR \verb+fj_night_prob+ to probability of nightime ambush;
+\item STR!VAR \verb+fj_name+ to the name of the rest interrupts (for editor use only);
+\item INT!VAR \verb+fj_cre_strref0...fj_cre_strref9+ to string displayed upon party ambush (default -1);
+\item STR!VAR \verb+fj_cre_resref0...fj_cre_resref9+ to creature resref;
+\item STR!VAR \verb+fj_spawn_num+ to the number of spawned attackers;
+\item STR!VAR \verb+fj_difficulty+ to the difficulty of the encounter;
+\item STR!VAR \verb+fj_duration+ to the creature's duration (default 1000);
+\item STR!VAR \verb+fj_wander_distance+ to the creature's random walk distance limit (default 1000);
+\item STR!VAR \verb+fj_mvmt_distance+ to the creature's movement distance limit (default 1000);
+\item STR!VAR \verb+fj_max_num+ to maximum number of spawned creatures;
+\item STR!VAR \verb+fj_enable+ to whether rest interrupts are enabled (0=no, 1=yes);
+\item STR!VAR \verb+fj_day_prob+ to probability of daytime ambush;
+\item STR!VAR \verb+fj_night_prob+ to probability of nightime ambush;
 \end{itemize}
 Map note structure variables:
 \begin{itemize}
-\item INT_VAR \verb+fj_loc_x+ to the X coordinate*;
-\item INT_VAR \verb+fj_loc_y+ to the Y coordinate*;
-\item INT_VAR \verb+fj_note_strref+ to the note string reference (default -1, BGII only)*;
-\item STR_VAR \verb+fj_note_text+ to the note text (PST only)*;
-\item INT_VAR \verb+fj_strref_loc+ to the strref location (0=external, 1=dialog.tlk, default 1);
-\item INT_VAR \verb+fj_color+ to the map marker color (0-7);
-\item INT_VAR \verb+fj_note_id+ to the note ID;
+\item INT!VAR \verb+fj_loc_x+ to the X coordinate*;
+\item INT!VAR \verb+fj_loc_y+ to the Y coordinate*;
+\item INT!VAR \verb+fj_note_strref+ to the note string reference (default -1, BGII only)*;
+\item STR!VAR \verb+fj_note_text+ to the note text (PST only)*;
+\item INT!VAR \verb+fj_strref_loc+ to the strref location (0=external, 1=dialog.tlk, default 1);
+\item INT!VAR \verb+fj_color+ to the map marker color (0-7);
+\item INT!VAR \verb+fj_note_id+ to the note ID;
 \end{itemize}
 Projectile trap structure variables (not available on PST):
 \begin{itemize}
-\item STR_VAR \verb+fj_name+ to the projectile filename*;
-\item INT_VAR \verb+fj_eff_off+ to the effect block offset;
-\item INT_VAR \verb+fj_eff_size+ to the effect block size;
-\item INT_VAR \verb+fj_missile_num+ to the missile.ids reference (projectl.ids - 1);
-\item INT_VAR \verb+fj_frequency+ to the explosion length (in frames);
-\item INT_VAR \verb+fj_duration+ to the number of explosions;
-\item INT_VAR \verb+fj_loc_x+ to the X coordinate*;
-\item INT_VAR \verb+fj_loc_y+ to the Y coordinate*;
-\item INT_VAR \verb+fj_loc_z+ to the height;
-\item INT_VAR \verb+fj_target+ to the ea.ids value of the target;
-\item INT_VAR \verb+fj_creator+ to the index of the party member who created this projectile (0-5);
-\item STR_VAR \verb+fj_embedded_eff_0+ to ~path/to/v2.eff~ or eff resref containing to projectile's effects* Subsequent indices can be used for additional effects;
+\item STR!VAR \verb+fj_name+ to the projectile filename*;
+\item INT!VAR \verb+fj_eff_off+ to the effect block offset;
+\item INT!VAR \verb+fj_eff_size+ to the effect block size;
+\item INT!VAR \verb+fj_missile_num+ to the missile.ids reference (projectl.ids - 1);
+\item INT!VAR \verb+fj_frequency+ to the explosion length (in frames);
+\item INT!VAR \verb+fj_duration+ to the number of explosions;
+\item INT!VAR \verb+fj_loc_x+ to the X coordinate*;
+\item INT!VAR \verb+fj_loc_y+ to the Y coordinate*;
+\item INT!VAR \verb+fj_loc_z+ to the height;
+\item INT!VAR \verb+fj_target+ to the ea.ids value of the target;
+\item INT!VAR \verb+fj_creator+ to the index of the party member who created this projectile (0-5);
+\item STR!VAR \verb+fj_embedded_eff_0+ to ~path/to/v2.eff~ or eff resref containing to projectile's effects* Subsequent indices can be used for additional effects;
 \end{itemize}
 A few examples best illustrate the use of this function.
 
@@ -10289,14 +10307,14 @@ Example 1: add an actor to an area
 \begin{verbatim}
 COPY_EXISTING ar0500.are override
   LPF fj_are_structure
-    INT_VAR
+    INT!VAR
     fj_loc_x          = 2780
     fj_loc_y          = 1955
     fj_dest_x         = 2780
     fj_dest_y         = 1955
     fj_animation      = 0x6110 //fighter female human
     fj_orientation    = 15     //SSE
-    STR_VAR
+    STR!VAR
     fj_structure_type = actor
     fj_name           = Aurora
     fj_cre_resref     = agaurora
@@ -10305,7 +10323,7 @@ COPY_EXISTING ar0500.are override
 Example 2: add a region to an area (in this case, a travel trigger to another area)
 \begin{verbatim}
   LPF fj_are_structure
-    INT_VAR
+    INT!VAR
     fj_type         = 2    //travel
     fj_box_left     = 3415
     fj_box_top      = 625
@@ -10316,7 +10334,7 @@ Example 2: add a region to an area (in this case, a travel trigger to another ar
     fj_vertex_1     = 3450 + (650 << 16)
     fj_vertex_2     = 3450 + (700 << 16)
     fj_vertex_3     = 3415 + (676 << 16)
-    STR_VAR
+    STR!VAR
     fj_structure_type   = region
     fj_name             = Tran0540
     fj_destination_area = ag0540
@@ -10326,11 +10344,11 @@ Example 2: add a region to an area (in this case, a travel trigger to another ar
 Example 3: add an entrance (from another area) to an area
 \begin{verbatim}
   LPF fj_are_structure
-    INT_VAR
+    INT!VAR
     fj_loc_x       = 3490
     fj_loc_y       = 655
     fj_orientation = 10   //NE
-    STR_VAR
+    STR!VAR
     fj_structure_type = entrance
     fj_name           = Exit0540
   END
@@ -10338,7 +10356,7 @@ Example 3: add an entrance (from another area) to an area
 Example 4: add a container to an area, then add an item to the new container
 \begin{verbatim}
   LPF fj_are_structure
-    INT_VAR
+    INT!VAR
     fj_type        = 8 //nonvisible
     fj_loc_x       = 4388
     fj_loc_y       = 2876
@@ -10352,15 +10370,15 @@ Example 4: add a container to an area, then add an item to the new container
     fj_vertex_1    = 4372 + (2845 << 16)
     fj_vertex_2    = 4382 + (2826 << 16)
     fj_vertex_3    = 4420 + (2839 << 16)
-    STR_VAR
+    STR!VAR
     fj_structure_type = container
     fj_name           = ~Cornerstone~
   END
   LPF fj_are_structure
-    INT_VAR
+    INT!VAR
     fj_con_itm_idx    = SHORT_AT 0x74 - 1 // a new container will be last in the file
     fj_flags          = 1 // identified
-    STR_VAR
+    STR!VAR
     fj_name           = c6lantho
     fj_structure_type = itm
   END
@@ -10368,7 +10386,7 @@ Example 4: add a container to an area, then add an item to the new container
 Example 5: add a door to an area
 \begin{verbatim}
   LPF fj_are_structure
-    INT_VAR
+    INT!VAR
     fj_flags               = 0b100000000
     fj_open_box_left       = 520
     fj_open_box_top        = 724
@@ -10407,7 +10425,7 @@ Example 5: add a door to an area
     fj_cell_closed_vert_6  = 32 + (68 << 16)
     fj_cell_closed_vert_7  = 33 + (69 << 16)
     fj_cell_closed_vert_8  = 34 + (70 << 16)
-    STR_VAR
+    STR!VAR
     fj_structure_type      = door
     fj_name                = Door10
     fj_door_wed_id         = DOOR10
@@ -10416,12 +10434,12 @@ Example 5: add a door to an area
 Example 6: add an animation to an area
 \begin{verbatim}
   LPF fj_are_structure
-    INT_VAR
+    INT!VAR
     fj_loc_x       = 2785
     fj_loc_y       = 949
     fj_flags       = 0b00000000000000000001000110000101
     //visible, not illuminated, invisible in dark, covered by actors, shown in combat
-    STR_VAR
+    STR!VAR
     fj_structure_type = animation
     fj_name           = Cave1
     fj_bam_resref     = ag1100c1
@@ -10431,8 +10449,8 @@ Example 7: delete all ambients from an area
 \begin{verbatim}
   FOR( i = SHORT_AT 0x82 ; i ; --i )BEGIN
     LPF fj_are_structure
-      INT_VAR fj_delete_mode = i - 1
-      STR_VAR fj_structure_type = ambient
+      INT!VAR fj_delete_mode = i - 1
+      STR!VAR fj_structure_type = ambient
     END
   END
 \end{verbatim}
@@ -10444,21 +10462,21 @@ Adds an area to the worldmap. All variables are zero or blank by default unless 
 This is an ACTION function.
 
 \begin{itemize}
-\item ACTION_DEFINE_ASSOCIATIVE_ARRAY \verb+toNewArea+ to the area references that lead to the new area;
-\item ACTION_DEFINE_ASSOCIATIVE_ARRAY \verb+fromNewArea+ to the area references that lead away from the new area;
-\item STR_VAR \verb+areName+ to the resource reference of the area to add (like "ar0700");
-\item STR_VAR \verb+strName+ to the descriptive name of the area (like "Waukeen's Promenade");
-\item STR_VAR \verb+strDesc+ to the area description that will show up when hovering the cursor over the area on the worldmap;
-\item STR_VAR \verb+worldmap+ to the name of the .wmp file you want patched (default is "worldmap");
-\item INT_VAR \verb+mapIcon+ to the area's map icon index (from mapicons.bam);
-\item INT_VAR \verb+xCoord+ to the area's X (east-west) coordinate;
-\item INT_VAR \verb+yCoord+ to the area's Y (north-south) coordinate;
-\item INT_VAR \verb+tTime+ to the area's travel time in hours * 4 (so 2 = 8 hours);
-\item INT_VAR \verb+inclSv+ to 1 if you want to patch saved game worldmaps as well as the master worldmap. \textbf{NB:} changes to saved games are uninstallable;
-\item INT_VAR \verb+visible+ to 1 if you want the 'visible' flag to be set;
-\item INT_VAR \verb+visibleAdjacent+ to 1 if you want the 'visible from adjacent' flag to be set;
-\item INT_VAR \verb+reachable+ to 1 if you want the 'reachable' flag to be set;
-\item INT_VAR \verb+visited+ to 1 if you want the 'visited' flag to be set;
+\item ACTION!DEFINE!ASSOCIATIVE!ARRAY \verb+toNewArea+ to the area references that lead to the new area;
+\item ACTION!DEFINE!ASSOCIATIVE!ARRAY \verb+fromNewArea+ to the area references that lead away from the new area;
+\item STR!VAR \verb+areName+ to the resource reference of the area to add (like "ar0700");
+\item STR!VAR \verb+strName+ to the descriptive name of the area (like "Waukeen's Promenade");
+\item STR!VAR \verb+strDesc+ to the area description that will show up when hovering the cursor over the area on the worldmap;
+\item STR!VAR \verb+worldmap+ to the name of the .wmp file you want patched (default is "worldmap");
+\item INT!VAR \verb+mapIcon+ to the area's map icon index (from mapicons.bam);
+\item INT!VAR \verb+xCoord+ to the area's X (east-west) coordinate;
+\item INT!VAR \verb+yCoord+ to the area's Y (north-south) coordinate;
+\item INT!VAR \verb+tTime+ to the area's travel time in hours * 4 (so 2 = 8 hours);
+\item INT!VAR \verb+inclSv+ to 1 if you want to patch saved game worldmaps as well as the master worldmap. \textbf{NB:} changes to saved games are uninstallable;
+\item INT!VAR \verb+visible+ to 1 if you want the 'visible' flag to be set;
+\item INT!VAR \verb+visibleAdjacent+ to 1 if you want the 'visible from adjacent' flag to be set;
+\item INT!VAR \verb+reachable+ to 1 if you want the 'reachable' flag to be set;
+\item INT!VAR \verb+visited+ to 1 if you want the 'visited' flag to be set;
 \item RET \verb+areNum+ returns the worldmap entry number for the new area;
 \end{itemize}
 An example best illustrates the use of this function.
@@ -10500,12 +10518,12 @@ END
 
 // calls the function and returns the worldmap entry number for the new area
 LAUNCH_ACTION_FUNCTION sc#addWmpAre
-    INT_VAR mapIcon = 21           // map icon
+    INT!VAR mapIcon = 21           // map icon
             xCoord  = 240          // x coordinate
             yCoord  = 130          // y coordinate
             tTime   = 0            // travel time *4, so two means eight hours
 
-    STR_VAR areName = "YS0390"     // area reference, like "AR0700"
+    STR!VAR areName = "YS0390"     // area reference, like "AR0700"
             strName = "Govt. West" // area name, like "Waukeen's Promenade"
             strDesc = "Govt. West" // area description which will show up when hovering the area on the worldmap
 
