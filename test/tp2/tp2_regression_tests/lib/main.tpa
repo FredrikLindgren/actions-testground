@@ -39,16 +39,8 @@ DEFINE_ACTION_MACRO run_tests BEGIN
   OUTER_SET ++tests
 END
 
-ACTION_FOR_EACH file IN
-                ~fun_eval~
-                ~add_music~
-                ~game_is~
-                ~x_of_filespec~
-                ~res_of_spell_ids~
-                ~read_2da~
-                ~get_file_arrays~
-BEGIN
-  INCLUDE ~%MOD_FOLDER%/lib/tests/%file%.tpa~
+ACTION_BASH_FOR ~%MOD_FOLDER%/lib/tests~ ~.+\.tpa$~ BEGIN
+  INCLUDE ~%BASH_FOR_FILESPEC%~
   LAM run_tests
 END
 
