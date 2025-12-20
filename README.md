@@ -94,19 +94,11 @@ compiled executables for some platforms available under
   in mind WeiDU builds distribution packages to the directory one
   level up from where the source is located.
 
-- Enter the directory where you put WeiDU's source code. Copy the file
-  ./sample.Configuration to ./Configuration. Open the file and change
-  the value for `OCAMLDIR` for your platform to the directory in which
-  the OCaml binaries are located.
-
 ### If you have compiled before
 
 - Make sure you have the up-to-date WeiDU source. The recommended way
   is by using git (from inside the directory where you keep your WeiDU
   source code): `git pull origin`
-
-- If the file ./sample.Configuration has been changed, recreate
-  ./Configuration and re-apply any changes you have made to it.
 
 ### Finally
 

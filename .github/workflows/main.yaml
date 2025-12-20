@@ -39,7 +39,6 @@ jobs:
           mkdir -p obj/.depend
           opam switch
           eval $(opam env)
-          mv sample.Configuration Configuration
           make
           make osx_zip
       - uses: actions/upload-artifact@v4
@@ -69,7 +68,6 @@ jobs:
           mkdir -p obj/.depend
           opam switch
           eval $(opam env)
-          mv sample.Configuration Configuration
           make
           make linux_zip
       - uses: actions/upload-artifact@v4
@@ -96,7 +94,6 @@ jobs:
           mv elkhound.exe D:/a/weidu/weidu/_opam/bin/elkhound.exe
           opam switch
           (& opam env) -split '\r?\n' | ForEach-Object { Invoke-Expression $_ }
-          mv sample.Configuration Configuration
           make
           make windows_zip
       - name: upload windows artifact
