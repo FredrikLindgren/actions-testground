@@ -3,15 +3,14 @@
 ## Requirements and build environment
 
 The version of OCaml needs to be greater than or equal to 4.04 and
-less than or equal to 4.11, and configured without forced safe
-strings.
+configured without forced safe strings.
 
 ### The Windows Unicode dilemma
 
 If WeiDU is built with OCaml greater than or equal to 4.06 on Windows
 and the environment variable `WINDOWS_UNICODE_MODE` is not set to
 `ansi` when configuring the OCaml build, the resulting WeiDU will be
-incompatible with mods that rely on "legacy" behaviour, notably the
+incompatible with mods that rely on legacy behaviour, notably the
 mod Infinity Animations.
 
 However, if WeiDU on Windows is built without Unicode-support, mods
@@ -25,9 +24,13 @@ for more information.
 
 ### GNU/Linux
 
-- OCaml with native compilers.
+- OCaml with native compilers. You either need to use
+  [opam](https://opam.ocaml.org/) or compile OCaml from source, as
+  WeiDU requires unsafe strings. With opam, you can obtain a suitable
+  version by creating a switch:
+  `opam switch create 4.11.2+default-unsafe-string`
 
-- A basic GCC tool chain with make.
+- A basic GCC tool chain with make. This might come pre-installed.
 
 - Perl, which is normally installed by default.
 
@@ -41,7 +44,13 @@ for more information.
 
 ### Windows
 
-- Native OCaml (typically compiled by MinGW), obtained from ocaml.org.
+*N.B.* These instructions may not be step-for-step accurate, as no one
+who develops WeiDU do so from Windows systems, so there is no current
+first-hand experience.
+
+- Native OCaml without forced safe strings, typically obtained through
+  [opam](https://opam.ocaml.org/):
+  `opam switch create --packages=ocaml-option-default-unsafe-string ocaml-variants.4.14.2+options`
 
 - A Cygwin-based *nix tool chain, particularly `binutils` and `make`
   from the `Devel` group. Perl is also required but is typically
@@ -56,20 +65,15 @@ for more information.
 
 ### MacOS
 
-- Make sure you have Xcode installed. You probably don't need Xcode
-  *per se* but apparently it is the conventional way of obtaining some
-  of the necessary programs (make, gcc, etc.). You may be able to
-  download and install Xcode's command-line tools from [Apple
-  Developer](https://developer.apple.com/downloads/) without having to
-  download and install all of Xcode.
-
-- Install [MacPorts](https://www.macports.org/index.php) or
-  [HomeBrew](http://brew.sh/).
+- A basic GCC tool chain with make.
 
 - Install Perl (using MacPorts or HomeBrew, for example).
 
-- Use MacPorts or HomeBrew to install OCaml. Note where OCaml was
-  installed.
+- OCaml with native compilers. You either need to use
+  [opam](https://opam.ocaml.org/) or compile OCaml from source, as
+  WeiDU requires unsafe strings. With opam, you can obtain a suitable
+  version by creating a switch:
+  `opam switch create 4.11.2+default-unsafe-string`
 
 - Optionally, install UPX. UPX is used to compress the compiled
   programs, but is not available for all platforms.
@@ -83,7 +87,10 @@ for more information.
 The source code and build instructions for Elkhound are available at
 [GitHub](https://github.com/WeiDUorg/elkhound). There are also
 compiled executables for some platforms available under
-[Releases](https://github.com/WeiDUorg/elkhound/releases/latest).
+[Releases](https://github.com/WeiDUorg/elkhound/releases/latest). Windows
+builds without a Cygwin-dependency, as well as ARM builds for MacOS
+can be obtained
+[here](https://github.com/The-Mod-Elephant/elkhound/releases).
 
 ## Compiling WeiDU
 
