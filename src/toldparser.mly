@@ -538,9 +538,9 @@ optional_evaluate :
     RPAREN BEGIN tp_action_list END { Tp.TP_Outer_For($3,$5,$7,$10) }
 | OUTER_PATCH STRING BEGIN tp_patch_list END { Tp.TP_Outer_Inner_Buff($2,$4) }
 | OUTER_PATCH_SAVE patch_STRING_left STRING BEGIN tp_patch_list END { Tp.TP_Outer_Inner_Buff_Save($2,$3,$5) }
-| OUTER_SET patch_STRING_left EQUALS patch_exp { Tp.TP_Outer_Set($2,$4) }
-| OUTER_SPRINT patch_STRING_left dlg_or_patch_STRING_right { Tp.TP_Outer_Sprint($2,$3) }
-| OUTER_TEXT_SPRINT patch_STRING_left patch_STRING_right { Tp.TP_Outer_Text_Sprint($2,$3) }
+| OUTER_SET patch_STRING_left EQUALS patch_exp { Tp.TP_Outer_Set($2,$4,false) }
+| OUTER_SPRINT patch_STRING_left dlg_or_patch_STRING_right { Tp.TP_Outer_Sprint($2,$3,false) }
+| OUTER_TEXT_SPRINT patch_STRING_left patch_STRING_right { Tp.TP_Outer_Text_Sprint($2,$3,false) }
 | OUTER_WHILE patch_exp BEGIN tp_action_list END { Tp.TP_Outer_While($2,$4) }
 | ACTION_READLN patch_STRING_left { Tp.TP_Action_ReadLN($2) }
 | REQUIRE_FILE STRING lse { Tp.TP_Require_File($2,$3) }
@@ -839,51 +839,51 @@ optional_evaluate :
 | WRITE_ASCII_TERMINATED patch_exp STRING { Tp.TP_PatchASCIITerminated($2,$3) }
 | INSERT_BYTES patch_exp patch_exp { Tp.TP_PatchInsertBytes($2,$3) }
 | DELETE_BYTES patch_exp patch_exp { Tp.TP_PatchDeleteBytes($2,$3) }
-| SET patch_STRING_left EQUALS patch_exp { Tp.TP_PatchSet($2,$4) }
+| SET patch_STRING_left EQUALS patch_exp { Tp.TP_PatchSet($2,$4,false) }
 
 | STRING PLUS_EQUALS patch_exp
-    { Tp.TP_PatchSet(Tp.PE_LiteralString $1,(Tp.PE_Add(Tp.PE_String(Tp.PE_LiteralString $1),$3))) }
+    { Tp.TP_PatchSet(Tp.PE_LiteralString $1,(Tp.PE_Add(Tp.PE_String(Tp.PE_LiteralString $1),$3)),false) }
 | STRING MINUS_EQUALS patch_exp
-    { Tp.TP_PatchSet(Tp.PE_LiteralString $1,(Tp.PE_Sub(Tp.PE_String(Tp.PE_LiteralString $1),$3))) }
+    { Tp.TP_PatchSet(Tp.PE_LiteralString $1,(Tp.PE_Sub(Tp.PE_String(Tp.PE_LiteralString $1),$3)),false) }
 | STRING TIMES_EQUALS patch_exp
-    { Tp.TP_PatchSet(Tp.PE_LiteralString $1,(Tp.PE_Mul(Tp.PE_String(Tp.PE_LiteralString $1),$3))) }
+    { Tp.TP_PatchSet(Tp.PE_LiteralString $1,(Tp.PE_Mul(Tp.PE_String(Tp.PE_LiteralString $1),$3)),false) }
 | STRING DIVIDE_EQUALS patch_exp
-    { Tp.TP_PatchSet(Tp.PE_LiteralString $1,(Tp.PE_Div(Tp.PE_String(Tp.PE_LiteralString $1),$3))) }
+    { Tp.TP_PatchSet(Tp.PE_LiteralString $1,(Tp.PE_Div(Tp.PE_String(Tp.PE_LiteralString $1),$3)),false) }
 | STRING OR_EQUALS patch_exp
-    { Tp.TP_PatchSet(Tp.PE_LiteralString $1,(Tp.PE_BOR(Tp.PE_String(Tp.PE_LiteralString $1),$3))) }
+    { Tp.TP_PatchSet(Tp.PE_LiteralString $1,(Tp.PE_BOR(Tp.PE_String(Tp.PE_LiteralString $1),$3)),false) }
 | STRING AND_EQUALS patch_exp
-    { Tp.TP_PatchSet(Tp.PE_LiteralString $1,(Tp.PE_BAND(Tp.PE_String(Tp.PE_LiteralString $1),$3))) }
+    { Tp.TP_PatchSet(Tp.PE_LiteralString $1,(Tp.PE_BAND(Tp.PE_String(Tp.PE_LiteralString $1),$3)),false) }
 | STRING BLSL_EQUALS patch_exp
-    { Tp.TP_PatchSet(Tp.PE_LiteralString $1,(Tp.PE_BLSL(Tp.PE_String(Tp.PE_LiteralString $1),$3))) }
+    { Tp.TP_PatchSet(Tp.PE_LiteralString $1,(Tp.PE_BLSL(Tp.PE_String(Tp.PE_LiteralString $1),$3)),false) }
 | STRING BLSR_EQUALS patch_exp
-    { Tp.TP_PatchSet(Tp.PE_LiteralString $1,(Tp.PE_BLSR(Tp.PE_String(Tp.PE_LiteralString $1),$3))) }
+    { Tp.TP_PatchSet(Tp.PE_LiteralString $1,(Tp.PE_BLSR(Tp.PE_String(Tp.PE_LiteralString $1),$3)),false) }
 | STRING BXOR_EQUALS patch_exp
-    { Tp.TP_PatchSet(Tp.PE_LiteralString $1,(Tp.PE_BXOR(Tp.PE_String(Tp.PE_LiteralString $1),$3))) }
+    { Tp.TP_PatchSet(Tp.PE_LiteralString $1,(Tp.PE_BXOR(Tp.PE_String(Tp.PE_LiteralString $1),$3)),false) }
 
 
 
 | SET patch_STRING_left PLUS_EQUALS patch_exp
-    { Tp.TP_PatchSet($2,(Tp.PE_Add(Tp.PE_String($2),$4))) }
+    { Tp.TP_PatchSet($2,(Tp.PE_Add(Tp.PE_String($2),$4)),false) }
 | SET patch_STRING_left MINUS_EQUALS patch_exp
-    { Tp.TP_PatchSet($2,(Tp.PE_Sub(Tp.PE_String($2),$4))) }
+    { Tp.TP_PatchSet($2,(Tp.PE_Sub(Tp.PE_String($2),$4)),false) }
 | SET patch_STRING_left TIMES_EQUALS patch_exp
-    { Tp.TP_PatchSet($2,(Tp.PE_Mul(Tp.PE_String($2),$4))) }
+    { Tp.TP_PatchSet($2,(Tp.PE_Mul(Tp.PE_String($2),$4)),false) }
 | SET patch_STRING_left DIVIDE_EQUALS patch_exp
-    { Tp.TP_PatchSet($2,(Tp.PE_Div(Tp.PE_String($2),$4))) }
+    { Tp.TP_PatchSet($2,(Tp.PE_Div(Tp.PE_String($2),$4)),false) }
 | SET patch_STRING_left OR_EQUALS patch_exp
-    { Tp.TP_PatchSet($2,(Tp.PE_BOR(Tp.PE_String($2),$4))) }
+    { Tp.TP_PatchSet($2,(Tp.PE_BOR(Tp.PE_String($2),$4)),false) }
 | SET patch_STRING_left AND_EQUALS patch_exp
-    { Tp.TP_PatchSet($2,(Tp.PE_BAND(Tp.PE_String($2),$4))) }
+    { Tp.TP_PatchSet($2,(Tp.PE_BAND(Tp.PE_String($2),$4)),false) }
 | SET patch_STRING_left BLSL_EQUALS patch_exp
-    { Tp.TP_PatchSet($2,(Tp.PE_BLSL(Tp.PE_String($2),$4))) }
+    { Tp.TP_PatchSet($2,(Tp.PE_BLSL(Tp.PE_String($2),$4)),false) }
 | SET patch_STRING_left BLSR_EQUALS patch_exp
-    { Tp.TP_PatchSet($2,(Tp.PE_BLSR(Tp.PE_String($2),$4))) }
+    { Tp.TP_PatchSet($2,(Tp.PE_BLSR(Tp.PE_String($2),$4)),false) }
 | SET patch_STRING_left BXOR_EQUALS patch_exp
-    { Tp.TP_PatchSet($2,(Tp.PE_BXOR(Tp.PE_String($2),$4))) }
+    { Tp.TP_PatchSet($2,(Tp.PE_BXOR(Tp.PE_String($2),$4)),false) }
 
 | SET_IDS_SYMBOL_OF_INT STRING STRING patch_exp
     { Tp.TP_PatchSetIdsSymOfInt($2,$3,$4) }
-| STRING EQUALS patch_exp { Tp.TP_PatchSet(Tp.PE_LiteralString $1,$3) }
+| STRING EQUALS patch_exp { Tp.TP_PatchSet(Tp.PE_LiteralString $1,$3,false) }
 | ADD_KNOWN_SPELL STRING string_ref_or_pe STRING { Tp.TP_Add_Known_Spell($2,$3,$4) }
 | ADD_MEMORIZED_SPELL STRING string_ref_or_pe STRING
     { Tp.TP_Add_Memorized_Spell($2,$3,$4,Tp.get_pe_int "1") }
@@ -918,9 +918,9 @@ optional_evaluate :
 | PATCH_PRINT lse       { Tp.TP_PatchPrint($2) }
 | TO_LOWER patch_STRING_right { Tp.TP_PatchToLower($2) }
 | TO_UPPER patch_STRING_right { Tp.TP_PatchToUpper($2) }
-| SPRINT patch_STRING_left dlg_or_patch_STRING_right     { Tp.TP_PatchSprint($2,$3) }
+| SPRINT patch_STRING_left dlg_or_patch_STRING_right     { Tp.TP_PatchSprint($2,$3,false) }
 | SNPRINT patch_exp patch_STRING_left dlg_or_patch_STRING_right     { Tp.TP_PatchSnprint($2,$3,$4) }
-| TEXT_SPRINT patch_STRING_left patch_STRING_right { Tp.TP_PatchTextSprint($2,$3) }
+| TEXT_SPRINT patch_STRING_left patch_STRING_right { Tp.TP_PatchTextSprint($2,$3,false) }
 | SPACES patch_STRING_left patch_STRING_right{ Tp.TP_PatchSpaces($2,$3) }
 | QUOTE patch_STRING_left patch_STRING_right{ Tp.TP_PatchQuote($2,$3) }
 | INSERT_2DA_ROW patch_exp patch_exp patch_exp {Tp.TP_PatchInsert2DARow($2,$3,$4) }

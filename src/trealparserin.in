@@ -331,6 +331,11 @@ nonterm(Tp.tp_pe_string option) Optional_Patch_String_Right {
   -> e1:Patch_String_Right { Some e1 }
 }
 
+nonterm(bool) Optional_Global {
+  -> { false }
+  -> GLOBAL { true }
+}
+
 nonterm(Tp.tp_patchexp) String_Ref_Or_Pe {
   -> e1:STRING_REF [ Tp.PE_String(Tp.PE_LiteralString(string_of_int e1)) ]
   -> LPAREN e1:Patch_Exp RPAREN [ e1 ]
@@ -446,31 +451,36 @@ nonterm(Tp.tp_action) Tp_Action {
        BEGIN e4:Tp_Action_List END [ Tp.TP_Outer_For(e1,e2,e3,e4) ]
   -> OUTER_PATCH e1:STRING BEGIN e2:Tp_Patch_List END [ Tp.TP_Outer_Inner_Buff(e1,e2) ]
   -> OUTER_PATCH_SAVE e1:Patch_String_Left e2:STRING BEGIN e3:Tp_Patch_List END [ Tp.TP_Outer_Inner_Buff_Save(e1,e2,e3) ]
-  -> OUTER_SET e1:Patch_String_Left EQUALS e2:Patch_Exp [ Tp.TP_Outer_Set(e1,e2) ]
-  -> OUTER_SET e1:Patch_String_Left PLUS_EQUALS e2:Patch_Exp
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_Add(Tp.PE_String e1,e2))) ]
-  -> OUTER_SET e1:Patch_String_Left MINUS_EQUALS e2:Patch_Exp
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_Sub(Tp.PE_String e1,e2))) ]
-  -> OUTER_SET e1:Patch_String_Left TIMES_EQUALS e2:Patch_Exp
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_Mul(Tp.PE_String e1,e2))) ]
-  -> OUTER_SET e1:Patch_String_Left DIVIDE_EQUALS e2:Patch_Exp
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_Div(Tp.PE_String e1,e2))) ]
-  -> OUTER_SET e1:Patch_String_Left OR_EQUALS e2:Patch_Exp
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_BOR(Tp.PE_String e1,e2))) ]
-  -> OUTER_SET e1:Patch_String_Left AND_EQUALS e2:Patch_Exp
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_BAND(Tp.PE_String e1,e2))) ]
-  -> OUTER_SET e1:Patch_String_Left BLSL_EQUALS e2:Patch_Exp
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_BLSL(Tp.PE_String e1,e2))) ]
-  -> OUTER_SET e1:Patch_String_Left BLSR_EQUALS e2:Patch_Exp
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_BLSR(Tp.PE_String e1,e2))) ]
-  -> OUTER_SET e1:Patch_String_Left BXOR_EQUALS e2:Patch_Exp
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_BXOR(Tp.PE_String e1,e2))) ]
-  -> OUTER_SET PLUS_PLUS e1:Patch_String_Left [ Tp.TP_Outer_Set(e1,(Tp.PE_Add(Tp.PE_String e1, Tp.get_pe_int "1"))) ]
-  -> OUTER_SET MINUS_MINUS e1:Patch_String_Left [ Tp.TP_Outer_Set(e1,(Tp.PE_Sub(Tp.PE_String e1, Tp.get_pe_int "1"))) ]
-  -> OUTER_SPRINT e1:Patch_String_Left e2:Dlg_Or_Patch_String_Right [ Tp.TP_Outer_Sprint(e1,e2) ]
+  -> OUTER_SET e3:Optional_Global e1:Patch_String_Left EQUALS e2:Patch_Exp
+       [ Tp.TP_Outer_Set(e1,e2,e3) ]
+  -> OUTER_SET e3:Optional_Global e1:Patch_String_Left PLUS_EQUALS e2:Patch_Exp
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_Add(Tp.PE_String e1,e2)),e3) ]
+  -> OUTER_SET e3:Optional_Global e1:Patch_String_Left MINUS_EQUALS e2:Patch_Exp
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_Sub(Tp.PE_String e1,e2)),e3) ]
+  -> OUTER_SET e3:Optional_Global e1:Patch_String_Left TIMES_EQUALS e2:Patch_Exp
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_Mul(Tp.PE_String e1,e2)),e3) ]
+  -> OUTER_SET e3:Optional_Global e1:Patch_String_Left DIVIDE_EQUALS e2:Patch_Exp
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_Div(Tp.PE_String e1,e2)),e3) ]
+  -> OUTER_SET e3:Optional_Global e1:Patch_String_Left OR_EQUALS e2:Patch_Exp
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_BOR(Tp.PE_String e1,e2)),e3) ]
+  -> OUTER_SET e3:Optional_Global e1:Patch_String_Left AND_EQUALS e2:Patch_Exp
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_BAND(Tp.PE_String e1,e2)),e3) ]
+  -> OUTER_SET e3:Optional_Global e1:Patch_String_Left BLSL_EQUALS e2:Patch_Exp
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_BLSL(Tp.PE_String e1,e2)),e3) ]
+  -> OUTER_SET e3:Optional_Global e1:Patch_String_Left BLSR_EQUALS e2:Patch_Exp
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_BLSR(Tp.PE_String e1,e2)),e3) ]
+  -> OUTER_SET e3:Optional_Global e1:Patch_String_Left BXOR_EQUALS e2:Patch_Exp
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_BXOR(Tp.PE_String e1,e2)),e3) ]
+  -> OUTER_SET e3:Optional_Global PLUS_PLUS e1:Patch_String_Left
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_Add(Tp.PE_String e1, Tp.get_pe_int "1")),e3) ]
+  -> OUTER_SET e3:Optional_Global MINUS_MINUS e1:Patch_String_Left
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_Sub(Tp.PE_String e1, Tp.get_pe_int "1")),e3) ]
+  -> OUTER_SPRINT e3:Optional_Global e1:Patch_String_Left e2:Dlg_Or_Patch_String_Right
+       [ Tp.TP_Outer_Sprint(e1,e2,e3) ]
   -> OUTER_SPRINTF e1:Patch_String_Left e2:Dlg_Or_Patch_String_Right LPAREN e3:Patch_Exp_List RPAREN
        [Tp.TP_Outer_Sprintf(e1,e2,e3)]
-  -> OUTER_TEXT_SPRINT e1:Patch_String_Left e2:Patch_String_Right [ Tp.TP_Outer_Text_Sprint(e1,e2) ]
+  -> OUTER_TEXT_SPRINT e3:Optional_Global e1:Patch_String_Left e2:Patch_String_Right
+       [ Tp.TP_Outer_Text_Sprint(e1,e2,e3) ]
   -> OUTER_SNPRINT e1:Patch_Exp e2:Patch_String_Left e3:Dlg_Or_Patch_String_Right [ Tp.TP_Outer_Snprint(e1,e2,e3) ]
   -> ACTION_DEFINE_ASSOCIATIVE_ARRAY e1:Patch_String_Left BEGIN e2:Associative_String_List END
        [ Tp.TP_ActionDefineAssociativeArray(e1,e2) ]
@@ -1199,48 +1209,54 @@ nonterm (Tp.tp_patch) Tp_Patch {
   -> WRITE_ASCII_TERMINATED e1:Patch_Exp e2:STRING [ Tp.TP_PatchASCIITerminated(e1,e2) ]
   -> INSERT_BYTES e1:Patch_Exp e2:Patch_Exp [ Tp.TP_PatchInsertBytes(e1,e2) ]
   -> DELETE_BYTES e1:Patch_Exp e2:Patch_Exp [ Tp.TP_PatchDeleteBytes(e1,e2) ]
-  -> SET e1:Patch_String_Left EQUALS e2:Patch_Exp [ Tp.TP_PatchSet(e1,e2) ]
-  -> SET e1:Patch_String_Left PLUS_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet(e1,(Tp.PE_Add(Tp.PE_String e1,e2))) ]
-  -> SET e1:Patch_String_Left MINUS_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet(e1,(Tp.PE_Sub(Tp.PE_String e1,e2))) ]
-  -> SET e1:Patch_String_Left TIMES_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet(e1,(Tp.PE_Mul(Tp.PE_String e1,e2))) ]
-  -> SET e1:Patch_String_Left DIVIDE_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet(e1,(Tp.PE_Div(Tp.PE_String e1,e2))) ]
-  -> SET e1:Patch_String_Left OR_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet(e1,(Tp.PE_BOR(Tp.PE_String e1,e2))) ]
-  -> SET e1:Patch_String_Left AND_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet(e1,(Tp.PE_BAND(Tp.PE_String e1,e2))) ]
-  -> SET e1:Patch_String_Left BLSL_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet(e1,(Tp.PE_BLSL(Tp.PE_String e1,e2))) ]
-  -> SET e1:Patch_String_Left BLSR_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet(e1,(Tp.PE_BLSR(Tp.PE_String e1,e2))) ]
-  -> SET e1:Patch_String_Left BXOR_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet(e1,(Tp.PE_BXOR(Tp.PE_String e1,e2))) ]
-  -> SET PLUS_PLUS e1:Patch_String_Left [ Tp.TP_PatchSet(e1,(Tp.PE_Add(Tp.PE_String e1, Tp.get_pe_int "1"))) ]
-  -> SET MINUS_MINUS e1:Patch_String_Left [ Tp.TP_PatchSet(e1,(Tp.PE_Sub(Tp.PE_String e1, Tp.get_pe_int "1"))) ]
-  -> e1:STRING EQUALS e2:Patch_Exp [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),e2) ]
-  -> e1:STRING PLUS_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_Add(Tp.PE_String (Tp.PE_LiteralString e1),e2))) ]
-  -> e1:STRING MINUS_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_Sub(Tp.PE_String (Tp.PE_LiteralString e1),e2))) ]
-  -> e1:STRING TIMES_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_Mul(Tp.PE_String (Tp.PE_LiteralString e1),e2))) ]
-  -> e1:STRING DIVIDE_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_Div(Tp.PE_String (Tp.PE_LiteralString e1),e2))) ]
-  -> e1:STRING OR_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_BOR(Tp.PE_String (Tp.PE_LiteralString e1),e2))) ]
-  -> e1:STRING AND_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_BAND(Tp.PE_String (Tp.PE_LiteralString e1),e2))) ]
-  -> e1:STRING BLSL_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_BLSL(Tp.PE_String (Tp.PE_LiteralString e1),e2))) ]
-  -> e1:STRING BLSR_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_BLSR(Tp.PE_String (Tp.PE_LiteralString e1),e2))) ]
-  -> e1:STRING BXOR_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_BXOR(Tp.PE_String (Tp.PE_LiteralString e1),e2))) ]
-  -> PLUS_PLUS e1:STRING [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_Add(Tp.get_pe_int e1, Tp.get_pe_int "1"))) ]
-  -> MINUS_MINUS e1:STRING [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_Sub(Tp.get_pe_int e1, Tp.get_pe_int "1"))) ]
+  -> SET e3:Optional_Global e1:Patch_String_Left EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet(e1,e2,e3) ]
+  -> SET e3:Optional_Global e1:Patch_String_Left PLUS_EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet(e1,(Tp.PE_Add(Tp.PE_String e1,e2)),e3) ]
+  -> SET e3:Optional_Global e1:Patch_String_Left MINUS_EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet(e1,(Tp.PE_Sub(Tp.PE_String e1,e2)),e3) ]
+  -> SET e3:Optional_Global e1:Patch_String_Left TIMES_EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet(e1,(Tp.PE_Mul(Tp.PE_String e1,e2)),e3) ]
+  -> SET e3:Optional_Global e1:Patch_String_Left DIVIDE_EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet(e1,(Tp.PE_Div(Tp.PE_String e1,e2)),e3) ]
+  -> SET e3:Optional_Global e1:Patch_String_Left OR_EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet(e1,(Tp.PE_BOR(Tp.PE_String e1,e2)),e3) ]
+  -> SET e3:Optional_Global e1:Patch_String_Left AND_EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet(e1,(Tp.PE_BAND(Tp.PE_String e1,e2)),e3) ]
+  -> SET e3:Optional_Global e1:Patch_String_Left BLSL_EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet(e1,(Tp.PE_BLSL(Tp.PE_String e1,e2)),e3) ]
+  -> SET e3:Optional_Global e1:Patch_String_Left BLSR_EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet(e1,(Tp.PE_BLSR(Tp.PE_String e1,e2)),e3) ]
+  -> SET e3:Optional_Global e1:Patch_String_Left BXOR_EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet(e1,(Tp.PE_BXOR(Tp.PE_String e1,e2)),e3) ]
+  -> SET e3:Optional_Global PLUS_PLUS e1:Patch_String_Left
+       [ Tp.TP_PatchSet(e1,(Tp.PE_Add(Tp.PE_String e1, Tp.get_pe_int "1")),e3) ]
+  -> SET e3:Optional_Global MINUS_MINUS e1:Patch_String_Left
+       [ Tp.TP_PatchSet(e1,(Tp.PE_Sub(Tp.PE_String e1, Tp.get_pe_int "1")),e3) ]
+  -> e3:Optional_Global e1:STRING EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),e2,e3) ]
+  -> e3:Optional_Global e1:STRING PLUS_EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_Add(Tp.PE_String (Tp.PE_LiteralString e1),e2)),e3) ]
+  -> e3:Optional_Global e1:STRING MINUS_EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_Sub(Tp.PE_String (Tp.PE_LiteralString e1),e2)),e3) ]
+  -> e3:Optional_Global e1:STRING TIMES_EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_Mul(Tp.PE_String (Tp.PE_LiteralString e1),e2)),e3) ]
+  -> e3:Optional_Global e1:STRING DIVIDE_EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_Div(Tp.PE_String (Tp.PE_LiteralString e1),e2)),e3) ]
+  -> e3:Optional_Global e1:STRING OR_EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_BOR(Tp.PE_String (Tp.PE_LiteralString e1),e2)),e3) ]
+  -> e3:Optional_Global e1:STRING AND_EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_BAND(Tp.PE_String (Tp.PE_LiteralString e1),e2)),e3) ]
+  -> e3:Optional_Global e1:STRING BLSL_EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_BLSL(Tp.PE_String (Tp.PE_LiteralString e1),e2)),e3) ]
+  -> e3:Optional_Global e1:STRING BLSR_EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_BLSR(Tp.PE_String (Tp.PE_LiteralString e1),e2)),e3) ]
+  -> e3:Optional_Global e1:STRING BXOR_EQUALS e2:Patch_Exp
+       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_BXOR(Tp.PE_String (Tp.PE_LiteralString e1),e2)),e3) ]
+  -> e3:Optional_Global PLUS_PLUS e1:STRING
+       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_Add(Tp.get_pe_int e1, Tp.get_pe_int "1")),e3) ]
+  -> e3:Optional_Global MINUS_MINUS e1:STRING
+       [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),(Tp.PE_Sub(Tp.get_pe_int e1, Tp.get_pe_int "1")),e3) ]
   -> SET_IDS_SYMBOL_OF_INT e1:STRING e2:STRING e3:Patch_Exp [ Tp.TP_PatchSetIdsSymOfInt(e1,e2,e3) ]
   -> ADD_KNOWN_SPELL e1:STRING e2:String_Ref_Or_Pe e3:STRING
        [ Tp.TP_Add_Known_Spell(e1,e2,e3) ]
@@ -1292,11 +1308,13 @@ nonterm (Tp.tp_patch) Tp_Patch {
   -> PATCH_LOG e1:Lse [ Tp.TP_PatchLog(e1) ]
   -> TO_LOWER e1:Patch_String_Right [ Tp.TP_PatchToLower e1 ]
   -> TO_UPPER e1:Patch_String_Right [ Tp.TP_PatchToUpper e1 ]
-  -> SPRINT e1:Patch_String_Left e2:Dlg_Or_Patch_String_Right [ Tp.TP_PatchSprint(e1,e2) ]
+  -> SPRINT e3:Optional_Global e1:Patch_String_Left e2:Dlg_Or_Patch_String_Right
+       [ Tp.TP_PatchSprint(e1,e2,e3) ]
   -> SPRINTF e1:Patch_String_Left e2:Dlg_Or_Patch_String_Right LPAREN e3:Patch_Exp_List RPAREN [ Tp.TP_PatchSprintf(e1,e2,e3) ]
   -> SNPRINT e1:Patch_Exp e2:Patch_String_Left e3:Dlg_Or_Patch_String_Right
        [ Tp.TP_PatchSnprint(e1,e2,e3) ]
-  -> TEXT_SPRINT e1:Patch_String_Left e2:Patch_String_Right [ Tp.TP_PatchTextSprint(e1,e2) ]
+  -> TEXT_SPRINT e3:Optional_Global e1:Patch_String_Left e2:Patch_String_Right
+       [ Tp.TP_PatchTextSprint(e1,e2,e3) ]
   -> SOURCE_BIFF e1:Patch_String_Left e2:Patch_String_Right [ Tp.TP_SourceBiff(e1,e2) ]
   -> SPACES e1:Patch_String_Left e2:Patch_String_Right [ Tp.TP_PatchSpaces(e1,e2) ]
   -> QUOTE  e1:Patch_String_Left e2:Patch_String_Right [ Tp.TP_PatchQuote(e1,e2) ]

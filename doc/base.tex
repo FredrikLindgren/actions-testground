@@ -3800,11 +3800,15 @@ or & \DEFINE{ALTER!TLK!LIST} \t{BEGIN} \ttref{value} \Slist \t{END} \t{BEGIN} \t
     The string DisplayString is echoed to setup-mymod.debug.
     If displayString contains \t{\%}\ttref{variable}\t{\%}
     references, their values will be displayed. \\
-or & \DEFINE{OUTER!TEXT!SPRINT} \ttref{variable} stringWithVars &
+or & \DEFINE{OUTER!TEXT!SPRINT} \Ob \t{GLOBAL} \Oe \ttref{variable} stringWithVars &
   Any WeiDU variables (enclosed in \t{\%}s) inside stringWithVars are
   replaced by their values and the resulting string (constructed at
-  mod-installation time!) is assigned to the variable \t{variable}. \\
-or & \DEFINE{OUTER!SPRINT} \ttref{variable} stringWithVars &
+  mod-installation time!) is assigned to the variable \t{variable}. If
+  \t{GLOBAL} is provided, the variable is set in a special variable
+  scope that can be accessed from any other variable scope. Normal
+  variables do, however, shadow \t{GLOBAL} variables if they have the
+  same variable name. \\
+or & \DEFINE{OUTER!SPRINT} \Ob \t{GLOBAL} \Oe \ttref{variable} stringWithVars &
   Like \ttref{OUTER!TEXT!SPRINT}, but stringWithVars can be an @reference, and will
   break --traify. Use \ttref{OUTER!TEXT!SPRINT} instead. \\
 
@@ -3822,23 +3826,27 @@ SPRINT author Jason
 SNPRINT 3 myvar "1:%author%"
 \end{verbatim}
   ... assigns \t{1:J} to \t{myvar}.  \\
-or & \DEFINE{OUTER!SET} \ttref{variable} \t{=} \ttref{value} &
-  Update \ttref{variable} so that it is equal to \ttref{value}. \\
-or & \ttref{OUTER!SET} \ttref{variable} \t{+=} \ttref{value} &
+or & \DEFINE{OUTER!SET} \Ob \t{GLOBAL} \Oe \ttref{variable} \t{=} \ttref{value} &
+  Update \ttref{variable} so that it is equal to \ttref{value}. If
+  \t{GLOBAL} is provided, the variable is set in a special variable
+  scope that can be accessed from any other variable scope. Normal
+  variables do, however, shadow \t{GLOBAL} variables if they have the
+  same variable name. \\
+or & \ttref{OUTER!SET} \Ob \t{GLOBAL} \Oe \ttref{variable} \t{+=} \ttref{value} &
   Equivalent to \t{OUTER!SET variable = variable + value}. \\
-or & \ttref{OUTER!SET} \ttref{variable} \t{-=} \ttref{value} &
+or & \ttref{OUTER!SET} \Ob \t{GLOBAL} \Oe \ttref{variable} \t{-=} \ttref{value} &
   Equivalent to \t{OUTER!SET variable = variable - value}. \\
-or & \ttref{OUTER!SET} \ttref{variable} \t{*=} \ttref{value} &
+or & \ttref{OUTER!SET} \Ob \t{GLOBAL} \Oe \ttref{variable} \t{*=} \ttref{value} &
   Equivalent to \t{OUTER!SET variable = variable * value}. \\
-or & \ttref{OUTER!SET} \ttref{variable} \t{/=} \ttref{value} &
+or & \ttref{OUTER!SET} \Ob \t{GLOBAL} \Oe \ttref{variable} \t{/=} \ttref{value} &
   Equivalent to \t{OUTER!SET variable = variable / value}. \\
-or & \ttref{OUTER!SET} \ttref{variable} \t{\&=} \ttref{value} &
+or & \ttref{OUTER!SET} \Ob \t{GLOBAL} \Oe \ttref{variable} \t{\&=} \ttref{value} &
   Equivalent to \t{OUTER!SET variable = variable BAND value}. \\
-or & \ttref{OUTER!SET} \ttref{variable} \t{|=} \ttref{value} &
+or & \ttref{OUTER!SET} \Ob \t{GLOBAL} \Oe \ttref{variable} \t{|=} \ttref{value} &
   Equivalent to \t{OUTER!SET variable = variable BOR value}. \\
-or & \ttref{OUTER!SET} \ttref{variable} \t{<<=} \ttref{value} &
+or & \ttref{OUTER!SET} \Ob \t{GLOBAL} \Oe \ttref{variable} \t{<<=} \ttref{value} &
   Equivalent to \t{OUTER!SET variable = variable BLSL value}. \\
-or & \ttref{OUTER!SET} \ttref{variable} \t{>>=} \ttref{value} &
+or & \ttref{OUTER!SET} \Ob \t{GLOBAL} \Oe \ttref{variable} \t{>>=} \ttref{value} &
   Equivalent to \t{OUTER!SET variable = variable BLSR value}. \\
 or & \DEFINE{OUTER!INNER!PATCH} buffString \t{BEGIN} \ttref{patch} \Slist \t{END} &
   Any WeiDU variables inside \t{\%}s within buffString are replaced by
@@ -4258,11 +4266,15 @@ or & \DEFINE{TO!UPPER} \ttref{variable} &
 or & \DEFINE{TO!LOWER} \ttref{variable} &
   Turns to lower-case the contents of \verb+%variable%+ and store the
   results in variable. \\
-or & \DEFINE{TEXT!SPRINT} \ttref{variable} stringWithVars &
+or & \DEFINE{TEXT!SPRINT} \Ob \t{GLOBAL} \Oe \ttref{variable} stringWithVars &
   Any WeiDU variables (enclosed in \t{\%}s) inside stringWithVars are
   replaced by their values and the resulting string (constructed at
-  mod-installation time!) is assigned to the variable \t{variable}. \\
-or & \DEFINE{SPRINT} \ttref{variable} stringWithVars &
+  mod-installation time!) is assigned to the variable \t{variable}. If
+  \t{GLOBAL} is provided, the variable is set in a special variable
+  scope that can be accessed from any other variable scope. Normal
+  variables do, however, shadow \t{GLOBAL} variables if they have the
+  same variable name. \\
+or & \DEFINE{SPRINT} \Ob \t{GLOBAL} \Oe \ttref{variable} stringWithVars &
   Like \ttref{TEXT!SPRINT}, but stringWithVars can be an @reference, and will
   break --traify. Use \ttref{TEXT!SPRINT} instead. \\
 
@@ -4655,25 +4667,29 @@ or & \DEFINE{GET!STRREF!FS} \ttref{value} \ttref{variable} &
   associated with the string from \t{DIALOG.TLK} is used instead. If the
   string has no sound, the empty string is used instead. \\
 
-or & \DEFINE{SET} \ttref{variable} \t{=} \ttref{value} &
-  Update \ttref{variable} so that it is equal to \ttref{value}. \\
-or & \ttref{variable} \t{=} \ttref{value} &
-  Update \ttref{variable} so that it is equal to \ttref{value}. \\
-or & \Ob \ttref{SET} \Oe \ttref{variable} \t{+=} \ttref{value} &
+or & \DEFINE{SET} \Ob \t{GLOBAL} \Oe \ttref{variable} \t{=} \ttref{value} &
+  Update \ttref{variable} so that it is equal to \ttref{value}. If
+  \t{GLOBAL} is provided, the variable is set in a special variable
+  scope that can be accessed from any other variable scope. Normal
+  variables do, however, shadow \t{GLOBAL} variables if they have the
+  same variable name. \\
+or & \Ob \t{GLOBAL} \Oe \ttref{variable} \t{=} \ttref{value} &
+  Equivalent to \ttref{SET} \t{variable = value}. \\
+or & \Ob \ttref{SET} \Oe \Ob \t{GLOBAL} \Oe \ttref{variable} \t{+=} \ttref{value} &
   Equivalent to \t{SET variable = variable + value}. \\
-or & \Ob \ttref{SET} \Oe \ttref{variable} \t{-=} \ttref{value} &
+or & \Ob \ttref{SET} \Oe \Ob \t{GLOBAL} \Oe \ttref{variable} \t{-=} \ttref{value} &
   Equivalent to \t{SET variable = variable - value}. \\
-or & \Ob \ttref{SET} \Oe \ttref{variable} \t{*=} \ttref{value} &
+or & \Ob \ttref{SET} \Oe \Ob \t{GLOBAL} \Oe \ttref{variable} \t{*=} \ttref{value} &
   Equivalent to \t{SET variable = variable * value}. \\
-or & \Ob \ttref{SET} \Oe \ttref{variable} \t{/=} \ttref{value} &
+or & \Ob \ttref{SET} \Oe \Ob \t{GLOBAL} \Oe \ttref{variable} \t{/=} \ttref{value} &
   Equivalent to \t{SET variable = variable / value}. \\
-or & \Ob \ttref{SET} \Oe \ttref{variable} \t{\&=} \ttref{value} &
+or & \Ob \ttref{SET} \Oe \Ob \t{GLOBAL} \Oe \ttref{variable} \t{\&=} \ttref{value} &
   Equivalent to \t{SET variable = variable BAND value}. \\
-or & \Ob \ttref{SET} \Oe \ttref{variable} \t{|=} \ttref{value} &
+or & \Ob \ttref{SET} \Oe \Ob \t{GLOBAL} \Oe \ttref{variable} \t{|=} \ttref{value} &
   Equivalent to \t{SET variable = variable BOR value}. \\
-or & \Ob \ttref{SET} \Oe \ttref{variable} \t{<<=} \ttref{value} &
+or & \Ob \ttref{SET} \Oe \Ob \t{GLOBAL} \Oe \ttref{variable} \t{<<=} \ttref{value} &
   Equivalent to \t{SET variable = variable BLSL value}. \\
-or & \Ob \ttref{SET} \Oe \ttref{variable} \t{>>=} \ttref{value} &
+or & \Ob \ttref{SET} \Oe \Ob \t{GLOBAL} \Oe \ttref{variable} \t{>>=} \ttref{value} &
   Equivalent to \t{SET variable = variable BLSR value}. \\
 
 or & \DEFINE{WHILE} \ttref{value} \t{BEGIN}

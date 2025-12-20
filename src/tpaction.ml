@@ -163,17 +163,17 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
       | TP_Outer_Inner_Buff_Save(store_var,buff_var,pl) ->
           run_patch (TP_PatchInnerBuffSave(store_var,buff_var,pl))
 
-      | TP_Outer_Set(name,value) ->
-          run_patch (TP_PatchSet(name,value))
+      | TP_Outer_Set(name,value,global) ->
+          run_patch (TP_PatchSet(name,value,global))
 
-      | TP_Outer_Sprint(name,msg) ->
-          run_patch (TP_PatchSprint(name,msg))
+      | TP_Outer_Sprint(name,msg,global) ->
+          run_patch (TP_PatchSprint(name,msg,global))
 
       | TP_Outer_Sprintf(name,msg,vars) ->
           run_patch (TP_PatchSprintf(name,msg,vars))
 
-      | TP_Outer_Text_Sprint (var,str) ->
-          run_patch (TP_PatchTextSprint(var,str))
+      | TP_Outer_Text_Sprint (var,str,global) ->
+          run_patch (TP_PatchTextSprint(var,str,global))
 
       | TP_Outer_Snprint(size,name,msg) ->
           run_patch (TP_PatchSnprint(size,name,msg))
@@ -1395,7 +1395,7 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
                               TP_Patch2DA
                                 (get_pe_int "2", get_pe_int "0", get_pe_int "0", get_pe_int "%tb#kit_temp2% %tb#kit_temp2%");
                               TP_PatchSet
-                                (get_pe_string "tb#kit_this_is_a_temp_var",get_pe_int "0");
+                                (get_pe_string "tb#kit_this_is_a_temp_var",get_pe_int "0",false);
                               TP_Patch2DANow
                                 ("tb#kit_this_is_a_temp_var", get_pe_int "0");],[])] ;
                          copy_constraint_list = [Tp.TP_IfExists] ;
@@ -1417,7 +1417,7 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
                               TP_Patch2DA
                                 (get_pe_int "2", get_pe_int "0", get_pe_int "0", get_pe_int "%tb#kit_temp2a% %tb#kit_temp2a%");
                               TP_PatchSet
-                                (get_pe_string "tb#kit_this_is_a_temp_var",get_pe_int "0");
+                                (get_pe_string "tb#kit_this_is_a_temp_var",get_pe_int "0",false);
                               TP_Patch2DANow
                                 ("tb#kit_this_is_a_temp_var", get_pe_int "0");],[])] ;
                          copy_constraint_list = [] ;

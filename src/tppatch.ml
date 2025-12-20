@@ -390,10 +390,11 @@ let rec process_patch2_real process_action tp our_lang patch_filename game buff 
         Var.set_string var str ;
         buff
 
-    | TP_PatchSet(name,value) ->
+    | TP_PatchSet(name,value,global) ->
         let value = (eval_pe buff game value) in
         let name = eval_pe_str name in
-        Var.set_int32 name value ;
+        if global then Var.set_global_int32 name value
+        else Var.set_int32 name value ;
         buff
 
     | TP_PatchInnerAction(al) ->
@@ -880,7 +881,7 @@ let rec process_patch2_real process_action tp our_lang patch_filename game buff 
     | TP_PrettyPrint2DA(indent) ->
         List.fold_left (fun acc elt ->
           process_patch2 patch_filename game acc elt) buff
-          [TP_PatchSet(get_pe_string "tb#pretty_print_indent", indent);
+          [TP_PatchSet(get_pe_string "tb#pretty_print_indent", indent, false);
            TP_PatchInclude [".../WEIDU_NAMESPACE/tb#pretty_print.tpp"]]
 
     | TP_Read2DANow(str, req_col) ->
@@ -1861,11 +1862,12 @@ let rec process_patch2_real process_action tp our_lang patch_filename game buff 
 
     | TP_PatchReraise -> raise !current_exception
 
-    | TP_PatchSprint(name,msg) ->
+    | TP_PatchSprint(name,msg,global) ->
         let name = eval_pe_str name in
         let (str : string) = eval_pe_tlk_str game msg in
         let value = Var.get_string str in
-        Var.set_string name value  ;
+        if global then Var.set_global_string name value
+        else Var.set_string name value ;
         buff
 
     | TP_PatchSprintf(name,msg,vars) ->
@@ -1897,10 +1899,11 @@ let rec process_patch2_real process_action tp our_lang patch_filename game buff 
         if !vars <> [] then failwith "SPRINTF: too many arguments";
         buff
 
-    | TP_PatchTextSprint (var,str) ->
+    | TP_PatchTextSprint (var,str,global) ->
         let var = eval_pe_str var in
         let str = Var.get_string (eval_pe_str str) in
-        Var.set_string var str ;
+        if global then Var.set_global_string var str
+        else Var.set_string var str ;
         buff
 
     | TP_SourceBiff (var, res) ->

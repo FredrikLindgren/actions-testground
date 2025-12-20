@@ -189,10 +189,10 @@ and tp_action =
   | TP_Outer_For of (tp_patch list) * tp_patchexp * (tp_patch list) * (tp_action list)
   | TP_Outer_Inner_Buff of string * (tp_patch list)
   | TP_Outer_Inner_Buff_Save of tp_pe_string * string * (tp_patch list)
-  | TP_Outer_Set of tp_pe_string * tp_patchexp
-  | TP_Outer_Sprint of tp_pe_string * tp_pe_tlk_string
+  | TP_Outer_Set of tp_pe_string * tp_patchexp * bool
+  | TP_Outer_Sprint of tp_pe_string * tp_pe_tlk_string * bool
   | TP_Outer_Sprintf of tp_pe_string * tp_pe_tlk_string * tp_patchexp list
-  | TP_Outer_Text_Sprint of tp_pe_string * tp_pe_string
+  | TP_Outer_Text_Sprint of tp_pe_string * tp_pe_string * bool
   | TP_Outer_Snprint of tp_patchexp * tp_pe_string * tp_pe_tlk_string
   | TP_ActionDefineAssociativeArray of tp_pe_string * ((tp_pe_string list) * tp_pe_string) list
   | TP_Outer_While of tp_patchexp * (tp_action list)
@@ -374,9 +374,9 @@ and tp_patch =
   | TP_PatchFail of Dlg.tlk_string
   | TP_PatchAbort of Dlg.tlk_string
   | TP_PatchWarn of Dlg.tlk_string
-  | TP_PatchSprint of tp_pe_string * tp_pe_tlk_string
+  | TP_PatchSprint of tp_pe_string * tp_pe_tlk_string * bool
   | TP_PatchSprintf of tp_pe_string * tp_pe_tlk_string * tp_patchexp list
-  | TP_PatchTextSprint of tp_pe_string * tp_pe_string
+  | TP_PatchTextSprint of tp_pe_string * tp_pe_string * bool
   | TP_SourceBiff of tp_pe_string * tp_pe_string
   | TP_PatchSpaces of tp_pe_string * tp_pe_string
   | TP_PatchQuote of tp_pe_string * tp_pe_string
@@ -393,7 +393,7 @@ and tp_patch =
 	* string (* what? *)
   | TP_PatchInsertBytes of tp_patchexp * tp_patchexp
   | TP_PatchDeleteBytes of tp_patchexp * tp_patchexp
-  | TP_PatchSet of tp_pe_string * tp_patchexp
+  | TP_PatchSet of tp_pe_string * tp_patchexp * bool
   | TP_PatchSetIdsSymOfInt of string * string * tp_patchexp
   | TP_PatchWhile of tp_patchexp * (tp_patch list)
   | TP_PatchFor of

@@ -24,6 +24,7 @@ type variable_value =
   | String of string
 
 let variables = ref(Hashtbl.create 255)
+let global_scope = ref (Hashtbl.create 255)
 
 let arrays : (string, string list list) Hashtbl.t ref = ref(Hashtbl.create 255)
 
@@ -48,6 +49,13 @@ let var_clear_push () =
   variables := Hashtbl.create 255 ;
   arrays := Hashtbl.create 255
 
+let var_lookup var =
+  (try Hashtbl.find !variables var with Not_found ->
+     Hashtbl.find !global_scope var)
+
+let var_wrap name =
+  "%" ^ name ^ "%"
+
 let cli_variables : string list option ref = ref None
 
 let set_int32 name value =
@@ -58,7 +66,7 @@ let set_int32 name value =
 let set_int name value = set_int32 name (Int32.of_int value)
 
 let get_int32 name =
-  match Hashtbl.find !variables name with
+  match var_lookup name with
   | Int32(v) -> v
   | String(s) -> Int32.of_string s
 
@@ -99,6 +107,16 @@ let add_local_string name value =
 let remove_local name =
   let name = "%" ^ name ^ "%" in
   Hashtbl.remove !variables name
+
+let set_global_string name value =
+  let name = var_wrap name in
+  if !debug_assign then Util.log_and_print "GLOBAL_SET %s = ~%s~\n" name value ;
+  Hashtbl.replace !global_scope name (String(value))
+
+let set_global_int32 name value =
+  let name = var_wrap name in
+  if !debug_assign then Util.log_and_print "GLOBAL_SET %s = %ld\n" name value ;
+  Hashtbl.replace !global_scope name (Int32(value))
 
 (* var_subst:
  * Str.global_substitute replacement for replacing variables inside a string
@@ -141,14 +159,14 @@ let get_string_special reg str =
       (fun whole_thing -> (* "%foo%" *)
         let quoted_substr = Str.matched_string whole_thing in
         try
-          (match Hashtbl.find !variables quoted_substr with
+          (match var_lookup quoted_substr with
           | Int32(v) -> Some(Int32.to_string v)
           | String(s) -> Some(s))
         with Not_found -> if reg <> variable_regexp then begin
           try
             let try_substr = String.sub quoted_substr 1 (String.length quoted_substr - 2) in
             let try_substr = "%" ^ try_substr ^ "%" in
-            (match Hashtbl.find !variables try_substr with
+            (match var_lookup try_substr with
             | Int32(v) -> Some(Int32.to_string v)
             | String(s) -> Some(s))
           with Not_found -> None
@@ -160,7 +178,7 @@ let get_string_special reg str =
 let get_string = get_string_special variable_regexp
 
 let get_string_exact str =
-  match Hashtbl.find !variables str with
+  match var_lookup str with
   | Int32(v) -> Int32.to_string v
   | String(s) -> s
 
