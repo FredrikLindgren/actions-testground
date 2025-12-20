@@ -19,7 +19,6 @@ jobs:
       - name: build docs
         run: |
           sudo apt-get install -yqqq hevea zip perl make
-          cp sample.Configuration Configuration
           make doc
       - name: download linux artifact
         uses: actions/download-artifact@main
