@@ -1098,7 +1098,7 @@ let test_output_tlk game pause_at_end =
   let test path =
     (match path with
     | Some path when (file_exists path) -> begin
-        (try Unix.access path [Unix.W_OK] ;
+        (try Case_ins.unix_access path [Unix.W_OK] ;
           log_or_print "[%s] claims to be writeable.\n" path ;
           if (Case_ins.unix_stat path).Unix.st_kind <> Unix.S_REG then
             failwith (path ^ " is a not a regular file") ;

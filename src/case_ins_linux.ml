@@ -31,6 +31,7 @@ let unix_mkdir s p = Unix.mkdir (case_transform (backslash_to_slash s)) p ;;
 let unix_opendir s = Unix.opendir (case_transform (backslash_to_slash s)) ;;
 let unix_rename s d = Unix.rename (case_transform (backslash_to_slash s)) (case_transform (backslash_to_slash d));;
 let unix_rmdir s = Unix.rmdir (case_transform (backslash_to_slash s));;
+let unix_access s p = Unix.access (case_transform (backslash_to_slash s)) p
 
 let sys_readdir s = Sys.readdir (case_transform (backslash_to_slash s));;
 

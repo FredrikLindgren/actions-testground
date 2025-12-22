@@ -20,6 +20,7 @@ let unix_mkdir s p = Unix.mkdir s p ;;
 let unix_opendir s = Unix.opendir s ;;
 let unix_rename s d = Unix.rename s d;;
 let unix_rmdir s = Unix.rmdir s;;
+let unix_access s p = Unix.access s p
 
 let sys_readdir s = Sys.readdir s;;
 
