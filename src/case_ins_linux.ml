@@ -4,8 +4,6 @@
 open BatteriesInit
 open Hashtblinit
 
-let case_exact = ref false
-
 external fcase : string -> string = "fcase"
 
 let case_transform s = fcase s
