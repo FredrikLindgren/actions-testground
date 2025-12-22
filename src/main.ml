@@ -1371,6 +1371,7 @@ let main () =
   let no_auto_update = ref false in
   let auto_update_all = ref false in
   let exit_now = ref false in
+  let show_licence = ref false in
 
   let force_install_these_main   = ref [] in
   let force_uninstall_these_main = ref [] in
@@ -1510,6 +1511,7 @@ let main () =
     "--safe-exit", Myarg.Set Tpstate.safe_exit, "\tPrints weidu.log after starting the installation of every component";
     "--version", Myarg.Set exit_now, "\tprint version number and exit";
     "--exit", Myarg.Set exit_now, "\tprint version number and exit";
+    "--licence", Myarg.Set show_licence, "\tprint licence information and exit" ;
     "--no-exit-pause", Myarg.Set no_exit_pause, "\tDon't ask to press enter to exit";
     "--ask-every", Myarg.Set Tp.ask_all, "\task about every TP2 component" ;
     "--ask-only", Myarg.List (Myarg.Int (fun i -> Tp.ask_only := i ::
@@ -1701,6 +1703,8 @@ let main () =
 
   Myarg.parse argDescr handleArg usageMsg  ;
   if !exit_now then exit 0;
+
+  if !show_licence then begin Licence.print () ; exit 0 end ;
 
   if (!auto_update_all) then begin
     (if (Arch.do_auto_update) then

@@ -13,7 +13,7 @@ WEIDU_BASE_MODULES := batList batteriesInit myhashtbl hashtblinit \
 	smutil useract lexerint parsetables arraystack objpool glr lrparse \
 	automate kit tpstate tphelp trealparser tlexer toldparser toldlexer tparser \
 	parsewrappers mymarshal tppe tpuninstall tppatch tpaction tpwork \
-	changelog
+	changelog licence
 WEIDU_MODULES = $(WEIDU_BASE_MODULES) myarg autoupdate main
 
 MODULES = $(WEIDU_MODULES) myarg weinstall tolower
