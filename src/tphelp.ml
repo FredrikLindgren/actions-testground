@@ -331,6 +331,7 @@ let init_default_strings () =
   add (-1052) "Simplified Chinese" ;
   add (-1053) "Russian" ;
   add (-1054) "Ukrainian" ;
+  add (-1055) "Hungarian" ;
   (* might be a good idea to leave a few numbers here,
    * in case there are additional translations made *)
 
@@ -499,7 +500,8 @@ let ask_about_lang_dir ask_text: string =
              ("pl_pl", (get_trans (-1047))); ("pt_br", (get_trans (-1048)));
              ("tr_tr", (get_trans (-1049))); ("ja_jp", (get_trans (-1050)));
              ("ko_kr", (get_trans (-1051))); ("zh_cn", (get_trans (-1052)));
-             ("ru_ru", (get_trans (-1053))); ("uk_ua", (get_trans (-1054)));]) ;
+             ("ru_ru", (get_trans (-1053))); ("uk_ua", (get_trans (-1054)));
+             ("hu_hu", (get_trans (-1055)));]) ;
   let prettify dir =
     if Hashtbl.mem pretty_ht dir then
       Hashtbl.find pretty_ht dir
