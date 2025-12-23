@@ -58,7 +58,6 @@ PROJECT_CMODULES   = reg
 PROJECT_CLIBS      = -ladvapi32
 endif
 #PROJECT_CMODULES   += eff_strings
-PROJECT_CMODULES   += fcase
 PROJECT_CMODULES   += zlib adler32 inflate uncompr inftrees zutil inffast $(GLOB) xdiff
 PROJECT_CMODULES   += xemit xpatchi xutils xdiffi xprepare $(ARCH_C_FILES)
 PROJECT_CMODULES   += crc32 compress deflate trees
@@ -138,7 +137,7 @@ $(PROJECT3_EXECUTABLE) : $(PROJECT3_MODULES:%=$(OBJDIR)/%.$(CMO)) \
 
 PROJECT4_EXECUTABLE = $(OBJDIR)/weinstall$(EXE)
 PROJECT4_MODULES    = batList batteriesInit case_ins weinstall
-PROJECT4_CMODULES   =
+PROJECT4_CMODULES   = fcase
 PROJECT4_OCAML_LIBS = unix str
 PROJECT4_LIBS       = unix camlstr
 .PHONY: weinstall
