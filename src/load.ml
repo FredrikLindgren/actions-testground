@@ -89,6 +89,7 @@ type script_style = BG1 | BG2 | IWD1 | IWD2 | PST | NONE
 
 type game = {
     mutable key : Key.key ;
+    key_name : string ;
     game_path : string ;
     mutable cd_path_list : string list ;
     mutable override_path_list : string list ;
@@ -355,7 +356,7 @@ let actually_load_tlk_pair game tlk_pair =
   end
 
 
-exception FoundKey of Key.key * string
+exception FoundKey of Key.key * string * string
 
 let load_null_game () =
   let dialogs =
@@ -379,6 +380,7 @@ let load_null_game () =
   let result =
     {
      key = Key.null_key () ;
+     key_name = " -- NO GAME -- " ;
      game_path = " -- NO GAME -- " ;
      cd_path_list = [] ;
      override_path_list = !override_paths ;
@@ -402,13 +404,13 @@ let find_key_file game_paths =
       let keyname = find_file_in_path path "^chitin.key$" in
       if file_exists keyname then begin
         let keybuff = load_file keyname in
-        raise (FoundKey((Key.load_key keyname keybuff),path))
+        raise (FoundKey((Key.load_key keyname keybuff),keyname,path))
       end) game_paths ;
     log_and_print "\nERROR: Unable to find CHITIN.KEY in:\n" ;
     List.iter (fun path -> log_and_print "\t%s\n" path) game_paths ;
     failwith
       "Unable to find CHITIN.KEY: run me in an Infinity Engine game directory"
-  with FoundKey(k,gp) -> k, gp
+  with FoundKey(k,kn,gp) -> k, kn, gp
 
 let read_cd_paths gp =
   let paths =
@@ -479,7 +481,7 @@ let autodetect_game_type key =
 let have_bgee_lang_dir_p = ref false
 
 let load_game () =
-  let key, gp = find_key_file !game_paths in
+  let key, keyname, gp = find_key_file !game_paths in
   let dialogs = load_dialogs gp in
   let dialog_index = 0 in
   let cd_paths = read_cd_paths gp in
@@ -491,6 +493,7 @@ let load_game () =
   let result =
     {
      key = key ;
+     key_name = keyname ;
      game_path = gp ;
      cd_path_list = cd_paths ;
      override_path_list = [(gp ^ "/override")] @ !override_paths ;

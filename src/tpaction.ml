@@ -364,7 +364,7 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
           let file_lst = List.map Var.get_string (List.map eval_pe_str file_lst) in
           let file_lst = List.map String.uppercase file_lst in
           let new_key = Key.remove_files game.Load.key file_lst in
-          let oc = open_for_writing "CHITIN.KEY" true in
+          let oc = open_for_writing game.key_name true in
           Key.save_key new_key oc ;
           close_out oc ;
           let keybuff = load_file "chitin.key" in
@@ -433,7 +433,7 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
             let new_key = Biff.save_biff game.Load.key filename
                 (Load.fix_biff_path filename) !find_list in
             if !debug_ocaml then log_and_print "MAKE_BIFF: Calculated new key\n";
-            let oc = open_for_writing "CHITIN.KEY" true in
+            let oc = open_for_writing game.key_name true in
             Key.save_key new_key oc ;
             close_out oc ;
             if !debug_ocaml then log_and_print "MAKE_BIFF: Saved the key\n";
