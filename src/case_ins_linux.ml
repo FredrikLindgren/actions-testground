@@ -6,7 +6,8 @@ open Hashtblinit
 
 external fcase : string -> string = "fcase"
 
-let case_transform s = fcase s
+(* fcase returns "./" for "" *)
+let case_transform s = if String.trim s <> "" then fcase s else ""
 
 (* Pervasives FS calls *)
 let backslash_to_slash s =
