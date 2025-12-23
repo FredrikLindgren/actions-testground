@@ -137,7 +137,7 @@ $(PROJECT3_EXECUTABLE) : $(PROJECT3_MODULES:%=$(OBJDIR)/%.$(CMO)) \
 
 PROJECT4_EXECUTABLE = $(OBJDIR)/weinstall$(EXE)
 PROJECT4_MODULES    = batList batteriesInit case_ins weinstall
-PROJECT4_CMODULES   = fcase
+PROJECT4_CMODULES   = $(CASE_C_FILES)
 PROJECT4_OCAML_LIBS = unix str
 PROJECT4_LIBS       = unix camlstr
 .PHONY: weinstall
