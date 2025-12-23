@@ -37,6 +37,7 @@ else
 		export OBJEXT    = o
 		export ARCH_FILE = arch_unix
 		export CASE_FILE = case_ins_linux
+		export ARCH_C_FILES = fcase
 		export GLOB      = glob_unix
 		# Very simplistic arch test
 		# Does not account for e.g., PPC machines
@@ -50,7 +51,7 @@ else
 		export WEIDU_OS     = unix
 		export ELKHOUND_BIN = elkhound
 		export USEOPT       = .opt
-		PROJECT_CMODULES    = nix
+		PROJECT_CMODULES    = nix fcase
 	else
 		ifeq "$(uname)" "Darwin"
 			# (2) Mac OS X, using GCC as the C compiler
