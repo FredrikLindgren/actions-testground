@@ -115,6 +115,11 @@ BEGIN
       OUTER_SPRINT charset "CP1251"
     END
 
+    ".*norwegian.*" ".*bokmål.*" ".*norsk.*" ".*no_NB.*"
+    BEGIN
+      OUTER_SPRINT chatset "CP1252"
+    END
+
     DEFAULT
       FAIL "ERROR: charset could not be inferred for language %language%"
   END
