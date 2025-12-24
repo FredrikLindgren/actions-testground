@@ -362,7 +362,6 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
 
       | TP_DisableFromKey(file_lst) ->
           let file_lst = List.map Var.get_string (List.map eval_pe_str file_lst) in
-          let file_lst = List.map String.uppercase file_lst in
           let new_key = Key.remove_files game.Load.key file_lst in
           let oc = open_for_writing game.key_name true in
           Key.save_key new_key oc ;

@@ -43,6 +43,8 @@ let null_key () = {
 let key_ext_ht = Hashtbl.create 101
 let ext_key_ht = Hashtbl.create 101
 
+let norm_lookup = Hashtbl.create 101
+
 let assoc ext key =
   Hashtbl.add key_ext_ht ext key ;
   Hashtbl.add ext_key_ht key ext
@@ -101,7 +103,7 @@ let ext_of_key key =
     Printf.sprintf "0x%X" key
 
 let key_of_ext warn ext =
-  let ext = String.uppercase ext in
+  let ext = String.uppercase_ascii ext in
   try
     Hashtbl.find key_ext_ht ext
   with e ->
@@ -175,15 +177,14 @@ let load_key filename buff =
         let len_file = short_of_str_off buff (off + 8) in
         {
          length = int_of_str_off buff off ;
-         filename = String.uppercase
-           (get_string_of_size buff off_file len_file) ;
+         filename = (get_string_of_size buff off_file len_file) ;
          locations = short_of_str_off buff (off + 10) ;
        }) ;
       resource = Array.init num_resource (fun i ->
         let off = offset_resource + (i * 14) in
         let bitfield = int32_of_str_off buff (off + 10) in
         let res = {
-          res_name = String.uppercase (get_string_of_size buff off 8) ;
+          res_name = get_string_of_size buff off 8 ;
           res_type = short_of_str_off buff (off + 8) ;
           other_index = Int32.to_int
             (Int32.logand bitfield (Int32.of_int 16383)) ;
@@ -193,6 +194,9 @@ let load_key filename buff =
                (Int32.of_int 63)) ;
         } in
         let ext_str = ext_of_key res.res_type in
+        Hashtbl.add norm_lookup
+                    ((String.uppercase res.res_name),ext_str)
+                    (res.res_name,ext_str) ;
         Hashtbl.add resfind (res.res_name,ext_str) res ;
         res) ;
     } in
@@ -205,9 +209,10 @@ let find_resource key name ext =
     Hashtbl.find key.resfind (name,ext)
   with Not_found ->
     begin
-      Hashtbl.find key.resfind
-        (String.uppercase name,String.uppercase ext)
-    end
+      let (lookup,ext) = Hashtbl.find norm_lookup
+                                      ((String.uppercase name),
+                                       (String.uppercase_ascii ext)) in
+      Hashtbl.find key.resfind (lookup,ext) end
 
 let resource_exists key name ext =
   try
@@ -300,13 +305,18 @@ let remove_biff key filename =
 let remove_files key file_lst =
   let new_resfind = Hashtbl.copy key.resfind in
   let file_hsh = Hashtbl.create 5 in
-  List.iter (fun file ->
-    let (name,ext) = split_resref file in
-    Hashtbl.remove new_resfind (name,ext) ;
-    Hashtbl.add file_hsh (name,ext) true) file_lst ;
+  List.iter (fun up_file ->
+      let (name,ext) = split_resref up_file in
+      (try
+         let (lookup,ext) = Hashtbl.find norm_lookup (name,ext) in
+         Hashtbl.remove new_resfind (lookup,ext) ;
+       with Not_found -> ()) ;
+        Hashtbl.add file_hsh (name,ext) true) (List.map String.uppercase
+                                                            file_lst) ;
   let new_file_count = ref (Array.length key.resource) in
   Array.iter (fun item ->
-    if Hashtbl.mem file_hsh (item.res_name, (ext_of_key item.res_type)) then
+    let up_name = String.uppercase item.res_name in
+    if Hashtbl.mem file_hsh (up_name,(ext_of_key item.res_type)) then
       begin
         log_only "DISABLE_FROM_KEY [%s.%s]: success\n" item.res_name
           (ext_of_key item.res_type) ;
@@ -314,7 +324,7 @@ let remove_files key file_lst =
                   (String.concat ""
                      ["override/" ; item.res_name ; "." ;
                       (ext_of_key item.res_type)])) ;
-        Hashtbl.remove file_hsh (item.res_name, (ext_of_key item.res_type)) ;
+        Hashtbl.remove file_hsh (up_name,(ext_of_key item.res_type)) ;
         decr new_file_count
       end) key.resource ;
   Hashtbl.iter (fun (a,b) _ ->
