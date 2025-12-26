@@ -32,10 +32,12 @@ let variables_stack = ref []
 let arrays_stack = ref []
 
 let var_pop () =
-  variables := List.hd !variables_stack ;
-  variables_stack := List.tl !variables_stack ;
-  arrays := List.hd !arrays_stack ;
-  arrays_stack := List.tl !arrays_stack
+  (try
+     variables := List.hd !variables_stack ;
+     variables_stack := List.tl !variables_stack ;
+     arrays := List.hd !arrays_stack ;
+     arrays_stack := List.tl !arrays_stack
+   with Failure _ -> failwith "Cant't pop the vars: no vars to pop")
 
 let var_push () =
   variables_stack := !variables :: !variables_stack ;
