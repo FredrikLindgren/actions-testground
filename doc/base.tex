@@ -5618,6 +5618,11 @@ Returns true if the variable String is set (there's a variable called either
 \verb+String+ or \verb+%String%+, regardless of whether it is a string or an
 integer).  \\
 
+or & \DEFINE{VARIABLE!IS!IN!ARRAY} \ttref{String} & % Not actually a String
+Returns true if the variable String is set, as per
+\ttref{VARIABLE!IS!SET}, and if it is a member of an array, in the way
+that has it, for example, iterared over by \ttref{PHP!EACH}. \\
+
 or & \DEFSYN{IS!AN!INT} \ttref{String} &
 Returns true if the variable String is set to an integer (there's a variable called either
 \verb+String+ or \verb+%String%+ with integer value).  \\

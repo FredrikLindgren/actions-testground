@@ -143,6 +143,16 @@ let rec eval_pe buff game p =
       else if Hashtbl.mem !Var.variables ("%" ^ s ^ "%") then 1l
       else 0l
 
+  | PE_VariableIsInArray(s) ->
+     let lst = String.split_on_char '_' (eval_pe_str s) in
+     (try
+        let name = List.hd lst in
+        let body = List.tl lst in
+        let bodies = (try Hashtbl.find !Var.arrays name with Not_found -> []) in
+        if body <> [] && (List.mem body bodies) &&
+             (eval_pe buff game (PE_VariableIsSet s)) = 1l then 1l else 0l ;
+      with Failure _ -> 0l)
+
   | PE_TraEntryExists(s,tra_l) ->
     let s = Var.get_string (eval_pe_str s) in
 	let tra_l = List.map Var.get_string (List.map eval_pe_str tra_l) in

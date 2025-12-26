@@ -536,6 +536,7 @@ and tp_patchexp =
   | PE_GameIs of string * bool
   | PE_GameIncludes of string
   | PE_VariableIsSet of tp_pe_string
+  | PE_VariableIsInArray of tp_pe_string
   | PE_IdsOfSymbol of string * string
   | PE_StateWhichSays of (Dlg.tlk_string option) * ((tp_patchexp * string) option) * string
   | PE_IsAnInt of tp_pe_string
