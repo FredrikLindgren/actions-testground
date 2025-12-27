@@ -1887,7 +1887,8 @@ let rec process_patch2_real process_action tp our_lang patch_filename game buff 
           Buffer.add_string buff' (match x with
           | Str.Text(y) -> y
           | Str.Delim(y) ->
-              (let cur = List.hd !vars in
+              (let cur = (try List.hd !vars with Failure _ ->
+                            failwith "SPRINTF: insufficient arguments") in
               vars := List.tl !vars;
               match y with
               | "%s" -> (string_of_pe buff game cur)
