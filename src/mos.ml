@@ -85,6 +85,7 @@ let mos_of_str buff =
 
 let reduce_palette i j mos palette xMax yMax =
   let curLen = (Hashtbl.length palette) in
+  if curLen = 0 then failwith "EXTEND_MOS: palette cannot be empty" ;
   let cpalette = ref [] in
   Hashtbl.iter (fun a b -> cpalette := (a,b) :: !cpalette) palette ;
   let cpalette = ref (List.sort (fun (a,b) (a1,b1) ->
