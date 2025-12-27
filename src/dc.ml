@@ -1018,7 +1018,10 @@ end
         Hashtbl.add label_of_ci c3du (c3du.c3du_speaker,(chain_label ()))
                 ) ci.c3_dialogue ;
       (match ci.c3_variable with
-      | None -> Hashtbl.replace label_of_ci (List.hd ci.c3_dialogue)
+      | None -> Hashtbl.replace label_of_ci
+                  (try (List.hd ci.c3_dialogue) with Failure _->
+                     failwith (Printf.sprintf "I_C_T: no dialogues for %s"
+                                 ci.c3_entry_file))
             (ci.c3_entry_file,ci.c3_entry_label) ;
       | Some _ -> ()) ;
       let final_trans = Array.to_list ci.c3_exit_trans in
@@ -1142,7 +1145,10 @@ end
         | None -> ()
         | Some(var) ->
             begin
-              let fst = List.hd ci.c3_dialogue in
+              let fst = (try List.hd ci.c3_dialogue with Failure _ ->
+                           failwith (Printf.sprintf
+                                       "I_C_T: no dialogues \
+                                        for %s" ci.c3_entry_file)) in
               let file,label = Hashtbl.find label_of_ci fst in
               let trans = Dlg.make_trans_of_next (Dlg.Symbolic(file,label,false)) in
               trans.Dlg.trans_trigger <- Some
