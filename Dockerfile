@@ -20,8 +20,7 @@ USER root
 RUN chown -R opam:opam /src
 USER opam
 ENV PATH="${PATH}:/home/opam/.opam/4.08/bin"
-RUN mv sample.Configuration Configuration && \
-    make
+RUN make
 FROM docker.io/debian:13-slim
 WORKDIR /src
 COPY --from=weidu-build /src/weidu.asm.exe /src/weidu
