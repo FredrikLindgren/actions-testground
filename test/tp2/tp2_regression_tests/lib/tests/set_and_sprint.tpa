@@ -10,6 +10,7 @@ BEGIN
     LAF test_sprint END
     LAF test_global_set END
     LAF test_global_sprint END
+    LAF test_global_with_VARIABLE_IS_star END
     OUTER_SET success = 1
   WITH
     DEFAULT
@@ -129,5 +130,19 @@ DEFINE_ACTION_FUNCTION test_global_sprint BEGIN
   LAF test_global_sprint_inner2 END
   ACTION_IF "%fl#global#quux%" STR_CMP baz BEGIN
     FAIL "test_global_sprint failed to set with array expression"
+  END
+END
+
+DEFINE_ACTION_FUNCTION test_global_with_VARIABLE_IS_star BEGIN
+  OUTER_SET GLOBAL fl#global#unique1 = 1
+  OUTER_SET GLOBAL $global(fl unique2) = 2
+  ACTION_IF NOT VARIABLE_IS_SET fl#global#unique1 BEGIN
+    FAIL "test_global_with_VARIABLE_IS_*: variable is not set"
+  END
+  ACTION_IF NOT VARIABLE_IS_SET $global(fl unique2) BEGIN
+    FAIL "test_global_with_VARIABLE_IS_*: array construct is not set"
+  END
+  ACTION_IF NOT VARIABLE_IS_IN_ARRAY $global(fl unique2) BEGIN
+    FAIL "test_global_with_VARIABLE_IS_*: variable is not in array"
   END
 END

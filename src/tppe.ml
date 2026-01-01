@@ -139,9 +139,9 @@ let rec eval_pe buff game p =
       end
   | PE_VariableIsSet(s) ->
       let s = eval_pe_str s in
-      if Hashtbl.mem !Var.variables s then 1l
-      else if Hashtbl.mem !Var.variables ("%" ^ s ^ "%") then 1l
-      else 0l
+      (try ignore (Var.var_lookup s) ; 1l with
+         Not_found -> (try ignore (Var.var_lookup (Var.var_wrap s)) ;
+                           1l with Not_found -> 0l))
 
   | PE_VariableIsInArray(s) ->
      let lst = String.split_on_char '_' (eval_pe_str s) in
