@@ -348,6 +348,8 @@ let init_default_strings () =
   add (-1063) "INSTALLATION ABORTED" ;
   add (-1064) "Aborting installation of [" ;
   add (-1065) "], rolling back to previous state" ;
+  add (-1066) "fails component requirements or is deprecated, \
+               *not* Re-Installing." ;
   ()
 
 let get_trans i =

@@ -1394,9 +1394,6 @@ let rec handle_tp game this_tp2_filename tp =
           with e -> handle_error e
           end
       | TP_Skip ->
-          if temp_uninst then
-            handle_letter tp "I" can_uninstall temp_uninst package_name
-              m finished !current;
           begin
             match subcomp_group m with
             | Some(ts) -> Hashtbl.add asked_about_comp ts true
@@ -1449,8 +1446,7 @@ let rec handle_tp game this_tp2_filename tp =
   | (_,_,_,_,Installed) as head :: tl -> head :: (process tl)
   | (_,_,_,_,Permanently_Uninstalled) as head :: tl -> head :: (process tl)
   | (a,b,c,sopt,Temporarily_Uninstalled) as head :: tl ->
-      begin
-        try
+     begin try
           (* we must re-install it! *)
           begin
             (* log_and_print "\nRe-Installing [%s] component %d %s\n"
@@ -1458,8 +1454,7 @@ let rec handle_tp game this_tp2_filename tp =
             log_and_print "\n%s%s%s %d %s\n"
               (get_trans (-1010)) a (get_trans (-1011)) c
               (str_of_str_opt sopt);
-            let tp_file = a in
-            let tp2 = handle_tp2_filename tp_file in
+            let tp2 = handle_tp2_filename a in
             Load.allow_missing := !Load.allow_missing @
               List.fold_left (fun acc elt -> match elt with
               | Allow_Missing(lst) -> lst @ acc
@@ -1473,11 +1468,11 @@ let rec handle_tp game this_tp2_filename tp =
               let l = List.nth tp2.languages b in
               our_lang := Some(l) ;
               our_lang_index := b ;
-              List.iter handle_tra_filename (List.map
-                                               Arch.backslash_to_slash
-                                               (List.map Var.get_string l.lang_tra_files));
+              List.iter handle_tra_filename
+                (List.map Arch.backslash_to_slash
+                   (List.map Var.get_string l.lang_tra_files));
               (*  log_and_print "Re-Installing Using Language [%s]\n" l.lang_name ;*)
-              log_and_print "%s [%s]\n" ((get_trans (-1012))) l.lang_name ;
+              log_and_print "%s [%s]\n" (get_trans (-1012)) l.lang_name ;
               Var.set_string "LANGUAGE" l.lang_dir_name ;
               ignore (set_postlang_tp2_vars tp2) ;
             with _ ->
@@ -1485,82 +1480,22 @@ let rec handle_tp game this_tp2_filename tp =
               our_lang_index := 0 ;
               ()) ;
             let m = get_nth_module tp2 c true in
-            let package_name = Dc.single_string_of_tlk_string_safe game m.mod_name in
-            let fails_requirements = List.exists (fun f -> match f with
-            | TPM_RequireComponent(s,i,warn) ->
-                begin
-                  if already_installed s i then
-                    false
-                  else begin
-                    log_and_print "\n[%s] component %d %s fails component requirements, *not* Re-Installing.\n"
-                      a c (str_of_str_opt sopt);
-                    true
-                  end
-                end
-            | TPM_ForbidComponent(s,i,warn) ->
-                begin
-                  if not (already_installed s i) then
-                    false
-                  else begin
-                    log_and_print "\n[%s] component %d %s fails component requirements, *not* Re-Installing.\n"
-                      a c (str_of_str_opt sopt);
-                    true
-                  end
-                end
-            | TPM_Deprecated(warn) -> begin
-                log_and_print "\n[%s] component %d %s is deprecated, *not* Re-Installing.\n"
-                  a c (str_of_str_opt sopt);
-                true
-            end
-            | TPM_RequirePredicate(p,warn) ->
-                begin
-                  if is_true (eval_pe "" game p) then
-                    false
-                  else begin
-                    log_and_print "\n[%s] component %d %s fails component requirements, *not* Re-Installing.\n"
-                      a c (str_of_str_opt sopt);
-                    true
-                  end
-                end
-            | TPM_Label(s) -> false
-            | _ -> false) m.mod_flags || (if module_groups_ok m then false else begin
-                log_and_print "\n[%s] component %d %s fails component requirements, *not* Re-Installing.\n"
-                  a c (str_of_str_opt sopt);
-                true end) ||
-                List.exists (fun f -> match f with
-                | TP_Require_File(file,warn) ->
-                    begin
-                      if (bigg_file_exists file game.Load.key) then
-                        false
-                      else begin
-                        log_and_print "\n[%s] component %d %s fails component requirements, *not* Re-Installing.\n"
-                          a c (str_of_str_opt sopt);
-                        true
-                      end
-                    end
-                | TP_Forbid_File(file,warn) ->
-                    begin
-                      if (bigg_file_exists file game.Load.key) then begin
-                        log_and_print "\n[%s] component %d %s fails component requirements, *not* Re-Installing.\n"
-                          a c (str_of_str_opt sopt);
-                        true
-                      end
-                      else
-                        false
-                    end
-                | _ -> false) m.mod_parts
-            in
-            begin
-              if fails_requirements then begin
-                temp_to_perm_uninstalled tp2.tp_filename c handle_tp2_filename game ;
-                re_installed := !re_installed @ [(a,b,c,sopt,Permanently_Uninstalled)] ;
+            let package_name = Dc.single_string_of_tlk_string_safe game
+                                 m.mod_name in
+            let fails_requirements = fails_requirements tp2 m in
+            if fails_requirements then begin
+                log_and_print "\n[%s%s %d %s %s\n" a (get_trans (-1011)) c
+                  (str_of_str_opt sopt) (get_trans (-1066)) ;
+                temp_to_perm_uninstalled tp2.tp_filename c handle_tp2_filename
+                  game ;
+                re_installed := !re_installed @
+                                  [(a,b,c,sopt,Permanently_Uninstalled)] ;
                 the_log := (a,b,c,sopt,Permanently_Uninstalled) :: !the_log;
               end else begin
-                handle_letter tp2 "R" false false package_name m (ref false) c ;
+                handle_letter tp2 "I" false false package_name m (ref false) c ;
                 re_installed := !re_installed @ [(a,b,c,sopt,Installed)] ;
                 the_log := (a,b,c,sopt,Installed) :: !the_log;
-              end
-            end ;
+              end ;
             Dc.clear_state () ;
             Dc.pop_trans ();
           end ;
@@ -1572,7 +1507,7 @@ let rec handle_tp game this_tp2_filename tp =
             a c (str_of_str_opt sopt) (printexc_to_string e) ;
           exit_status := StatusInstallFailure ;
           (a,b,c,sopt,Permanently_Uninstalled) :: (process tl)
-      end
+     end
   in
   let result = process !the_log in
 

@@ -93,3 +93,4 @@
 @-1063= "INSTALLATION ABORTED"
 @-1064= "Aborting installation of ["
 @-1065= "], rolling back to previous state"
+@-1066= "fails component requirements or is deprecated, *not* Re-Installing." // Subject is the component
