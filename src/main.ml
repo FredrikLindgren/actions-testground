@@ -707,6 +707,27 @@ let biff_get bg_list game =
         ) bg_list
 ;;
 
+let unbiff ub_list game =
+  let biff_contents = Key.list_biff_contents game.Load.key ub_list in
+  List.iter (fun res ->
+      let name = res.Key.res_name in
+      let ext = Key.ext_of_key res.Key.res_type in
+      let outpath = theout.dir ^ "/" ^ name ^ "." ^ ext in
+      (try
+         let out = open_for_writing outpath true in
+         if ext <> "IDS" && ext <> "2DA" then begin
+             let _ = Load.copy_resource game name ext out in
+             close_out out ;
+           end else begin
+             let buff,_ = Load.load_resource "--unbiff" game false
+                            name ext in
+             output_string out buff ;
+             close_out out ;
+           end
+       with e ->
+         log_and_print "[%s] --unbiff error: %s\n" outpath
+           (printexc_to_string e))) biff_contents
+
 let make_biff_from_dir make_biff game =
   (match make_biff with
   | None -> ()
@@ -1364,6 +1385,7 @@ let main () =
   let ds_list = ref [] in
   let strapp_list = ref [] in
   let bc_list = ref [] in
+  let ub_list = ref [] in
   let bg_list = ref [] in
   let bcs_list = ref [] in
   let baf_list = ref [] in
@@ -1602,6 +1624,7 @@ let main () =
     "--list-biffs", Myarg.Set list_biff, "\tenumerate all BIFF files in CHITIN.KEY" ;
     "--list-files", Myarg.Set list_files, "\tenumerate all resource files in CHITIN.KEY";
     "--biff", Myarg.String (fun s -> bc_list := (String.uppercase s) :: !bc_list), "X\tenumerate contents of BIFF file X (cumulative)" ;
+    "--unbiff", Myarg.String (fun s -> ub_list := (String.uppercase s) :: !ub_list), "X\textract all resources from game BIFF X (cumulative)" ;
     "--biff-type", Myarg.String (fun s -> bs_type_list := s :: !bs_type_list), "X\texamine all BIFF resources of extension X ... (cumulative)" ;
     "--biff-str", Myarg.String (fun s -> bs_str_list := s :: !bs_str_list), "X\t... and list those containing X (cumulative, regexp allowed)" ;
     "--biff-name", Myarg.Int (fun i -> Load.content_name_offset := Some(i)),
@@ -1905,6 +1928,10 @@ let main () =
   end else if (!bs_type_list <> [] || !bs_str_list <> []) then begin
     log_and_print "WARNING: Please specify both --biff-type EXT and (--biff-str STRING or --biff-short-at OFFSET)\n"
   end  ;
+
+  (* Extract the BIFFs worth of resources *)
+  if (!ub_list <> []) then
+    unbiff !ub_list game ;
 
   (* Grab resources from BIFFs *)
   if (!bg_list <> []) then
