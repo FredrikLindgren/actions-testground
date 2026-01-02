@@ -244,15 +244,11 @@ let list_biff key o =
     o (Printf.sprintf "[%s]\t%9d bytes, %3d locations\n"
          b.filename b.length b.locations)) key.biff
 
-let list_biff_contents key o bl =
-  Array.iter (fun r ->
-    let biff = key.biff.(r.bif_index) in
-    let up_name = String.uppercase biff.filename in
-    if List.mem up_name bl then
-      o (Printf.sprintf "[%s] contains %8s.%3s at index %d\n"
-           biff.filename r.res_name ( ext_of_key r.res_type )
-           (if ext_of_key r.res_type = "TIS" then
-             r.tis_index else r.other_index))) key.resource
+let list_biff_contents key bl =
+  List.filter (fun res ->
+      let biff = key.biff.(res.bif_index) in
+      let up_name = String.uppercase_ascii biff.filename in
+      List.mem up_name bl) (Array.to_list key.resource)
 
 let list_key key o =
   Array.iter (fun r ->

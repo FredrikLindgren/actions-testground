@@ -1857,7 +1857,14 @@ let main () =
 
   (* List BIFF contents *)
   if (!bc_list <> []) then begin
-    Key.list_biff_contents game.Load.key output_theout !bc_list
+      let biff_contents = Key.list_biff_contents game.Load.key !bc_list in
+      List.iter (fun r ->
+          let biff = game.Load.key.biff.(r.Key.bif_index) in
+          output_theout (Printf.sprintf "[%s] contains %8s.%3s at index %d\n"
+                           biff.filename r.res_name (Key.ext_of_key r.res_type)
+                           (if Key.ext_of_key r.res_type = "TIS" then
+                              r.Key.tis_index else r.Key.other_index)))
+        biff_contents
   end ;
 
 
