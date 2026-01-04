@@ -122,6 +122,56 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
       else is_true (eval_pe "" game (Pred_File_Exists_In_Game (PE_LiteralString(file)))) ;
     end else true in
 
+  let passes_constraints filename buff con_l game caller print_if_do =
+    List.fold_left (fun acc elt -> acc &&
+      match elt with
+        TP_Contains(s) -> begin
+          let my_regexp = Str.regexp_case_fold
+              (Var.get_string (eval_pe_str s)) in
+          try
+            let _ = Str.search_forward my_regexp buff 0 in
+            if print_if_do then
+              log_only "%s: Doing [%s] because it DOES contain [%s]\n"
+                caller filename (Var.get_string (eval_pe_str s)) ;
+            true
+          with _ ->
+            log_only "%s: Not doing [%s] because it does NOT contain [%s]\n"
+              caller filename (Var.get_string (eval_pe_str s)) ;
+            false
+        end
+      | TP_NotContains(s) -> begin
+          let my_regexp = Str.regexp_case_fold
+              (Var.get_string (eval_pe_str s)) in
+          try
+            let _ = Str.search_forward my_regexp buff 0 in
+            if print_if_do then
+              log_only "%s: Not doing [%s] because it DOES contains [%s]\n"
+                caller filename (Var.get_string (eval_pe_str s)) ;
+            false
+          with _ ->
+            log_only "%s: Doing [%s] because it does NOT contain [%s]\n"
+              caller filename (Var.get_string (eval_pe_str s)) ;
+            true
+      end
+      | TP_IfSizeIs(size) ->
+          if String.length buff = size then
+            true
+          else begin
+            log_only "%s: Not doing [%s] because size is %d, NOT %d\n"
+              caller filename (String.length buff) size ; false end
+      | TP_ButOnlyIfItChanges
+      | TP_IfExists -> true
+      | TP_Eval(pe) ->
+          let v = eval_pe buff game pe in
+          if v = Int32.zero then begin
+            if print_if_do then
+              log_only "%s: Not doing [%s] because condition evaluates to %ld\n"
+                caller filename v ; false
+          end else begin
+            log_only "%s: Doing [%s] because condition evaluates to %ld\n"
+              caller filename v ; true
+          end) true con_l in
+
   let process_action = (process_action_real our_lang game this_tp2_filename) in
   let process_patch2 = process_patch2_real process_action tp our_lang in
 
@@ -741,44 +791,9 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
                         List.iter (fun p -> process_patch1 src game buff p) plist
                       with _ -> ()
                     end;
-                let ok_to_copy = List.fold_left (fun acc elt -> acc &&
-                  match elt with
-                  | TP_Contains(s) -> begin
-                      let my_regexp = Str.regexp_case_fold (Var.get_string (eval_pe_str s)) in
-                      try
-                        let _ = Str.search_forward my_regexp buff 0 in
-                      true
-                      with _ ->
-                        log_only_modder "Not copying [%s] to [%s] because it does NOT contain [%s]\n"
-                          src dest (Var.get_string (eval_pe_str s)) ;
-                        false
-                  end
-                  | TP_NotContains(s) -> begin
-                      let my_regexp = Str.regexp_case_fold (Var.get_string (eval_pe_str s)) in
-                      try
-                        let _ = Str.search_forward my_regexp buff 0 in
-                        log_only_modder "Not copying [%s] to [%s] because it DOES contain [%s]\n"
-                          src dest (Var.get_string (eval_pe_str s)) ;
-                        false
-                      with _ ->
-                        true
-                  end
-                  | TP_IfSizeIs(size) ->
-                      if String.length buff = size then
-                        true
-                      else begin
-                        log_only_modder "Not copying [%s] to [%s] because size is %d, NOT %d\n"
-                          src dest (String.length buff) size ;
-                        false
-                      end
-                  | TP_Eval(pe) ->
-                      let v = eval_pe buff game pe in
-                      if v = Int32.zero then begin
-                        log_only_modder "Not copying [%s] to [%s] because condition evaluates to %ld\n"
-                          src dest v ; false
-                      end else true
-                  | TP_ButOnlyIfItChanges
-                  | TP_IfExists -> true) true clist in
+                let ok_to_copy = passes_constraints (Printf.sprintf "%s -> %s"
+                                                       src dest)
+                    buff clist game "COPY" false in
                 if ok_to_copy then begin
                   let result_buff =
                     List.fold_left (fun acc elt ->
@@ -1858,42 +1873,8 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
             if buff = "" then
               log_or_print "[%s]: empty or does not exist\n" file
             else begin
-              let okay = List.fold_left (fun acc elt -> acc &&
-                match elt with
-                  TP_Contains(s) -> begin
-                    let my_regexp = Str.regexp_case_fold (Var.get_string (eval_pe_str s)) in
-                    try let _ = Str.search_forward my_regexp buff 0 in
-                    log_only "Appending cols to [%s] because it DOES contain [%s]\n"
-                      file (Var.get_string (eval_pe_str s))  ;
-                    true
-                    with _ ->
-                      log_only "Not appending cols to [%s] because it does NOT contain [%s]\n"
-                        file (Var.get_string (eval_pe_str s)) ;
-                      false
-                  end
-                | TP_NotContains(s) -> begin
-                    let my_regexp = Str.regexp_case_fold (Var.get_string (eval_pe_str s)) in
-                    try let _ = Str.search_forward my_regexp buff 0 in
-                    log_only "Not appending cols to [%s] because it DOES contains [%s]\n"
-                      file (Var.get_string (eval_pe_str s)) ;
-                    false
-                    with _ ->
-                      log_only "Appending cols to [%s] because it does NOT contain [%s]\n"
-                        file (Var.get_string (eval_pe_str s)) ;
-                      true
-                end
-                | TP_IfSizeIs(size) -> String.length buff = size
-                | TP_ButOnlyIfItChanges
-                | TP_IfExists -> true
-                | TP_Eval(pe) ->
-                    let v = eval_pe buff game pe in
-                    if v = Int32.zero then begin
-                      log_only "Not appending cols to [%s] because condition evaluates to %ld\n"
-                        file v ; false
-                    end else begin
-                      log_only "Appending cols to [%s] because condition evaluates to %ld\n"
-                        file v ; true
-                    end) true con_l in
+              let okay = passes_constraints file buff con_l game
+                  "APPEND_COL" true in
               if okay then begin (* do the append *)
                 let dest = if frombif then
                   "override/" ^ file
@@ -1953,44 +1934,8 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
             end else begin
               load_file file
             end in
-            let okay = List.fold_left (fun acc elt -> acc &&
-              match elt with
-                TP_Contains(s) -> begin
-                  let my_regexp = Str.regexp_case_fold
-                      (Var.get_string (eval_pe_str s)) in
-                  try let _ = Str.search_forward my_regexp buff 0 in
-                  log_only "Appending [%.10s...] to [%s] because it DOES contain [%s]\n"
-                    src file (Var.get_string (eval_pe_str s))  ;
-                  true
-                  with _ ->
-                    log_only "Not appending [%.10s...] to [%s] because it does NOT contain [%s]\n"
-                      src file (Var.get_string  (eval_pe_str s)) ;
-                    false
-                end
-              | TP_NotContains(s) -> begin
-                  let my_regexp = Str.regexp_case_fold
-                      (Var.get_string (eval_pe_str s)) in
-                  try let _ = Str.search_forward my_regexp buff 0 in
-                  log_only "Not appending [%.10s...] to [%s] because it DOES contains [%s]\n"
-                    src file (Var.get_string (eval_pe_str s)) ;
-                  false
-                  with _ ->
-                    log_only "Appending [%.10s...] to [%s] because it does NOT contain [%s]\n"
-                      src file (Var.get_string (eval_pe_str s)) ;
-                    true
-              end
-              | TP_IfSizeIs(size) -> String.length buff = size
-              | TP_ButOnlyIfItChanges
-              | TP_IfExists -> true
-              | TP_Eval(pe) ->
-                  let v = eval_pe buff game pe in
-                  if v = Int32.zero then begin
-                    log_only "Not appending [%.10s] to [%s] because condition evaluates to %ld\n"
-                      src file v ; false
-                  end else begin
-                    log_only "Appending [%.10s] to [%s] because condition evaluates to %ld\n"
-                      src file v ; true
-                  end) true con_l in
+            let okay = passes_constraints file buff con_l game
+                "APPEND" true in
             if okay then begin (* do the append *)
               let dest =
                 if frombif then "override/" ^ file
