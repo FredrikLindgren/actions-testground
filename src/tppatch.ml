@@ -391,8 +391,10 @@ let rec process_patch2_real process_action tp our_lang patch_filename game buff 
         buff
 
     | TP_PatchSet(name,value,global) ->
-        let value = (eval_pe buff game value) in
+        if global then ignore (Var.global_push_arrays ()) ;
         let name = eval_pe_str name in
+        if global then ignore (Var.global_pop_arrays ()) ;
+        let value = (eval_pe buff game value) in
         if global then Var.set_global_int32 name value
         else Var.set_int32 name value ;
         buff
@@ -709,7 +711,8 @@ let rec process_patch2_real process_action tp our_lang patch_filename game buff 
 
     | TP_PatchSortArrayIndices(array,sort_type) ->
         let array = Var.get_string (eval_pe_str array) in
-        let indices = (try Hashtbl.find !Var.arrays array with _ -> []) in
+        let indices,global =
+          (try Var.array_lookup array with Not_found -> ([],false)) in
         let sort_fodder = (match sort_type with
         | TP_Lexicographically ->
             List.map (fun var ->
@@ -735,8 +738,13 @@ let rec process_patch2_real process_action tp our_lang patch_filename game buff 
                     array; errors_this_component := true ; 0))) pairs in
         let sorted_indices = List.map (fun (_,var) ->
           var) sorted in
-        if List.length sorted_indices > 0 then
-          ignore (Hashtbl.add !Var.arrays array (List.rev sorted_indices)) ;
+        if List.length sorted_indices > 0 then begin
+          if global then
+            ignore (Hashtbl.add !Var.global_arrays array
+                      (List.rev sorted_indices))
+          else
+            ignore (Hashtbl.add !Var.arrays array (List.rev sorted_indices))
+        end ;
         buff
 
     | TP_PatchForEach(var,sl,pl) ->
@@ -752,7 +760,8 @@ let rec process_patch2_real process_action tp our_lang patch_filename game buff 
     | TP_PatchPHPEach(var,invar,outvar,pl) ->
         let var_s = Var.get_string (eval_pe_str var) in
         let var = PE_LiteralString(var_s) in
-        let values = try Hashtbl.find !Var.arrays var_s with _ -> [] in
+        let values,_ =
+          try Var.array_lookup var_s with Not_found -> ([],false) in
         let outvar = eval_pe_str outvar in
         let  invar = eval_pe_str  invar in
         let the_buff = ref buff in
@@ -1863,7 +1872,9 @@ let rec process_patch2_real process_action tp our_lang patch_filename game buff 
     | TP_PatchReraise -> raise !current_exception
 
     | TP_PatchSprint(name,msg,global) ->
+        if global then ignore (Var.global_push_arrays ()) ;
         let name = eval_pe_str name in
+        if global then ignore (Var.global_pop_arrays ()) ;
         let (str : string) = eval_pe_tlk_str game msg in
         let value = Var.get_string str in
         if global then Var.set_global_string name value

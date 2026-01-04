@@ -148,7 +148,8 @@ let rec eval_pe buff game p =
      (try
         let name = List.hd lst in
         let body = List.tl lst in
-        let bodies = (try Hashtbl.find !Var.arrays name with Not_found -> []) in
+        let bodies,_ =
+          (try Var.array_lookup name with Not_found -> ([],false)) in
         if body <> [] && (List.mem body bodies) &&
              (eval_pe buff game (PE_VariableIsSet s)) = 1l then 1l else 0l ;
       with Failure _ -> 0l)

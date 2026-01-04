@@ -27,6 +27,7 @@ let variables = ref(Hashtbl.create 255)
 let global_scope = ref (Hashtbl.create 255)
 
 let arrays : (string, string list list) Hashtbl.t ref = ref(Hashtbl.create 255)
+let global_arrays = ref(Hashtbl.create 255)
 
 let variables_stack = ref []
 let arrays_stack = ref []
@@ -54,6 +55,24 @@ let var_clear_push () =
 let var_lookup var =
   (try Hashtbl.find !variables var with Not_found ->
      Hashtbl.find !global_scope var)
+
+let global_push_arrays () =
+  arrays_stack := !arrays :: !arrays_stack ;
+  arrays := !global_arrays
+
+let global_pop_arrays () =
+  (try
+    global_arrays := !arrays ;
+    arrays := List.hd !arrays_stack
+  with Failure _ -> failwith "Can't pop arrays: no arrays to pop")
+
+let array_lookup var =
+  (try
+    let a = Hashtbl.find !arrays var in
+    (a,false)
+  with Not_found ->
+    let a = Hashtbl.find !global_arrays var in
+    (a,true))
 
 let var_wrap name =
   "%" ^ name ^ "%"
