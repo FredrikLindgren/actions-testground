@@ -550,13 +550,13 @@ optional_evaluate :
 | APPEND_COL STRING STRING tp_when_list { Tp.TP_Append_Col($2,$3,Tp.get_pe_int "0",$4,true,0) }
 | APPEND_COL STRING STRING  STRING tp_when_list { Tp.TP_Append_Col($2,$3,(Tp.get_pe_int $4),$5,true,0) }
 | EXTEND_TOP STRING STRING tp_patch_list optional_using
-    { Tp.TP_Extend_Top(false,$2,$3,$4,$5) }
+    { Tp.TP_Extend_Top(false,$2,$3,$4,$5,[]) }
 | EXTEND_BOTTOM STRING STRING tp_patch_list optional_using
-    { Tp.TP_Extend_Bottom(false,$2,$3,$4,$5) }
+    { Tp.TP_Extend_Bottom(false,$2,$3,$4,$5,[]) }
 | EXTEND_TOP_REGEXP STRING STRING tp_patch_list optional_using
-    { Tp.TP_Extend_Top(true,$2,$3,$4,$5) }
+    { Tp.TP_Extend_Top(true,$2,$3,$4,$5,[]) }
 | EXTEND_BOTTOM_REGEXP STRING STRING tp_patch_list optional_using
-    { Tp.TP_Extend_Bottom(true,$2,$3,$4,$5) }
+    { Tp.TP_Extend_Bottom(true,$2,$3,$4,$5,[]) }
 | AT_EXIT STRING { Tp.TP_At_Exit($2,false) }
 | AT_INTERACTIVE_EXIT STRING { Tp.TP_At_Interactive_Exit($2,false) }
 | AT_INTERACTIVE_UNINSTALL STRING { Tp.TP_At_Interactive_Uninstall($2,false) }

@@ -213,8 +213,10 @@ and tp_action =
          * Create backup?
          *)
   | TP_Set_Col of string * (string list) * int * (tp_constraint list)
-  | TP_Extend_Top of bool * string * string * (tp_patch list) * (string list)
-  | TP_Extend_Bottom of bool * string * string * (tp_patch list) * (string list)
+  | TP_Extend_Top of bool * string * string * (tp_patch list) *
+        (string list) * (tp_constraint list)
+  | TP_Extend_Bottom of bool * string * string * (tp_patch list) *
+        (string list) * (tp_constraint list)
   | TP_At_Exit of string * bool
   | TP_At_Interactive_Exit of string * bool
   | TP_At_Uninstall of string * bool

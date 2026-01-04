@@ -496,10 +496,14 @@ nonterm(Tp.tp_action) Tp_Action {
   -> APPEND_COL e0:Optional_Backup e1:STRING e2:STRING e3:Patch_Exp e4:Tp_When_List [ Tp.TP_Append_Col(e1,e2,e3,e4,true,e0) ]
   -> APPEND_COL_OUTER e0:Optional_Backup e1:STRING e2:STRING e3:Tp_When_List [ Tp.TP_Append_Col(e1,e2,Tp.get_pe_int "0",e3,false,e0) ]
   -> APPEND_COL_OUTER e0:Optional_Backup e1:STRING e2:STRING e3:Patch_Exp e4:Tp_When_List [ Tp.TP_Append_Col(e1,e2,e3,e4,false,e0) ]
-  -> EXTEND_TOP e1:STRING e2:STRING e3:Tp_Patch_List e4:Optional_Using [ Tp.TP_Extend_Top(false,e1,e2,e3,e4) ]
-  -> EXTEND_BOTTOM e1:STRING e2:STRING e3:Tp_Patch_List e4:Optional_Using [ Tp.TP_Extend_Bottom(false,e1,e2,e3,e4) ]
-  -> EXTEND_TOP_REGEXP e1:STRING e2:STRING e3:Tp_Patch_List e4:Optional_Using [ Tp.TP_Extend_Top(true,e1,e2,e3,e4) ]
-  -> EXTEND_BOTTOM_REGEXP e1:STRING e2:STRING e3:Tp_Patch_List e4:Optional_Using [ Tp.TP_Extend_Bottom(true,e1,e2,e3,e4) ]
+  -> EXTEND_TOP e1:STRING e2:STRING e3:Tp_Patch_List e4:Optional_Using e5:Tp_When_List
+       [ Tp.TP_Extend_Top(false,e1,e2,e3,e4,e5) ]
+  -> EXTEND_BOTTOM e1:STRING e2:STRING e3:Tp_Patch_List e4:Optional_Using e5:Tp_When_List
+       [ Tp.TP_Extend_Bottom(false,e1,e2,e3,e4,e5) ]
+  -> EXTEND_TOP_REGEXP e1:STRING e2:STRING e3:Tp_Patch_List e4:Optional_Using e5:Tp_When_List
+       [ Tp.TP_Extend_Top(true,e1,e2,e3,e4,e5) ]
+  -> EXTEND_BOTTOM_REGEXP e1:STRING e2:STRING e3:Tp_Patch_List e4:Optional_Using e5:Tp_When_List
+       [ Tp.TP_Extend_Bottom(true,e1,e2,e3,e4,e5) ]
   -> AT_EXIT e1:STRING e2:Optional_Exact [ Tp.TP_At_Exit(e1,e2) ]
   -> AT_INTERACTIVE_EXIT e1:STRING e2:Optional_Exact [ Tp.TP_At_Interactive_Exit(e1,e2) ]
   -> AT_UNINSTALL e1:STRING e2:Optional_Exact [ Tp.TP_At_Uninstall(e1,e2) ]

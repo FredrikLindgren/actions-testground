@@ -1986,30 +1986,27 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
             end
           end else log_or_print "Not appending to [%s] because the file does not exist\n" file
 
-      | TP_Extend_Top(use_reg,dest,src,pl,tra_l)
-      | TP_Extend_Bottom(use_reg,dest,src,pl,tra_l) -> begin
+      | TP_Extend_Top(use_reg,dest,src,pl,tra_l,con_l)
+      | TP_Extend_Bottom(use_reg,dest,src,pl,tra_l,con_l) -> begin
         let dest = if not use_reg then Arch.backslash_to_slash dest else dest in
         let tra_l = List.map (fun x -> Arch.backslash_to_slash x) tra_l in
         log_and_print "Extending game scripts ...\n" ;
         let dest = (Var.get_string dest) in
         let src = (Var.get_string src) in
         let src = Arch.backslash_to_slash src in
-        let dlist =
-          if use_reg = false then
+        let dlist = List.filter (fun f -> when_exists f con_l true game)
+          (if use_reg = false then
             [dest]
           else begin
-            let files_in_chitin = Key.list_of_key_resources game.Load.key true in
+            let files_in_chitin = Key.list_of_key_resources
+                game.Load.key true in
             let regexp = Str.regexp_case_fold dest in
             let matches = ref [] in
             List.iter (fun possible ->
               if Str.string_match regexp possible 0 then begin
                 matches := (possible) :: !matches
               end) files_in_chitin ;
-            if (!matches = []) then
-              [dest]
-            else
-              !matches
-          end
+            if (!matches = []) then [dest] else !matches end)
         in
         Dc.push_copy_trans_modder () ;
         (try
@@ -2048,7 +2045,8 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
 
           if !Dc.notChanged then
             Modder.handle_msg "SETUP_TRA"
-              (Printf.sprintf "WARNING: EXTEND* %s with strings from setup.tra\n" src);
+              (Printf.sprintf "WARNING: EXTEND* %s with strings from \
+                 setup.tra\n" src) ;
           let src_script =
             let src_buff = load_file src in
             if (!has_if_eval_bug) then begin
@@ -2060,9 +2058,9 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
               (try
                 process_patch2 src game acc elt
               with e ->
-                log_and_print "ERROR: [%s] -> [%s] Patching Failed (EXTEND_TOP/BOTTOM)\n"
-                  src dest ; raise e))
-                src_buff pl in
+                log_and_print "ERROR: [%s] -> [%s] Patching Failed \
+                  (EXTEND_TOP/BOTTOM)\n" src dest ; raise e)) src_buff pl
+            in
             Dc.ok_to_resolve_strings_while_loading := Some(game) ;
             (try
               let res = handle_script_buffer src src_buff in
@@ -2072,43 +2070,49 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
               begin
                 Dc.ok_to_resolve_strings_while_loading := None ;
                 raise e
-              end) ; in
+              end)
+          in
           List.iter (fun dest ->
             let base,ext = split_resref (String.uppercase dest) in
-            let dest_script =
-              let old_a_m = !Load.allow_missing in
-              Load.allow_missing := dest :: old_a_m ;
-              let dest_buff, dest_path =
-                (try
-                  Load.load_resource "EXTEND_TOP/EXTEND_BOTTOM" game true base ext
-                with _ ->
-                  begin
-                    log_only "[%s] not found, treating as empty.\n" dest ;
-                    "",""
-                  end)
-              in
-              Load.allow_missing := old_a_m ;
-              handle_script_buffer dest dest_buff in
-
-            let destpath =
+            let old_a_m = !Load.allow_missing in
+            Load.allow_missing := dest :: old_a_m ;
+            let dest_buff, dest_path =
               (try
-                ignore(String.index dest '/'); dest
-              with _ -> "override/" ^ dest) in
-            Stats.time "saving files" (fun () ->
-              let out = open_for_writing destpath true in
-              Bcs.save_bcs game (Bcs.Save_BCS_OC(out))
-                (match a with
-                  TP_Extend_Top(_,_,_,_,_) -> src_script @ dest_script
-                | _ -> dest_script @ src_script) ;
-              close_out out ;
-              begin (* handle read-only files! *)
-                (try
-                  Case_ins.unix_chmod destpath 511 ; (* 511 = octal 0777 = a+rwx *)
-                with e -> ())
-                  (* log_or_print "WARNING: chmod %s : %s\n" filename
-                     (printexc_to_string e) *)
-              end ;) () ;
-            log_or_print "Extended script [%s] with [%s]\n" dest src) dlist ;
+                Load.load_resource "EXTEND_TOP/EXTEND_BOTTOM"
+                  game true base ext
+              with _ ->
+                begin
+                  log_only "[%s] not found, treating as empty.\n" dest ;
+                  "",""
+                end)
+            in
+            Load.allow_missing := old_a_m ;
+            if passes_constraints dest dest_buff con_l game
+                "EXTEND_TOP/EXTEND_BOTTOM" false then
+              begin
+                log_and_print "dest is %s\n" dest ;
+                let dest_script = handle_script_buffer dest dest_buff in
+                let destpath =
+                  (try
+                    ignore(String.index dest '/'); dest
+                  with _ -> "override/" ^ dest) in
+                Stats.time "saving files" (fun () ->
+                  let out = open_for_writing destpath true in
+                  Bcs.save_bcs game (Bcs.Save_BCS_OC(out))
+                    (match a with
+                      TP_Extend_Top(_,_,_,_,_,_) -> src_script @ dest_script
+                    | _ -> dest_script @ src_script) ;
+                  close_out out ;
+                  begin (* handle read-only files! *)
+                    (try
+                      (* 511 = octal 0777 = a+rwx *)
+                      Case_ins.unix_chmod destpath 511 ;
+                    with e -> ())
+                      (* log_or_print "WARNING: chmod %s : %s\n" filename
+                         (printexc_to_string e) *)
+                  end) () ;
+                log_or_print "Extended script [%s] with [%s]\n" dest src
+              end) dlist ;
           Dc.pop_trans () ;
         with e -> Dc.pop_trans () ; raise e)
       end

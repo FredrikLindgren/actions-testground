@@ -3307,22 +3307,31 @@ P Q R 3
 	  assumed to be at the beginning of newText. A cell containing exactly
 	  \verb+$+ is printed as empty. \\
 
-  or & \DEFSYN{EXTEND!TOP} existingBCS newFile \ttref{patch} \Slist \Ob \t{USING} traName \Slist \Oe &
-    Loads existingFile (which may be \ttref{BAF} or \ttref{BCS}), prepends
-    all of newBCS to the top of it, applies all of the \ttref{patch}es, and
-    then copies it to the \t{override} folder. User variables in
-    the filenames existingFile and newFile are replaced by their values.
-    Use \ttref{EVALUATE!BUFFER} if you want to evaluate variables inside
-    the body of newFile before parsing it. \\
-  or & \DEFSYN{EXTEND!BOTTOM} existingBCS newFile \ttref{patch} \Slist \Ob \t{USING} traName \Slist \Oe &
+  or & \DEFSYN{EXTEND!TOP} existingBCS newFile \ttref{patch} \Slist
+    \Ob \t{USING} traName \Slist \Oe \Ob \ttref{when} \Slist \Oe &
+
+    If there are no \ttref{when} conditions, or they are all true,
+    loads existingFile (which may be \ttref{BAF} or \ttref{BCS}),
+    prepends all of newBCS to the top of it, applies all of the
+    \ttref{patch}es, and then copies it to the \t{override}
+    folder. User variables in the filenames existingFile and newFile
+    are replaced by their values.  Use \ttref{EVALUATE!BUFFER} if you
+    want to evaluate variables inside the body of newFile before
+    parsing it. \\
+
+  or & \DEFSYN{EXTEND!BOTTOM} existingBCS newFile \ttref{patch} \Slist
+    \Ob \t{USING} traName \Slist \Oe \Ob \ttref{when} \Slist \Oe &
     As \ttref{EXTEND!TOP}, but the newFile file is put at the bottom of the
     existingBCS file. User variables in the filenames existingFile and
     newFile are replaced by their values. \\
-  or & \DEFINE{EXTEND!TOP!REGEXP} existingBCSregexp newFile \ttref{patch} \Slist \Ob \t{USING} traName \Slist \Oe &
+  or & \DEFINE{EXTEND!TOP!REGEXP} existingBCSregexp newFile \ttref{patch} \Slist
+    \Ob \t{USING} traName \Slist \Oe \Ob \ttref{when} \Slist \Oe &
     As \ttref{EXTEND!TOP}, but the newFile file is put at the top of the
     every \ttref{BCS} file that matches the \ttref{regexp}
     existingBCSregexp. \\
-  or & \DEFINE{EXTEND!BOTTOM!REGEXP} existingBCSregexp newFile \ttref{patch} \Slist \Ob \t{USING} traName \Slist \Oe &
+  or & \DEFINE{EXTEND!BOTTOM!REGEXP} existingBCSregexp newFile
+    \ttref{patch} \Slist \Ob \t{USING} traName \Slist \Oe
+    \Ob \ttref{when} \Slist \Oe &
     See \ttref{EXTEND!TOP!REGEXP}.  \\
   or & \DEFINE{ACTION!IF} \ttref{value} \t{THEN BEGIN}
     \ttref{TP2 Action} \Slist \t{END}
@@ -5397,28 +5406,42 @@ or & \DEFINE{PATCH!TIME} \ttref{String} \t{BEGIN} \ttref{patch}
 \\
 \\
 
-\DEFINE{when} & & A \ttref{when} clause gives you local control over when a
-  \ttref{COPY}, \ttref{COPY!EXISTING} or \ttref{APPEND!COL} happens. If the
-  \ttref{COPY} or \ttref{COPY!EXISTING} contains multiple files, each one
-  is checked against the \ttref{when} clauses separately.  \\
-is & \DEFINE{IF!SIZE!IS} fileSize & True if the input file size is
-fileSize. You may use \DEFINE{I!S!I} as a synonym for \ttref{IF!SIZE!IS}. \\
-or & \DEFINE{IF} \ttref{regexp} & True if the input file contains
-\ttref{regexp}. \\
-or & \DEFINE{UNLESS} \ttref{regexp} & False if the input file contains
-\ttref{regexp}.  \\
-or & \DEFINE{BUT!ONLY!IF!IT!CHANGES} & True only if the file is actually
-changed by patching actions. Unlike all other \ttref{when} clauses, this
-one is evaluated just before the result would be written out to the disk.
-You may use \DEFINE{BUT!ONLY} as a synonym for \ttref{BUT!ONLY!IF!IT!CHANGES}. \\
-or & \DEFINE{IF!EXISTS} &
+\DEFINE{when} & & A \ttref{when} clause gives you local control over
+when a \ttref{COPY}, \ttref{COPY!EXISTING}, \ttref{APPEND},
+\ttref{APPEND!COL}, \ttref{EXTEND!TOP}, \ttref{EXTEND!BOTTOM},
+\ttref{EXTEND!TOP!REGEXP}, or \ttref{EXTEND!BOTTOM!REGEXP} happens. If
+the \ttref{COPY}, \ttref{COPY!EXISTING}, \ttref{EXTEND!TOP!REGEXP}, or
+\ttref{EXTEND!BOTTOM!REGEXP} contains multiple files, each one is
+checked against the \ttref{when} clauses separately. \\
 
-True only if the file exists. For \ttref{COPY}, this check is done
-with \ttref{FILE!EXISTS}. For \ttref{COPY!EXISTING},
-\ttref{COPY!EXISTING!REGEXP}, \ttref{COPY!RANDOM}, \t{APPEND} and
-\ttref{APPEND!COL} this check is done with
-\ttref{FILE!EXISTS!IN!GAME}. For \ttref{COPY!ALL!GAM!FILES}, this when
-clause is redundant. \\
+  is & \DEFINE{IF!SIZE!IS} fileSize & True if the input file size is
+  fileSize. For \t{BCS}-files, the size is checked before
+  decompilation. You may use \DEFINE{I!S!I} as a synonym for
+  \ttref{IF!SIZE!IS}. \\
+
+  or & \DEFINE{IF} \ttref{regexp} & True if the input file contains
+  \ttref{regexp}. For \t{BCS}-files, the check is done before
+  decompiliation. \\
+
+  or & \DEFINE{UNLESS} \ttref{regexp} & False if the input file
+  contains \ttref{regexp}. For \t{BCS}-files, the check is done before
+  decompilation. \\
+
+  or & \DEFINE{BUT!ONLY!IF!IT!CHANGES} & True only if the file is
+  actually changed by patching actions. This \ttref{when} clause is
+  only checked for \t{COPY} actions. Unlike all other \ttref{when}
+  clauses, this one is evaluated just before the result would be
+  written out to the disk.  You may use \DEFINE{BUT!ONLY} as a synonym
+  for \ttref{BUT!ONLY!IF!IT!CHANGES}. \\
+
+  or & \DEFINE{IF!EXISTS} & True only if the file exists. For
+  \ttref{COPY}, this check is done with \ttref{FILE!EXISTS}. For
+  \ttref{COPY!EXISTING}, \ttref{COPY!EXISTING!REGEXP},
+  \ttref{COPY!RANDOM}, \t{APPEND}, \ttref{APPEND!COL},
+  \ttref{EXTEND!TOP}, \ttref{EXTEND!BOTTOM},
+  \ttref{EXTEND!TOP!REGEXP}, and \ttref{EXTEND!BOTTOM!REGEXP} this
+  check is done with \ttref{FILE!EXISTS!IN!GAME}. For
+  \ttref{COPY!ALL!GAM!FILES}, this \t{when} clause is redundant. \\
 
 \\
 
