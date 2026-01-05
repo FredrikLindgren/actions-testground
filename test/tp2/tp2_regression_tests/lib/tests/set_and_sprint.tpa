@@ -162,6 +162,9 @@ DEFINE_ACTION_FUNCTION test_global_arrays BEGIN
   OUTER_SPRINT $expected(3) baz
   OUTER_SPRINT $expected(4) quux
   OUTER_SET index = 0
+  ACTION_IF NOT VARIABLE_IS_IN_ARRAY $fl#global(1) BEGIN
+    FAIL "test_global_arrays: expected array construct was not set"
+  END
   ACTION_PHP_EACH fl#global AS key => value BEGIN
     OUTER_SET ++ index
     ACTION_IF NOT key = index BEGIN
@@ -170,6 +173,10 @@ DEFINE_ACTION_FUNCTION test_global_arrays BEGIN
     ACTION_IF "%value%" STR_CMP $expected("%index%") BEGIN
       FAIL "test_global_arrays: values are out of expected order"
     END
+  END
+  ACTION_CLEAR_ARRAY fl#global
+  ACTION_PHP_EACH fl#global AS _ => _ BEGIN
+    OUTER_SET ++ index
   END
   ACTION_IF NOT index = 4 BEGIN
     FAIL "test_global_arrays: at end of test index does not have expected value"

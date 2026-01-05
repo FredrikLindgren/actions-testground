@@ -688,9 +688,14 @@ let rec process_patch2_real process_action tp our_lang patch_filename game buff 
 
     | TP_PatchClearArray(arr) ->
         let arr = eval_pe_str arr in
-        while Hashtbl.mem !Var.arrays arr do
-          Hashtbl.remove !Var.arrays arr
-        done;
+        let _,global = Var.array_lookup arr in
+        if global then
+          while Hashtbl.mem !Var.global_arrays arr do
+            Hashtbl.remove !Var.global_arrays arr
+          done else
+          while Hashtbl.mem !Var.arrays arr do
+            Hashtbl.remove !Var.arrays arr
+          done ;
         buff
 
     | TP_PatchDefineArray(arr,vals) ->
