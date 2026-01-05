@@ -52,6 +52,8 @@ let process_log log file_list game =
     let (tpfile, lang_num, comp_num, _, _) = cur_mod in
     let tp2 = parse_tp2 tpfile in
     let backup_dir = tp2.Tp.backup in
+    ignore (Tpstate.set_prelang_tp2_vars tp2) ;
+    ignore (Arch2.associate_these ()) ;
     List.iter (fun (backup_file, op_type) ->
       if file_exists backup_file then
         let lines = Util.read_lines backup_file in
