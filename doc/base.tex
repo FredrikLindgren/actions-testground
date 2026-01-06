@@ -4227,9 +4227,12 @@ order will be undefined. \\
 
 \DEFINE{patch}\label{TP2 Patch} & & A \ttref{patch} tells WeiDU how to modify a file.  \\
 is & \DEFSYN{SAY} \ttref{offset} \ttref{text} &
-  The string-ref associated with \ttref{text} is written at
-  \ttref{offset}. This is commonly used to change the name or
-  description of a spell or item. \\
+  If \t{text} does not exist in \t{DIALOG.TLK}, it is added. The
+  string reference associated with \t{text} is written at
+  \ttref{offset}. Any variables in \t{text} are replaced by their
+  respective values before \t{text} is added to the game. \t{SAY} is
+  commonly used to change the name or description of a spell or
+  item. \\
   or & \DEFINE{PATCH!FAIL} warningString &
     If this \ttref{TP2 Action} is execution, warningString is displayed and
     the \ttref{component} fails to install. \\
@@ -4260,14 +4263,16 @@ COPY_EXISTING_REGEXP ~.*\.CRE~ ~override~
     The string DisplayString is echoed to setup-mymod.debug.
     If displayString contains \t{\%}\ttref{variable}\t{\%}
     references, their values will be displayed. \\
-or & \DEFINE{SAY!EVALUATED} \ttref{offset} stringWithVars &
-  Any WeiDU variables (enclosed in \t{\%}s) inside stringWithVars are
-  replaced by their values and the resulting string (constructed at
-  mod-installation time!) is added to \t{DIALOG.TLK} and its string
-  reference it written to the \ttref{offset}. Example:
+    or & \DEFINE{SAY!EVALUATED} \ttref{offset} stringWithVars &
+  Any WeiDU variables inside stringWithVars are replaced by their
+  respective values and the resulting string is added to
+  \t{DIALOG.TLK}. Its string reference it written to the
+  \ttref{offset}. Since \ttref{SAY} also evaluates variables,
+  \t{SAY!EVALUATED} can be considered superfluous legacy
+  syntax. Example of usage:
 \begin{verbatim}
 COPY_EXISTING_REGEXP ~RING.*.ITM~ ~override~
-  READ_LONG 0x38 cost
+  READ_LONG 0x34 cost
   SAY_EVALUATED IDENTIFIED_DESC
     ~I Am %SOURCE_RES%, I Cost %cost%~
 \end{verbatim} \\
