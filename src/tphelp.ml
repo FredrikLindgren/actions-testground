@@ -66,9 +66,9 @@ let rec pe_to_str pe = "(" ^ (match pe with
 | PE_BASR(e1,e2) -> Printf.sprintf "%s BASR %s" (pe_to_str e1) (pe_to_str e2)
 | PE_BNOT(e1) -> Printf.sprintf "BNOT %s" (pe_to_str e1)
 | PE_ABS(e1) -> Printf.sprintf "ABS %s" (pe_to_str e1)
-| PE_GameIs(e1,b1) -> if b1 then
+| PE_GameIs(e1,b1,_) -> if b1 then
     Printf.sprintf "GAME_IS ~%s~" e1 else Printf.sprintf "ENGINE_IS ~%s~" e1
-| PE_GameIncludes(e1) -> Printf.sprintf "GAME_INCLUDES ~%s~" e1
+| PE_GameIncludes(e1,_) -> Printf.sprintf "GAME_INCLUDES ~%s~" e1
 | PE_ModIsInstalled(e1,e2) ->
     Printf.sprintf "MOD_IS_INSTALLED ~%s~ %s" e1 (pe_to_str e2)
 | PE_IsInstalledAfter(e1,e2,e3,e4) ->

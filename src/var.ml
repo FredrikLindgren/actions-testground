@@ -32,6 +32,10 @@ let global_arrays = ref(Hashtbl.create 255)
 let variables_stack = ref []
 let arrays_stack = ref []
 
+let gameIsCache : (string, bool) Hashtbl.t ref = ref(Hashtbl.create 10)
+let engineIsCache : (string, bool) Hashtbl.t ref = ref(Hashtbl.create 10)
+let gameIncludesCache : (string, bool) Hashtbl.t ref = ref(Hashtbl.create 10)
+
 let var_pop () =
   (try
      variables := List.hd !variables_stack ;

@@ -1789,7 +1789,8 @@ let main () =
   | Some x -> x
   | None -> begin
       let rec walk lst = match lst with
-      | (s,i) :: _ when Tppe.is_true (Tppe.eval_pe "" game (Tp.PE_GameIs(s,false))) -> i
+      | (s,i) :: _ when Tppe.is_true (Tppe.eval_pe "" game
+                                        (Tp.PE_GameIs(s,false,None))) -> i
       | hd :: tl -> walk tl
       | [] -> 0
       in walk ["BG2",62169; "TOB",74107; "BG1",22186; "TOTSC",24124; "IWD1",34502; "HOW",34502; "TOTLM",34502; "PST",106497; "IWD2",41422]

@@ -768,6 +768,12 @@ nonterm((Tp.file_or_directory_regexp * string) list) Rev_TP_Move_List {
   -> e5:Rev_TP_Move_List LPAREN e1:STRING e2:Optional_Match_Exact e3:STRING RPAREN e4:STRING [ (Tp.TP_Directory_Regexp (e1,e2,e3), e4) :: e5 ]
 }
 
+nonterm(Tp.tp_cache_arg option) Optional_Cache {
+  -> [ None ]
+  -> CLEAR [ Some(Tp.TP_ClearCache) ]
+  -> CACHE [ Some(Tp.TP_Cache) ]
+}
+
 nonterm((string * string) list) Str_Str_List {
   -> e1:Rev_Str_Str_List [ List.rev e1 ]
 }
@@ -1041,9 +1047,9 @@ nonterm (Tp.tp_patchexp) Patch_Exp {
   -> INSTALL_ORDER e1:Patch_String_Right e2:Patch_Exp_Safe AFTER e3:Patch_String_Right e4:Patch_Exp_Safe [ Tp.PE_IsInstalledAfter(e1,e2,e3,e4) ]
   -> INSTALL_ORDER e1:Patch_String_Right e2:Patch_Exp_Safe BEFORE e3:Patch_String_Right e4:Patch_Exp_Safe [ Tp.PE_IsInstalledAfter(e3,e4,e1,e2) ]
   -> ID_OF_LABEL e1:Patch_String_Right e2:Patch_String_Right [ Tp.PE_IdOfLabel(e1,e2) ]
-  -> GAME_IS e1:STRING [ Tp.PE_GameIs(e1,true) ]
-  -> ENGINE_IS e1:STRING [ Tp.PE_GameIs(e1,false) ]
-  -> GAME_INCLUDES e1:STRING [ Tp.PE_GameIncludes(e1) ]
+  -> GAME_IS e0:Optional_Cache e1:STRING [ Tp.PE_GameIs(e1,true,e0) ]
+  -> ENGINE_IS e0:Optional_Cache e1:STRING [ Tp.PE_GameIs(e1,false,e0) ]
+  -> GAME_INCLUDES e0:Optional_Cache e1:STRING [ Tp.PE_GameIncludes(e1,e0) ]
   -> VARIABLE_IS_SET e1:Patch_String_Name [ Tp.PE_VariableIsSet e1 ]
   -> VARIABLE_IS_IN_ARRAY e1:Patch_String_Name [ Tp.PE_VariableIsInArray e1 ]
   -> IDS_OF_SYMBOL LPAREN e1:STRING e2:STRING RPAREN [ Tp.PE_IdsOfSymbol(e1,e2) ]

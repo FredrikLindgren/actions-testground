@@ -744,7 +744,7 @@ optional_evaluate :
 | patch_exp QUESTION patch_exp COLON patch_exp { Tp.PE_If($1,$3,$5); }
 
 | MOD_IS_INSTALLED STRING STRING { Tp.PE_ModIsInstalled($2,Tp.get_pe_int($3)) }
-| GAME_IS STRING { Tp.PE_GameIs($2,true) }
+| GAME_IS STRING { Tp.PE_GameIs($2,true,None) }
 | VARIABLE_IS_SET patch_STRING_name { Tp.PE_VariableIsSet($2) }
 | IDS_OF_SYMBOL LPAREN STRING STRING RPAREN { Tp.PE_IdsOfSymbol($3,$4) }
 | STATE_WHICH_SAYS lse FROM STRING {

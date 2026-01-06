@@ -139,6 +139,10 @@ and array_indices_sort_type =
 | TP_Lexicographically
 | TP_Numerically
 
+and tp_cache_arg =
+| TP_ClearCache
+| TP_Cache
+
 and tp_action =
   | TP_ActionBashFor of ((string * (bool option) * string) list) * (tp_action list)
   | TP_ActionDefineArray of tp_pe_string * string list
@@ -535,8 +539,8 @@ and tp_patchexp =
   | PE_ModIsInstalled of string * tp_patchexp
   | PE_IsInstalledAfter of tp_pe_string * tp_patchexp * tp_pe_string * tp_patchexp
   | PE_IdOfLabel of tp_pe_string * tp_pe_string
-  | PE_GameIs of string * bool
-  | PE_GameIncludes of string
+  | PE_GameIs of string * bool * tp_cache_arg option
+  | PE_GameIncludes of string * tp_cache_arg option
   | PE_VariableIsSet of tp_pe_string
   | PE_VariableIsInArray of tp_pe_string
   | PE_IdsOfSymbol of string * string

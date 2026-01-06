@@ -445,92 +445,124 @@ let rec eval_pe buff game p =
         | Some x -> x)
       | [] -> Int32.to_int Int32.min_int)
 
-  | PE_GameIs(game_list,isGameCheck) -> begin
-      let game_list = Str.split many_whitespace_regexp (Var.get_string game_list) in
-      let f x = (eval_pe buff game (Pred_File_Exists_In_Game (PE_LiteralString x))) = 1l in
-      let tutu     = if isGameCheck then f "fw0125.are" else false in
-      let  bgt     = if isGameCheck then f "ar7200.are" else false in
-      let   ca     = if isGameCheck then f "tc1300.are" else false in
-      let iwdinbg2 = if isGameCheck then f "ar9201.are" else false in
-      let eet = if isGameCheck then f "eet.flag" else false in
-      let  bg2 = f "ar0083.are"   in
-      let  tob = f "ar6111.are"   in
-      let iwd2 = f "ar6050.are"   in
-      let  pst = f "ar0104a.are"  in
-      let  bg1 = f "ar0125.are"   in
-      let tosc = f "ar2003.are"   in
-      let iwd1 = f "ar2116.are"   in
-      let  how = f "ar9109.are"   in
-      let tolm = f "ar9715.are"   in
-      let ttsc = f "fw2003.are"   in
-      let bgee = f "oh1000.are"   in
-      let bg2ee = f "oh6000.are"  in
-      let iwdee = f "howparty.2da" in
-      let pstee = f "pstchar.2da" in
-      let res = List.exists (fun this ->
-        match String.uppercase this with
-        | "BG2"
-        | "SOA"        -> bg2 && not tutu && not tob && not ca && not iwdinbg2
-        | "TOB"        -> bg2 && not tutu &&     tob && not ca && not iwdinbg2 && not bg2ee
-        | "IWD2"       -> iwd2
-        | "PST"        -> pst && not pstee
-        | "BG1"        -> bg1 && not tosc && not bg2
-        | "TOTSC"      -> bg1 &&     tosc && not bg2 && not iwd1 && not bgee
-        | "IWD"
-        | "IWD1"       -> iwd1 && not how && not tolm && not bg2
-        | "HOW"        -> iwd1 &&     how && not tolm && not bg2
-        | "TOTLM"      -> iwd1 &&     how &&     tolm && not bg2 && not iwdee
-        | "TUTU"       -> tutu && not ttsc
-        | "TUTU_TOTSC"
-        | "TUTU+TOTSC" -> tutu &&     ttsc
-        | "BGT"        -> bgt
-        | "CA"         -> ca
-        | "IWD-IN-BG2"
-        | "IWD_IN_BG2"
-        | "IWDINBG2"   -> bg2 && iwdinbg2
-        | "BG2EE"      -> bg2ee && not eet
-        | "BGEE"       -> bgee && not bg2ee && not eet
-        | "IWDEE"      -> iwdee
-        | "PSTEE"      -> pstee
-        | "EET"        -> eet
-        | _ -> log_and_print "WARNING: No rule to identify %s\n" (String.uppercase this) ; false
-      ) game_list in
-      if res then 1l else 0l;
+  | PE_GameIs(game_list,isGameCheck,cache) -> begin
+      let cached,result = (match cache with
+      | None -> false,false
+      | Some(TP_ClearCache) -> Hashtbl.remove (if isGameCheck then
+          !Var.gameIsCache else
+          !Var.engineIsCache) game_list ; false,false
+      | Some(TP_Cache) -> (try (true,(Hashtbl.find (if isGameCheck then
+          !Var.gameIsCache else
+          !Var.engineIsCache) game_list)) with Not_found -> false,false))
+      in
+      if not cached then begin
+        let split_list = Str.split many_whitespace_regexp
+            (Var.get_string game_list) in
+        let f x = (eval_pe buff game (Pred_File_Exists_In_Game
+                                        (PE_LiteralString x))) = 1l
+        in
+        let tutu     = if isGameCheck then f "fw0125.are" else false in
+        let  bgt     = if isGameCheck then f "ar7200.are" else false in
+        let   ca     = if isGameCheck then f "tc1300.are" else false in
+        let iwdinbg2 = if isGameCheck then f "ar9201.are" else false in
+        let eet = if isGameCheck then f "eet.flag" else false in
+        let  bg2 = f "ar0083.are"   in
+        let  tob = f "ar6111.are"   in
+        let iwd2 = f "ar6050.are"   in
+        let  pst = f "ar0104a.are"  in
+        let  bg1 = f "ar0125.are"   in
+        let tosc = f "ar2003.are"   in
+        let iwd1 = f "ar2116.are"   in
+        let  how = f "ar9109.are"   in
+        let tolm = f "ar9715.are"   in
+        let ttsc = f "fw2003.are"   in
+        let bgee = f "oh1000.are"   in
+        let bg2ee = f "oh6000.are"  in
+        let iwdee = f "howparty.2da" in
+        let pstee = f "pstchar.2da" in
+        let res = List.exists (fun this ->
+          match String.uppercase this with
+          | "BG2"
+          | "SOA"        -> bg2 && not tutu && not tob && not ca && not iwdinbg2
+          | "TOB"        -> bg2 && not tutu &&     tob && not ca && not iwdinbg2 && not bg2ee
+          | "IWD2"       -> iwd2
+          | "PST"        -> pst && not pstee
+          | "BG1"        -> bg1 && not tosc && not bg2
+          | "TOTSC"      -> bg1 &&     tosc && not bg2 && not iwd1 && not bgee
+          | "IWD"
+          | "IWD1"       -> iwd1 && not how && not tolm && not bg2
+          | "HOW"        -> iwd1 &&     how && not tolm && not bg2
+          | "TOTLM"      -> iwd1 &&     how &&     tolm && not bg2 && not iwdee
+          | "TUTU"       -> tutu && not ttsc
+          | "TUTU_TOTSC"
+          | "TUTU+TOTSC" -> tutu &&     ttsc
+          | "BGT"        -> bgt
+          | "CA"         -> ca
+          | "IWD-IN-BG2"
+          | "IWD_IN_BG2"
+          | "IWDINBG2"   -> bg2 && iwdinbg2
+          | "BG2EE"      -> bg2ee && not eet
+          | "BGEE"       -> bgee && not bg2ee && not eet
+          | "IWDEE"      -> iwdee
+          | "PSTEE"      -> pstee
+          | "EET"        -> eet
+          | _ -> log_and_print "WARNING: No rule to identify %s\n"
+                (String.uppercase this) ; false) split_list
+        in
+        (match cache with
+        | Some(TP_Cache) -> Hashtbl.replace (if isGameCheck then
+            !Var.gameIsCache else
+            !Var.engineIsCache) game_list res
+        | _ -> ()) ;
+        if res then 1l else 0l end else if result then 1l else 0l
   end
 
-  | PE_GameIncludes(game_set) -> begin
+  | PE_GameIncludes(game_set,cache) -> begin
       let game_set = Var.get_string game_set in
-      let bg1 = ["BG1"; "TOTSC"; "TUTU"; "TUTU_TOTSC"; "BGT"; "BGEE"; "EET"] in
-      let totsc = ["TOTSC"; "TUTU_TOTSC"; "BGT"; "BGEE"; "EET"] in
-      let soa = ["SOA"; "TOB"; "BGT"; "BG2EE"; "EET"] in
-      let tob = ["TOB"; "BGT"; "BG2EE"; "EET"] in
-      let pst = ["PST"; "PSTEE"] in
-      let iwd = ["IWD"; "HOW"; "TOTLM"; "IWD_IN_BG2"; "IWDEE"] in
-      let how = ["HOW"; "TOTLM"; "IWD_IN_BG2"; "IWDEE"] in
-      let totlm = ["TOTLM"; "IWD_IN_BG2"; "IWDEE"] in
-      let iwd2 = ["IWD2"] in
-      let ca = ["CA"] in
-      (match String.uppercase game_set with
-      | "SOD" -> eval_pe "" game (PE_ResourceContains
-                                    (PE_LiteralString "CAMPAIGN.2DA",
-                                     PE_LiteralString "SOD"))
-      | _ -> begin
-          let list = (match String.uppercase game_set with
-          | "BG1" -> bg1
-          | "TOTSC" -> totsc
-          | "BG2"
-          | "SOA" -> soa
-          | "TOB" -> tob
-          | "PST" -> pst
-          | "IWD1"
-          | "IWD" -> iwd
-          | "HOW" -> how
-          | "TOTLM" -> totlm
-          | "IWD2" -> iwd2
-          | "CA" -> ca
-          | _ -> log_and_print "WARNING: GAME_INCLUDES has no rule for %s\n" (String.uppercase game_set) ; [(String.uppercase game_set)]) in
-          eval_pe buff game (PE_GameIs((String.concat " " list), true))
-      end)
+      let cached,result = (match cache with
+      | None -> false,false
+      | Some (TP_ClearCache) -> Hashtbl.remove !Var.gameIncludesCache game_set ;
+          false, false
+      | Some (TP_Cache) -> (try (true,(Hashtbl.find !Var.gameIncludesCache
+                                         game_set)) with Not_found ->
+                                           false,false))
+      in
+      if not cached then begin
+        let bg1 = ["BG1"; "TOTSC"; "TUTU"; "TUTU_TOTSC"; "BGT"; "BGEE";
+                   "EET"] in
+        let totsc = ["TOTSC"; "TUTU_TOTSC"; "BGT"; "BGEE"; "EET"] in
+        let soa = ["SOA"; "TOB"; "BGT"; "BG2EE"; "EET"] in
+        let tob = ["TOB"; "BGT"; "BG2EE"; "EET"] in
+        let pst = ["PST"; "PSTEE"] in
+        let iwd = ["IWD"; "HOW"; "TOTLM"; "IWD_IN_BG2"; "IWDEE"] in
+        let how = ["HOW"; "TOTLM"; "IWD_IN_BG2"; "IWDEE"] in
+        let totlm = ["TOTLM"; "IWD_IN_BG2"; "IWDEE"] in
+        let iwd2 = ["IWD2"] in
+        let ca = ["CA"] in
+        (match String.uppercase game_set with
+        | "SOD" -> eval_pe "" game (PE_ResourceContains
+                                      (PE_LiteralString "CAMPAIGN.2DA",
+                                       PE_LiteralString "SOD"))
+        | _ -> begin
+            let list = (match String.uppercase game_set with
+            | "BG1" -> bg1
+            | "TOTSC" -> totsc
+            | "BG2"
+            | "SOA" -> soa
+            | "TOB" -> tob
+            | "PST" -> pst
+            | "IWD1"
+            | "IWD" -> iwd
+            | "HOW" -> how
+            | "TOTLM" -> totlm
+            | "IWD2" -> iwd2
+            | "CA" -> ca
+            | _ -> log_and_print "WARNING: GAME_INCLUDES has no rule for %s\n"
+                  (String.uppercase game_set) ; [(String.uppercase game_set)])
+            in
+            eval_pe buff game (PE_GameIs((String.concat " " list), true, cache))
+        end)
+      end else if result then 1l else 0l
   end
 
   | PE_IsAnInt(x) -> let old_eval_pe_warn = !eval_pe_warn in (eval_pe_warn := false ;
@@ -705,7 +737,4 @@ let string_of_pe buff game pe =
   in
   eval_pe_warn := true ; 
   value
-  
-let engine_is str =
-  1l = eval_pe "" (Load.the_game()) (PE_GameIs (str,false))
-  
+
