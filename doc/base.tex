@@ -4224,6 +4224,21 @@ interpreted as numbers; any strings will raise a warning and the sort
 order will be undefined. \\
 
 \\
+\\
+
+\DEFINE{Caching} && Allows you to control caching behaviour in
+supported use-cases. \\
+
+is && The default behaviour is no caching. \\
+
+or & \t{\textbf{CACHE}} & The result is cached and repeat calls use the
+cached result instead of calculating a new result. This can improve
+performance significantly. \\
+
+or & \t{\textbf{CLEAR}} & A cached result is cleared and the result is
+calculated anew. \\
+
+\\
 
 \DEFINE{patch}\label{TP2 Patch} & & A \ttref{patch} tells WeiDU how to modify a file.  \\
 is & \DEFSYN{SAY} \ttref{offset} \ttref{text} &
@@ -5609,25 +5624,30 @@ contains the second \ttref{regexp}. Thus \t{"AR1005" STRING!CONTAINS!REGEXP
 
 {\em Be warned that this does the exact opposite of what the name suggests.} \\
 
-or & \DEFINE{GAME!IS} \ttref{String} & Returns true if the IE game variant
-is one of the entries in String, otherwise it returns false. String is a list of
-whitespace-separated entries, chosen from (case doesn't matter)
+or & \DEFINE{GAME!IS} \ttref{Caching} \ttref{String} & Returns true if
+the IE game variant is one of the entries in String, otherwise it
+returns false. String is a list of whitespace-separated entries,
+chosen from (case doesn't matter)
 \verb+bg2=soa, tob, iwd2, pst, bg1, totsc, iwd=iwd1, how, totlm, tutu, tutu_totsc, bgt, ca, iwd_in_bg2, bgee, bg2ee, eet, iwdee, pstee+.
-In the list, \verb+bg2=soa+ means that \verb+bg2+ and \verb+soa+ are synonyms,
-and you can use whichever one you like. Please note that the items in the list are
-defined to be mutually exclusive (except \verb+tob+ will detect both plain ToB
-and ToB with BGT installed, for legacy purposes), so \verb+bg2+ will detect a
-SoA-only game, without either ToB or Tutu installed. As such, a mod which is
-usable with any flavor of BG2 and any flavor of Tutu or BG: EE would contain
-\verb+REQUIRE_PREDICATE GAME_IS ~bg2 tob tutu tutu_totsc bgee bg2ee~+ . \\
+In the list, \verb+bg2=soa+ means that \verb+bg2+ and \verb+soa+ are
+synonyms, and you can use whichever one you like. Please note that the
+items in the list are defined to be mutually exclusive (except
+\verb+tob+ will detect both plain ToB and ToB with BGT installed, for
+legacy purposes), so \verb+bg2+ will detect a SoA-only game, without
+either ToB or Tutu installed. As such, a mod which is usable with any
+flavor of BG2 and any flavor of Tutu or BG: EE would contain
+\verb+REQUIRE_PREDICATE GAME_IS ~bg2 tob tutu tutu_totsc bgee bg2ee~+
+. If caching, \t{GAME!IS} will return the same result for the same
+string, and do so much faster. \\
 
-or & \DEFINE{ENGINE!IS} \ttref{String} & Functions like \ttref{GAME!IS}
-except \verb+bg2=soa+ will detect SoA-based Tutu games in addition to SoA games,
-and \verb+tob+ will detect ToB-based Tutu games in addition to ToB and BGT games.
-As such, a mod that requires Throne of Bhaal's engine enhancements could use
-\verb+REQUIRE_PREDICATE ENGINE_IS ~tob~+ . \\
+or & \DEFINE{ENGINE!IS} \ttref{Caching} \ttref{String} &
+Functions like \ttref{GAME!IS} except \verb+bg2=soa+ will detect
+SoA-based Tutu games in addition to SoA games, and \verb+tob+ will
+detect ToB-based Tutu games in addition to ToB and BGT games.  As
+such, a mod that requires Throne of Bhaal's engine enhancements could
+use \verb+REQUIRE_PREDICATE ENGINE_IS ~tob~+ . \\
 
-or & \DEFINE{GAME!INCLUDES} \ttref{String} &
+or & \DEFINE{GAME!INCLUDES} \ttref{Caching} \ttref{String} &
 
 Returns true if the IE game variant includes the game content
 specified by String. String is a single game chosen from
@@ -5637,7 +5657,8 @@ synonyms, and you can use whichever one you like. Please note that
 unlike \ttref{GAME!IS} you only specify a single game, rather than a
 list of games. As an example, \verb+GAME_INCLUDES ~tob~+ will return
 true for any game which includes the ToB content, such as ToB itself,
-BGT or BG2EE. \\
+BGT or BG2EE. If caching, \t{GAME!INCLUDES} will return the same
+result for the same string, and do so much faster. \\
 
 or & \DEFINE{IDS!OF!SYMBOL} \t{(} File \ttref{String} \t{)} &
 Will return the number associated with String in File.ids,
