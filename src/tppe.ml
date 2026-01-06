@@ -499,6 +499,7 @@ let rec eval_pe buff game p =
   end
 
   | PE_GameIncludes(game_set) -> begin
+      let game_set = Var.get_string game_set in
       let bg1 = ["BG1"; "TOTSC"; "TUTU"; "TUTU_TOTSC"; "BGT"; "BGEE"; "EET"] in
       let totsc = ["TOTSC"; "TUTU_TOTSC"; "BGT"; "BGEE"; "EET"] in
       let soa = ["SOA"; "TOB"; "BGT"; "BG2EE"; "EET"] in
