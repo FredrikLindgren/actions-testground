@@ -123,7 +123,8 @@ let load_big_slow_tlk filename = begin
       let offset_strdata = get_int () in 
       let (result:tlk) = Array.init size (fun i ->
 	let entry_offset = 18 + (i * 26) in
-	ignore( Unix.lseek fd entry_offset Unix.SEEK_SET ); 
+	ignore(Unix.LargeFile.lseek fd (Int64.of_int entry_offset)
+                 Unix.SEEK_SET);
 	let flags = get_short () in
 	my_read 8 fd buff filename ; 
 	let sound_name = get_string_of_size buff 0 8 in 
@@ -134,7 +135,9 @@ let load_big_slow_tlk filename = begin
 	let text = if text_length = 0 then "" else
         begin
           let string_i_text = Bytes.create text_length in 
-          ignore(Unix.lseek fd (offset_strdata + text_offset) Unix.SEEK_SET) ;
+          ignore(Unix.LargeFile.lseek fd (Int64.of_int
+                                            (offset_strdata + text_offset))
+                   Unix.SEEK_SET) ;
           my_read text_length fd string_i_text filename ; 
           string_i_text
         end
@@ -237,11 +240,11 @@ let load_small_fast_tlk filename = begin
 end
 
 let load_tlk filename = 
-  let stats = Case_ins.unix_stat filename in
-  let size = stats.Unix.st_size in 
-  if (size < 8) then
+  let stats = Case_ins.unix_stat64 filename in
+  let size = stats.Unix.LargeFile.st_size in 
+  if (size < 8L) then
     failwith "not a valid TLK file (too small)"
-  else if (size > Sys.max_string_length) then 
+  else if (size > Int64.of_int (Sys.max_string_length)) then 
     load_big_slow_tlk filename
   else
     load_small_fast_tlk filename 

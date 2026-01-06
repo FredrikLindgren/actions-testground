@@ -539,14 +539,15 @@ let cmp_tra_file tcmp_src tcmp_dest game =
               (printexc_to_string e)
           end
       in
-      if (Case_ins.unix_stat s).Unix.st_kind <> Unix.S_REG then begin
+      let file_kind s = (Case_ins.unix_stat64 s).Unix.LargeFile.st_kind in
+      if file_kind s <> Unix.S_REG then begin
         let s_d_h = Case_ins.unix_opendir s in
         try
           while true do
             let s' = Unix.readdir s_d_h in
             let one = (s ^ "/" ^ s') in
             let two = (d ^ "/" ^ s') in
-            if (Case_ins.unix_stat one).Unix.st_kind = Unix.S_REG then
+            if file_kind one = Unix.S_REG then
               tracompare one two
           done
         with e -> (Unix.closedir s_d_h )
@@ -737,7 +738,7 @@ let make_biff_from_dir make_biff game =
       (try
         while true do
           let s' = Unix.readdir s_d_h in
-          if ((Case_ins.unix_stat (s ^ "/" ^ s')).Unix.st_kind =
+          if ((Case_ins.unix_stat64 (s ^ "/" ^ s')).Unix.LargeFile.st_kind =
               Unix.S_REG) then file_list := (s ^ "/" ^ s') :: !file_list
         done
       with _ -> () ) ;
@@ -1121,7 +1122,9 @@ let test_output_tlk game pause_at_end =
     | Some path when (file_exists path) -> begin
         (try Case_ins.unix_access path [Unix.W_OK] ;
           log_or_print "[%s] claims to be writeable.\n" path ;
-          if (Case_ins.unix_stat path).Unix.st_kind <> Unix.S_REG then
+          let file_kind path =
+            (Case_ins.unix_stat64 path).Unix.LargeFile.st_kind in
+          if file_kind path <> Unix.S_REG then
             failwith (path ^ " is a not a regular file") ;
           log_or_print "[%s] claims to be a regular file.\n" path ;
           ()

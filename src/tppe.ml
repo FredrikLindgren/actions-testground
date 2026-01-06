@@ -620,7 +620,9 @@ let rec eval_pe buff game p =
                 try
                   let x = Unix.readdir dh in
                   if !debug_ocaml then log_and_print "%s-\n" x;
-                  if (Case_ins.unix_stat ((List.nth parts 0) ^ x)).Unix.st_kind = Unix.S_DIR &&
+                  if (Case_ins.unix_stat64
+                        ((List.nth parts 0) ^ x)).Unix.LargeFile.st_kind =
+                    Unix.S_DIR &&
                     (List.nth parts 0) <> "." && (List.nth parts 0) <> ".." then
                     ((List.nth parts 0) ^ x ^ (List.nth parts 1)) :: readdir dh
                   else readdir dh

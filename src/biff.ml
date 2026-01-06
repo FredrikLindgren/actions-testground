@@ -246,7 +246,7 @@ let read_compressed_biff_internal fd filename start size chunk_fun =
   let sizes_buff = Bytes.create 8 in
   while not !finished do
     (* now we're looking at one block *)
-    let _ = Unix.lseek fd !cmp_offset Unix.SEEK_SET in
+    let _ = Unix.LargeFile.lseek fd (Int64.of_int !cmp_offset) Unix.SEEK_SET in
     my_read 8 fd sizes_buff filename ;
     let uncmplen = int_of_str_off sizes_buff 0 in
     let cmplen = int_of_str_off sizes_buff 4 in
@@ -267,7 +267,8 @@ let read_compressed_biff_internal fd filename start size chunk_fun =
       finished := true
     end else begin
       (* read this block *)
-      let _ = Unix.lseek fd (!cmp_offset+8) Unix.SEEK_SET in
+      let _ = Unix.LargeFile.lseek fd (Int64.of_int (!cmp_offset+8))
+          Unix.SEEK_SET in
       let cmp_buff = Bytes.create cmplen in
       my_read cmplen fd cmp_buff filename ;
       let uncmp = Cbif.uncompress cmp_buff 0 cmplen uncmplen in
@@ -358,7 +359,8 @@ let load_normal_biff filename size fd buff =
     let table_len = (num_file_entry * 16) +
         (num_tileset_entry * 20) in
     let buff = Bytes.create table_len in
-    let _ = Unix.lseek fd offset_file_entry Unix.SEEK_SET in
+    let _ = Unix.LargeFile.lseek fd (Int64.of_int offset_file_entry)
+        Unix.SEEK_SET in
     my_read table_len fd buff filename ;
     let result =
       {
@@ -434,7 +436,8 @@ let extract_file biff i ign =
     if (biff.compressed) then begin
       read_compressed_biff biff.fd biff.filename this.res_offset size
     end else begin
-      let _ = Unix.lseek biff.fd this.res_offset Unix.SEEK_SET in
+      let _ = Unix.LargeFile.lseek biff.fd (Int64.of_int this.res_offset)
+          Unix.SEEK_SET in
       let buff = Bytes.create size in
       my_read size biff.fd buff biff.filename ;
       buff
@@ -453,7 +456,8 @@ let extract_tis biff i ign =
       if (biff.compressed) then begin
         read_compressed_biff biff.fd biff.filename this.tis_offset size
       end else begin
-        let _ = Unix.lseek biff.fd this.tis_offset Unix.SEEK_SET in
+        let _ = Unix.LargeFile.lseek biff.fd (Int64.of_int this.tis_offset)
+            Unix.SEEK_SET in
         let buff = Bytes.create size in
         my_read size biff.fd buff biff.filename;
         buff
@@ -505,7 +509,8 @@ let copy_file biff i oc is_tis =
       read_compressed_biff_internal
         biff.fd biff.filename offset size copy_chunk
     end else begin
-      let _ = Unix.lseek biff.fd offset Unix.SEEK_SET in
+      let _ = Unix.LargeFile.lseek biff.fd (Int64.of_int offset)
+          Unix.SEEK_SET in
       let chunk_size = 10240 in
       let chunk = Bytes.create chunk_size in
       let sofar = ref 0 in

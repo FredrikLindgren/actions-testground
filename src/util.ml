@@ -359,8 +359,8 @@ let file_contains_data name =
 
 let is_directory name =
   (try
-    let stats = Case_ins.unix_stat name in
-    let res = stats.Unix.st_kind = Unix.S_DIR in
+    let stats = Case_ins.unix_stat64 name in
+    let res = stats.Unix.LargeFile.st_kind = Unix.S_DIR in
     (* log_only "%s is a directory: %b\n" name res ;  *)
     res
   with _ -> false)
@@ -469,12 +469,12 @@ and copy_large_file name out reason =
 (*  log_or_print "Copying a large file: %s to %s\n" name out ; *)
   try begin
     Stats.time "loading files" (fun () ->
-      let stats = Case_ins.unix_stat name in
-      let size = stats.Unix.st_size in
-      if size = 0 then
+      let stats = Case_ins.unix_stat64 name in
+      let size = stats.Unix.LargeFile.st_size in
+      if size = 0L then
         log_or_print_modder "WARNING: [%s] is a 0 byte file\n" name
-      else if size < 0 then begin
-        log_and_print "ERROR: [%s] has reported size %d\n" name size ;
+      else if size < 0L then begin
+        log_and_print "ERROR: [%s] has reported size %Ld\n" name size ;
         failwith ("error loading " ^ name)
       end ;
       if file_exists out then my_unlink out ;
@@ -484,12 +484,17 @@ and copy_large_file name out reason =
             [Unix.O_WRONLY ; Unix.O_CREAT] 511 in
         let chunk_size = 10240 in
         let chunk = Bytes.create chunk_size in
-        let sofar = ref 0 in
+        let sofar = ref 0L in
         while !sofar < size do
-          let chunk_size = min (size - !sofar) chunk_size in
+          (* Int64.min was not introduced until OCaml 4.13 *)
+          let remaining = (Int64.sub size !sofar) in
+          let chunk_size =
+            if remaining > (Int64.of_int chunk_size) then
+              chunk_size else (Int64.to_int remaining)
+          in
           my_read chunk_size in_fd chunk name ;
           my_write chunk_size out_fd chunk out ;
-          sofar := !sofar + chunk_size ;
+          sofar := (Int64.add !sofar (Int64.of_int chunk_size)) ;
         done ;
         (try
           Unix.close in_fd ;
@@ -498,7 +503,7 @@ and copy_large_file name out reason =
           log_and_print "ERROR: copy_large_file failed to close %s or %s\n"
             name out ;
           raise e) ;
-        log_only "%s copied to %s, %d bytes\n" name out size ;
+        log_only "%s copied to %s, %Ld bytes\n" name out size ;
       end) ()
   end
   with e ->

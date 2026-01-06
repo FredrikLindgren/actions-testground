@@ -400,7 +400,9 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
                 (try
                   while true do
                     let next = Unix.readdir dh in
-                    if ((Case_ins.unix_stat (dir ^ "/" ^ next)).Unix.st_kind = Unix.S_REG) &&
+                    if ((Case_ins.unix_stat64
+                           (dir ^ "/" ^ next)).Unix.LargeFile.st_kind =
+                        Unix.S_REG) &&
                       (Str.string_match reg next 0) then begin
                         let file = (String.uppercase (dir ^ "/" ^ next)) in
                         let filespec = Case_ins.filename_basename file in
@@ -466,7 +468,8 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
                 while true do
                   let next = Unix.readdir dh in
                   if !debug_ocaml then log_and_print "%s\n" next;
-                  if ((Case_ins.unix_stat (directory ^ "/" ^ next)).Unix.st_kind =
+                  if ((Case_ins.unix_stat64
+                         (directory ^ "/" ^ next)).Unix.LargeFile.st_kind =
                       Unix.S_REG) && (Str.string_match reg next 0) then
                     (if !debug_ocaml then log_and_print "  match!\n";
                      find_list := (String.uppercase (directory ^ "/" ^ next)) :: !find_list;
@@ -1618,8 +1621,8 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
               let filep = (Unix.readdir dh) in
               if        Str.string_match pattern filep 0 then begin
                 let file = path ^ "/" ^ filep in
-                let stats = Case_ins.unix_stat file in
-                if stats.Unix.st_kind = my_type then begin
+                let stats = Case_ins.unix_stat64 file in
+                if stats.Unix.LargeFile.st_kind = my_type then begin
                   Var.set_string
                     (eval_pe_str
                        (PE_Dollars(toArr,[get_pe_string(string_of_int !i)],
