@@ -21,6 +21,7 @@ let unix_rmdir s = Unix.rmdir s;;
 let unix_access s p = Unix.access s p
 
 let sys_readdir s = Sys.readdir s;;
+let sys_remove s = Sys.remove s
 
 let weidu_executable = "weidu.exe" ;;
 

@@ -2100,7 +2100,7 @@ List.iter (fun c -> match c with
     Lazy.force f)
     !execute_at_exit ;
 if file_exists "override/add_spell.ids" && not (file_exists "override/spell.ids.installed") && not (
-  let files = Sys.readdir "override" in
+  let files = Case_ins.sys_readdir "override" in
   let r = Str.regexp_case_fold "$spell\\.ids\\..*\\.marker^" in
   List.exists (fun f -> Str.string_match r f 0) (Array.to_list files)
     ) then

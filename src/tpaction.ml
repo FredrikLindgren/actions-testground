@@ -311,7 +311,7 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
                   if do_backup then
                     backup_if_extant head ;
                   ignore (record_other_file_op head) ;
-                  Sys.remove head ;
+                  Case_ins.sys_remove head ;
                   delete tail
                 end else if is_directory head then begin
                   let head = Str.global_replace (Str.regexp "/$") ""
