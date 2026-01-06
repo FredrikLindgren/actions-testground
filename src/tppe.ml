@@ -560,7 +560,13 @@ let rec eval_pe buff game p =
             | _ -> log_and_print "WARNING: GAME_INCLUDES has no rule for %s\n"
                   (String.uppercase game_set) ; [(String.uppercase game_set)])
             in
-            eval_pe buff game (PE_GameIs((String.concat " " list), true, cache))
+            let res = eval_pe buff game (PE_GameIs((String.concat " " list),
+                                                   true, cache)) in
+            (match cache with
+            | Some (TP_Cache) -> Hashtbl.replace !Var.gameIncludesCache
+                  game_set (if res = 0l then false else true)
+            | _ -> ()) ;
+            res
         end)
       end else if result then 1l else 0l
   end
