@@ -127,6 +127,8 @@ let rec pe_to_str pe = "(" ^ (match pe with
       (pe_str_str s)
 | PE_ValidScriptTriggers s -> Printf.sprintf "VALID_SCRIPT_TRIGGERS %s"
       (pe_str_str s)
+| PE_DefinedAsFunction s -> Printf.sprintf "DEFINED_AS_FUNCTION %s"
+      (pe_str_str s)
                              ) ^ ")"
 
 and pe_str_str s = match s with

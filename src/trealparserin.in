@@ -1067,6 +1067,7 @@ nonterm (Tp.tp_patchexp) Patch_Exp {
   -> NEXT_STRREF [Tp.PE_NextStrref]
   -> VALID_SCRIPT_ACTIONS e1:Patch_String_Right [ Tp.PE_ValidScriptActions e1 ]
   -> VALID_SCRIPT_TRIGGERS e1:Patch_String_Right [ Tp.PE_ValidScriptTriggers e1 ]
+  -> DEFINED_AS_FUNCTION e1:Patch_String_Right [ Tp.PE_DefinedAsFunction e1 ]
 }
 
 nonterm (Tp.tp_store_position) Optional_Store_Position {
