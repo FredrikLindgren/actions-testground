@@ -5896,6 +5896,12 @@ that both 1 and 2 are true in a boolean context. In the case of, for
 example, dimorphic functions, where both an action function and a
 patch function exist of the same name, the return value is 1. \\
 
+or & \DEFINE{DEFINED!AS!INLINED} \ttref {variable} &
+
+Variable can be a string (variables are evaluated) or an array
+construct that evaluates to a string. Returns 1 if the string is the
+path of a defined inlined file, otherwise 0. \\
+
 or & \t{\%}\ttref{variable}\t{\%}   &
     The value of the \ttref{variable} is used. \\
 

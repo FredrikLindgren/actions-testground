@@ -129,6 +129,8 @@ let rec pe_to_str pe = "(" ^ (match pe with
       (pe_str_str s)
 | PE_DefinedAsFunction s -> Printf.sprintf "DEFINED_AS_FUNCTION %s"
       (pe_str_str s)
+| PE_DefinedAsInlined s -> Printf.sprintf "DEFINED_AS_INLINED %s"
+      (pe_str_str s)
                              ) ^ ")"
 
 and pe_str_str s = match s with

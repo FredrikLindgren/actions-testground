@@ -7,6 +7,7 @@ BEGIN
   PRINT "%message%"
   ACTION_TRY
     LAF test_defined_as_function END
+    LAF test_defined_as_inlined END
     OUTER_SET success = 1
   WITH
     DEFAULT
@@ -38,5 +39,14 @@ DEFINE_ACTION_FUNCTION test_defined_as_function BEGIN
 
   ACTION_IF DEFINED_AS_FUNCTION fl#functionp = 1 BEGIN
     FAIL "test_defined_as_function: expected patch function was defined as action"
+  END
+END
+
+DEFINE_ACTION_FUNCTION test_defined_as_inlined BEGIN
+  ACTION_IF NOT DEFINED_AS_INLINED ".../fl#inlined/null.file" BEGIN
+    FAIL "test_defined_as_inlined: expected inlined file was not defined"
+  END
+  ACTION_IF DEFINED_AS_INLINED ".../fl#not_defined" BEGIN
+    FAIL "test_defined_as_inlined: expected undefined file was defined"
   END
 END

@@ -554,6 +554,7 @@ and tp_patchexp =
   | PE_ValidScriptActions of tp_pe_string
   | PE_ValidScriptTriggers of tp_pe_string
   | PE_DefinedAsFunction of tp_pe_string
+  | PE_DefinedAsInlined of tp_pe_string
 
   | Pred_File_MD5 of tp_pe_string * tp_pe_string
   | Pred_File_Exists of tp_pe_string

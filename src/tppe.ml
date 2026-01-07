@@ -726,6 +726,10 @@ let rec eval_pe buff game p =
       if Hashtbl.mem Tpstate.functions (name,false) then 1l else if
         Hashtbl.mem Tpstate.functions (name,true) then 2l else 0l
   end
+  | PE_DefinedAsInlined pe_string ->
+      (if Hashtbl.mem Util.inlined_files
+          (Var.get_string (eval_pe_str pe_string)) then
+        1l else 0l)
 
 let eval_pe buff game pe =
   let res = Stats.time "eval_pe" (fun () -> eval_pe buff game pe) () in
