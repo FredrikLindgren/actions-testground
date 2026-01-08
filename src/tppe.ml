@@ -723,7 +723,9 @@ let rec eval_pe buff game p =
   end
   | PE_DefinedAsFunction pe_string -> begin
       let name = Var.get_string (eval_pe_str pe_string) in
-      if Hashtbl.mem Tpstate.functions (name,false) then 1l else if
+      if Hashtbl.mem Tpstate.functions (name,false) &&
+      Hashtbl.mem Tpstate.functions (name, true) then 3l else if
+        Hashtbl.mem Tpstate.functions (name,false) then 1l else if
         Hashtbl.mem Tpstate.functions (name,true) then 2l else 0l
   end
   | PE_DefinedAsInlined pe_string ->

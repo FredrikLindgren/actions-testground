@@ -5891,10 +5891,9 @@ or & \DEFINE{DEFINED!AS!FUNCTION} \ttref {variable} &
 Variable can be a string (variables are evaluated) or an array
 construct that evaluates to a string. Returns 1 if the string is the
 name of an action function, 2 if the string is the name of a patch
-function and 0 if string is not the name of any defined function. Note
-that both 1 and 2 are true in a boolean context. In the case of, for
-example, dimorphic functions, where both an action function and a
-patch function exist of the same name, the return value is 1. \\
+function, 3 if the string is the name of both an action function and a
+patch function, and 0 if string is not the name of any defined
+function. Note that 1, 2 and 3 are all true in a boolean context. \\
 
 or & \DEFINE{DEFINED!AS!INLINED} \ttref {variable} &
 

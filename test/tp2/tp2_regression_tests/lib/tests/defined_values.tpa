@@ -20,6 +20,8 @@ DEFINE_ACTION_FUNCTION fl#functiona BEGIN END
 
 DEFINE_PATCH_FUNCTION fl#functionp BEGIN END
 
+DEFINE_DIMORPHIC_FUNCTION fl#function2 BEGIN END
+
 DEFINE_ACTION_FUNCTION test_defined_as_function BEGIN
   ACTION_IF NOT (DEFINED_AS_FUNCTION fl#functiona = 1) BEGIN
     FAIL "test_defined_as_function: expected action function was not defined as such"
@@ -27,6 +29,10 @@ DEFINE_ACTION_FUNCTION test_defined_as_function BEGIN
 
   ACTION_IF NOT (DEFINED_AS_FUNCTION fl#functionp = 2) BEGIN
     FAIL "test_defined_as_function: expected patch function was not defined as such"
+  END
+
+  ACTION_IF NOT (DEFINED_AS_FUNCTION fl#function2 = 3) BEGIN
+    FAIL "test_defined_as_function: expected dimorphic function was not defined as such"
   END
 
   ACTION_IF DEFINED_AS_FUNCTION fl#fail_function BEGIN
