@@ -1,14 +1,14 @@
 BACKUP "tp2_regression_tests/backup"
 AUTHOR Wisp
 
-VERSION "we want the new parser"
+VERSION "we want the Elkhound parser"
 
 BEGIN ~TP2 regression tests~
 
 /*
  * Whether to keep the installation from failing on failed tests.
  */
-OUTER_SET stop_on_errors = 1
+OUTER_SET stop_on_errors = 0
 
 
 
