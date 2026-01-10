@@ -103,7 +103,7 @@ jobs:
           path: WeiDU-Windows-*.zip
           if-no-files-found: error
   trigger-nightly-release:
-    needs: [build-macos, build-linux, build-windows]
+    needs: [build-linux]
     if: github.ref == 'refs/heads/devel'
     runs-on: ubuntu-22.04
     steps:
@@ -134,7 +134,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
   trigger-rc-release:
-    needs: [build-macos, build-linux, build-windows]
+    needs: [build-linux]
     if: github.ref == 'refs/heads/rc'
     runs-on: ubuntu-22.04
     steps:
