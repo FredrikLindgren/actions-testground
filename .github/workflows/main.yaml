@@ -152,7 +152,7 @@ jobs:
           rc_number=$((10#${{ env.minor_version }} - 1))
           echo "rc=${rc_number}" >> "$GITHUB_OUTPUT"
       - name: create tag
-        uses: action/github-script@v8
+        uses: actions/github-script@v8
         with:
           script: |
             github.rest.git.createRef({
