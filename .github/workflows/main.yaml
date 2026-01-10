@@ -91,7 +91,7 @@ jobs:
         run: choco install upx zip
       - name: build weidu
         run: |
-          mv elkhound.exe D:/a/weidu/weidu/_opam/bin/elkhound.exe
+          mv elkhound.exe D:/a/actions_testground/actions_testground/_opam/bin/elkhound.exe
           opam switch
           (& opam env) -split '\r?\n' | ForEach-Object { Invoke-Expression $_ }
           make
@@ -103,7 +103,7 @@ jobs:
           path: WeiDU-Windows-*.zip
           if-no-files-found: error
   trigger-nightly-release:
-    needs: [build-linux]
+    needs: [bulid-macos, build-linux, build-windows]
     if: github.ref == 'refs/heads/devel'
     runs-on: ubuntu-22.04
     steps:
@@ -134,7 +134,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
   trigger-rc-release:
-    needs: [build-linux]
+    needs: [build-macos, build-linux, build-windows]
     if: github.ref == 'refs/heads/rc'
     runs-on: ubuntu-22.04
     steps:
