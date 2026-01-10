@@ -103,7 +103,7 @@ jobs:
           path: WeiDU-Windows-*.zip
           if-no-files-found: error
   trigger-nightly-release:
-    needs: [bulid-macos, build-linux, build-windows]
+    needs: [build-macos, build-linux, build-windows]
     if: github.ref == 'refs/heads/devel'
     runs-on: ubuntu-22.04
     steps:
