@@ -108,4 +108,16 @@ DEFINE_ACTION_FUNCTION test_if_exists BEGIN
   ACTION_IF NOT index < 0 BEGIN
     FAIL "test_if_exists: append was not carried out despite expectations"
   END
+
+  COPY ".../fl#inlined/null.file" "override/fl#null.ext"
+  IF_EXISTS
+  ACTION_IF NOT FILE_EXISTS_IN_GAME fl#null.ext BEGIN
+    FAIL "test_if_exists: inlined file was not copied despite expectations"
+  END
+
+  COPY ".../fl#not_defined" "override/fl#null2.ext"
+  IF_EXISTS
+  ACTION_IF FILE_EXISTS_IN_GAME fl#null2.ext BEGIN
+    FAIL "test_if_exists: inlined file was copied against expectations"
+  END
 END

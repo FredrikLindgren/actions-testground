@@ -5454,14 +5454,16 @@ checked against the \ttref{when} clauses separately. \\
   written out to the disk.  You may use \DEFINE{BUT!ONLY} as a synonym
   for \ttref{BUT!ONLY!IF!IT!CHANGES}. \\
 
-  or & \DEFINE{IF!EXISTS} & True only if the file exists. For
-  \ttref{COPY}, this check is done with \ttref{FILE!EXISTS}. For
-  \ttref{COPY!EXISTING}, \ttref{COPY!EXISTING!REGEXP},
-  \ttref{COPY!RANDOM}, \t{APPEND}, \ttref{APPEND!COL},
-  \ttref{EXTEND!TOP}, \ttref{EXTEND!BOTTOM},
+  or & \DEFINE{IF!EXISTS} & True only if the file exists or an inlined
+  file of that name is defined. For \ttref{COPY}, this check is done
+  with \ttref{FILE!EXISTS}. For \ttref{COPY!EXISTING},
+  \ttref{COPY!EXISTING!REGEXP}, \ttref{COPY!RANDOM}, \t{APPEND},
+  \ttref{APPEND!COL}, \ttref{EXTEND!TOP}, \ttref{EXTEND!BOTTOM},
   \ttref{EXTEND!TOP!REGEXP}, and \ttref{EXTEND!BOTTOM!REGEXP} this
   check is done with \ttref{FILE!EXISTS!IN!GAME}. For
-  \ttref{COPY!ALL!GAM!FILES}, this \t{when} clause is redundant. \\
+  \ttref{COPY!ALL!GAM!FILES}, this \t{when} clause is redundant. For
+  inlined files, this check is equivalent to
+  \ttref{DEFINED!AS!INLINED}. \\
 
 \\
 

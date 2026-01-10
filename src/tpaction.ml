@@ -117,9 +117,11 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
 
   let when_exists file when_list existing game =
     if List.mem TP_IfExists when_list then begin
+      if Hashtbl.mem Util.inlined_files file then true else
       if not existing then
         bigg_file_exists file game.Load.key
-      else is_true (eval_pe "" game (Pred_File_Exists_In_Game (PE_LiteralString(file)))) ;
+      else is_true (eval_pe "" game (Pred_File_Exists_In_Game
+                                       (PE_LiteralString(file)))) ;
     end else true in
 
   let passes_constraints filename buff con_l game caller print_if_do =
