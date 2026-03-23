@@ -218,6 +218,9 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
       | TP_Outer_Set(name,value,global) ->
           run_patch (TP_PatchSet(name,value,global))
 
+      | TP_OuterSetIdsSymOfInt(var,ids,value) ->
+          run_patch (TP_PatchSetIdsSymOfInt(var,ids,value))
+
       | TP_Outer_Sprint(name,msg,global) ->
           run_patch (TP_PatchSprint(name,msg,global))
 
@@ -1170,9 +1173,9 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
       end
 
       | TP_Add_Spell(file,kind,level,ids_name,pl,ple,pld) ->
-          log_and_print "Adding spell %s\n" ids_name;
           let file = Var.get_string file in
           let ids_name = Var.get_string ids_name in
+          log_and_print "Adding spell %s\n" ids_name;
           process_action tp (TP_Include [".../WEIDU_NAMESPACE/add_spell.tpa"]);
           let use_ple = if_true (match ple with
           | None -> false
@@ -2477,6 +2480,9 @@ let rec process_action_real our_lang game this_tp2_filename tp a =
           begin
             run_patch (TP_PatchTime (name, pl_of_al action_list))
           end
+
+      | TP_RegisterUninstall(filename) ->
+          Util.backup_if_extant (Var.get_string (eval_pe_str filename))
       );
       if !clear_memory then begin
         clear_memory := false;

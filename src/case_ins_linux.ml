@@ -4,10 +4,16 @@
 open BatteriesInit
 open Hashtblinit
 
+let case_fold = ref true
+let lowercase = ref false
+
+let case_sensitive_p () = true
+
 external fcase : string -> string = "fcase"
 
 (* fcase returns "./" for "" *)
-let case_transform s = if String.trim s <> "" then fcase s else ""
+let case_transform s = if !lowercase then String.lowercase s else
+if not !case_fold then s else if String.trim s <> "" then fcase s else ""
 
 (* Pervasives FS calls *)
 let backslash_to_slash s =
@@ -34,6 +40,7 @@ let unix_access s p = Unix.access (case_transform (backslash_to_slash s)) p
 
 let sys_readdir s = Sys.readdir (case_transform (backslash_to_slash s));;
 let sys_remove s = Sys.remove (case_transform (backslash_to_slash s))
+let sys_file_exists s = Sys.file_exists (case_transform (backslash_to_slash s))
 
 let weidu_executable = "weidu" ;;
 

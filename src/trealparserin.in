@@ -11,7 +11,17 @@ let rec left_to_right p =
   | Tp.PE_Evaluate s -> Tp.PE_Evaluate(left_to_right s)
   | Tp.PE_Lowercase s -> Tp.PE_Lowercase(left_to_right s)
   | Tp.PE_Uppercase s -> Tp.PE_Uppercase(left_to_right s)
-  | Tp.PE_Dollars (s,sl,true,false) -> Tp.PE_Dollars(left_to_right s, List.map left_to_right sl, false, true)
+  | Tp.PE_Dollars (s,sl,false,true) -> Tp.PE_Dollars(left_to_right s, List.map left_to_right sl, true, false)
+  | Tp.PE_Dollars (s,sl,a,b) -> Tp.PE_Dollars(left_to_right s, List.map left_to_right sl, a, b)
+
+let rec left_to_name p =
+  match p with
+  | Tp.PE_LiteralString s -> Tp.PE_LiteralString s
+  | Tp.PE_GetVar s -> Tp.PE_GetVar (left_to_right s)
+  | Tp.PE_Evaluate s -> Tp.PE_Evaluate(left_to_right s)
+  | Tp.PE_Lowercase s -> Tp.PE_Lowercase(left_to_right s)
+  | Tp.PE_Uppercase s -> Tp.PE_Uppercase(left_to_right s)
+  | Tp.PE_Dollars (s,sl,false,true) -> Tp.PE_Dollars(left_to_right s, List.map left_to_right sl, false, false)
   | Tp.PE_Dollars (s,sl,a,b) -> Tp.PE_Dollars(left_to_right s, List.map left_to_right sl, a, b)
 
 let seven_patch_exp v1 v2 v3 v4 v5 v6 v7 =
@@ -454,27 +464,28 @@ nonterm(Tp.tp_action) Tp_Action {
   -> OUTER_SET e3:Optional_Global e1:Patch_String_Left EQUALS e2:Patch_Exp
        [ Tp.TP_Outer_Set(e1,e2,e3) ]
   -> OUTER_SET e3:Optional_Global e1:Patch_String_Left PLUS_EQUALS e2:Patch_Exp
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_Add(Tp.PE_String e1,e2)),e3) ]
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_Add(Tp.PE_String(left_to_right e1),e2)),e3) ]
   -> OUTER_SET e3:Optional_Global e1:Patch_String_Left MINUS_EQUALS e2:Patch_Exp
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_Sub(Tp.PE_String e1,e2)),e3) ]
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_Sub(Tp.PE_String(left_to_right e1),e2)),e3) ]
   -> OUTER_SET e3:Optional_Global e1:Patch_String_Left TIMES_EQUALS e2:Patch_Exp
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_Mul(Tp.PE_String e1,e2)),e3) ]
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_Mul(Tp.PE_String(left_to_right e1),e2)),e3) ]
   -> OUTER_SET e3:Optional_Global e1:Patch_String_Left DIVIDE_EQUALS e2:Patch_Exp
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_Div(Tp.PE_String e1,e2)),e3) ]
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_Div(Tp.PE_String(left_to_right e1),e2)),e3) ]
   -> OUTER_SET e3:Optional_Global e1:Patch_String_Left OR_EQUALS e2:Patch_Exp
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_BOR(Tp.PE_String e1,e2)),e3) ]
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_BOR(Tp.PE_String(left_to_right e1),e2)),e3) ]
   -> OUTER_SET e3:Optional_Global e1:Patch_String_Left AND_EQUALS e2:Patch_Exp
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_BAND(Tp.PE_String e1,e2)),e3) ]
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_BAND(Tp.PE_String(left_to_right e1),e2)),e3) ]
   -> OUTER_SET e3:Optional_Global e1:Patch_String_Left BLSL_EQUALS e2:Patch_Exp
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_BLSL(Tp.PE_String e1,e2)),e3) ]
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_BLSL(Tp.PE_String(left_to_right e1),e2)),e3) ]
   -> OUTER_SET e3:Optional_Global e1:Patch_String_Left BLSR_EQUALS e2:Patch_Exp
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_BLSR(Tp.PE_String e1,e2)),e3) ]
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_BLSR(Tp.PE_String(left_to_right e1),e2)),e3) ]
   -> OUTER_SET e3:Optional_Global e1:Patch_String_Left BXOR_EQUALS e2:Patch_Exp
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_BXOR(Tp.PE_String e1,e2)),e3) ]
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_BXOR(Tp.PE_String(left_to_right e1),e2)),e3) ]
   -> OUTER_SET e3:Optional_Global PLUS_PLUS e1:Patch_String_Left
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_Add(Tp.PE_String e1, Tp.get_pe_int "1")),e3) ]
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_Add(Tp.PE_String(left_to_right e1), Tp.get_pe_int "1")),e3) ]
   -> OUTER_SET e3:Optional_Global MINUS_MINUS e1:Patch_String_Left
-       [ Tp.TP_Outer_Set(e1,(Tp.PE_Sub(Tp.PE_String e1, Tp.get_pe_int "1")),e3) ]
+       [ Tp.TP_Outer_Set(e1,(Tp.PE_Sub(Tp.PE_String(left_to_right e1), Tp.get_pe_int "1")),e3) ]
+  -> OUTER_SET_IDS_SYMBOL_OF_INT e1:STRING e2:STRING e3:Patch_Exp [ Tp.TP_OuterSetIdsSymOfInt(e1,e2,e3) ]
   -> OUTER_SPRINT e3:Optional_Global e1:Patch_String_Left e2:Dlg_Or_Patch_String_Right
        [ Tp.TP_Outer_Sprint(e1,e2,e3) ]
   -> OUTER_SPRINTF e1:Patch_String_Left e2:Dlg_Or_Patch_String_Right LPAREN e3:Patch_Exp_List RPAREN
@@ -586,6 +597,7 @@ nonterm(Tp.tp_action) Tp_Action {
   -> WITH_SCOPE BEGIN e1:Tp_Action_List END [ Tp.TP_WithVarScope(e1) ]
   -> ACTION_TIME e1:Patch_String_Right BEGIN
      e2:Tp_Action_List END [ Tp.TP_ActionTime(e1, e2) ]
+  -> REGISTER_UNINSTALL e1:Patch_String_Right [ Tp.TP_RegisterUninstall(e1) ]
 }
 
 nonterm((Tp.tp_patchexp list * Tp.tp_patchexp * Tp.tp_action list) list) Action_With_List_Rev {
@@ -710,8 +722,8 @@ nonterm((Tp.tp_pe_string * Tp.tp_pe_string) list) PeStr_PeStrMaybeLit_List {
 
 nonterm((Tp.tp_pe_string * Tp.tp_pe_string) list) PeStr_PeStrMaybeLit_List_Rev {
   -> { [] }
-  -> e1:PeStr_PeStrMaybeLit_List_Rev e2:Patch_String_Left EQUALS e3:Patch_String_Right [ (e2,e3) :: e1 ]
-  -> e1:PeStr_PeStrMaybeLit_List_Rev e2:Patch_String_Left [ (e2, left_to_right e2) :: e1 ]
+  -> e1:PeStr_PeStrMaybeLit_List_Rev e2:Patch_String_Left EQUALS e3:Patch_String_Name [ (e2,e3) :: e1 ]
+  -> e1:PeStr_PeStrMaybeLit_List_Rev e2:Patch_String_Left [ (e2,left_to_name e2) :: e1 ]
 }
 
 nonterm(string list) String_List_Rev {
@@ -824,6 +836,11 @@ nonterm(Tp.tp_pe_string) Patch_String_Right {
   -> EVALUATE_BUFFER e1:Patch_String_Right [ Tp.PE_Evaluate e1 ]
   -> DOLLARS e1:Patch_String_Right LPAREN e2:Patch_String_Right_List RPAREN
        [ Tp.PE_Dollars(e1,e2,true,false) ]
+}
+
+nonterm(Tp.tp_array_construct) Array_Construct {
+  -> DOLLARS e1:Patch_String_Right LPAREN e2:Patch_String_Right_List RPAREN
+       [ Tp.PE_Dollars(e1,e2,false,false) ]
 }
 
 nonterm(Tp.tp_pe_string list) Patch_String_Left_List_Rev {
@@ -1051,7 +1068,7 @@ nonterm (Tp.tp_patchexp) Patch_Exp {
   -> ENGINE_IS e0:Optional_Cache e1:STRING [ Tp.PE_GameIs(e1,false,e0) ]
   -> GAME_INCLUDES e0:Optional_Cache e1:STRING [ Tp.PE_GameIncludes(e1,e0) ]
   -> VARIABLE_IS_SET e1:Patch_String_Name [ Tp.PE_VariableIsSet e1 ]
-  -> VARIABLE_IS_IN_ARRAY e1:Patch_String_Name [ Tp.PE_VariableIsInArray e1 ]
+  -> VARIABLE_IS_IN_ARRAY e1:Array_Construct [ Tp.PE_VariableIsInArray e1 ]
   -> IDS_OF_SYMBOL LPAREN e1:STRING e2:STRING RPAREN [ Tp.PE_IdsOfSymbol(e1,e2) ]
   -> STATE_WHICH_SAYS e1:Lse FROM e2:STRING
        [ let file = fst (split e2) ^ ".dlg" in
@@ -1225,27 +1242,27 @@ nonterm (Tp.tp_patch) Tp_Patch {
   -> SET e3:Optional_Global e1:Patch_String_Left EQUALS e2:Patch_Exp
        [ Tp.TP_PatchSet(e1,e2,e3) ]
   -> SET e3:Optional_Global e1:Patch_String_Left PLUS_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet(e1,(Tp.PE_Add(Tp.PE_String e1,e2)),e3) ]
+       [ Tp.TP_PatchSet(e1,(Tp.PE_Add(Tp.PE_String(left_to_right e1),e2)),e3) ]
   -> SET e3:Optional_Global e1:Patch_String_Left MINUS_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet(e1,(Tp.PE_Sub(Tp.PE_String e1,e2)),e3) ]
+       [ Tp.TP_PatchSet(e1,(Tp.PE_Sub(Tp.PE_String(left_to_right e1),e2)),e3) ]
   -> SET e3:Optional_Global e1:Patch_String_Left TIMES_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet(e1,(Tp.PE_Mul(Tp.PE_String e1,e2)),e3) ]
+       [ Tp.TP_PatchSet(e1,(Tp.PE_Mul(Tp.PE_String(left_to_right e1),e2)),e3) ]
   -> SET e3:Optional_Global e1:Patch_String_Left DIVIDE_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet(e1,(Tp.PE_Div(Tp.PE_String e1,e2)),e3) ]
+       [ Tp.TP_PatchSet(e1,(Tp.PE_Div(Tp.PE_String(left_to_right e1),e2)),e3) ]
   -> SET e3:Optional_Global e1:Patch_String_Left OR_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet(e1,(Tp.PE_BOR(Tp.PE_String e1,e2)),e3) ]
+       [ Tp.TP_PatchSet(e1,(Tp.PE_BOR(Tp.PE_String(left_to_right e1),e2)),e3) ]
   -> SET e3:Optional_Global e1:Patch_String_Left AND_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet(e1,(Tp.PE_BAND(Tp.PE_String e1,e2)),e3) ]
+       [ Tp.TP_PatchSet(e1,(Tp.PE_BAND(Tp.PE_String(left_to_right e1),e2)),e3) ]
   -> SET e3:Optional_Global e1:Patch_String_Left BLSL_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet(e1,(Tp.PE_BLSL(Tp.PE_String e1,e2)),e3) ]
+       [ Tp.TP_PatchSet(e1,(Tp.PE_BLSL(Tp.PE_String(left_to_right e1),e2)),e3) ]
   -> SET e3:Optional_Global e1:Patch_String_Left BLSR_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet(e1,(Tp.PE_BLSR(Tp.PE_String e1,e2)),e3) ]
+       [ Tp.TP_PatchSet(e1,(Tp.PE_BLSR(Tp.PE_String(left_to_right e1),e2)),e3) ]
   -> SET e3:Optional_Global e1:Patch_String_Left BXOR_EQUALS e2:Patch_Exp
-       [ Tp.TP_PatchSet(e1,(Tp.PE_BXOR(Tp.PE_String e1,e2)),e3) ]
+       [ Tp.TP_PatchSet(e1,(Tp.PE_BXOR(Tp.PE_String(left_to_right e1),e2)),e3) ]
   -> SET e3:Optional_Global PLUS_PLUS e1:Patch_String_Left
-       [ Tp.TP_PatchSet(e1,(Tp.PE_Add(Tp.PE_String e1, Tp.get_pe_int "1")),e3) ]
+       [ Tp.TP_PatchSet(e1,(Tp.PE_Add(Tp.PE_String(left_to_right e1), Tp.get_pe_int "1")),e3) ]
   -> SET e3:Optional_Global MINUS_MINUS e1:Patch_String_Left
-       [ Tp.TP_PatchSet(e1,(Tp.PE_Sub(Tp.PE_String e1, Tp.get_pe_int "1")),e3) ]
+       [ Tp.TP_PatchSet(e1,(Tp.PE_Sub(Tp.PE_String(left_to_right e1), Tp.get_pe_int "1")),e3) ]
   -> e3:Optional_Global e1:STRING EQUALS e2:Patch_Exp
        [ Tp.TP_PatchSet((Tp.PE_LiteralString e1),e2,e3) ]
   -> e3:Optional_Global e1:STRING PLUS_EQUALS e2:Patch_Exp

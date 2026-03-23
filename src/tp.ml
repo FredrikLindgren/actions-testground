@@ -35,6 +35,7 @@ let debug_change = ref false
 let has_if_eval_bug = ref true
 let continue_on_error = ref false
 let debug_pe = ref false
+let conf : (string, string) Hashtbl.t ref = ref (Hashtbl.create 5)
 
 exception Abort of string
 
@@ -194,6 +195,7 @@ and tp_action =
   | TP_Outer_Inner_Buff of string * (tp_patch list)
   | TP_Outer_Inner_Buff_Save of tp_pe_string * string * (tp_patch list)
   | TP_Outer_Set of tp_pe_string * tp_patchexp * bool
+  | TP_OuterSetIdsSymOfInt of string * string * tp_patchexp
   | TP_Outer_Sprint of tp_pe_string * tp_pe_tlk_string * bool
   | TP_Outer_Sprintf of tp_pe_string * tp_pe_tlk_string * tp_patchexp list
   | TP_Outer_Text_Sprint of tp_pe_string * tp_pe_string * bool
@@ -264,6 +266,7 @@ and tp_action =
   | TP_WithTra of tp_pe_string list * tp_action list
   | TP_WithVarScope of tp_action list
   | TP_ActionTime of tp_pe_string * tp_action list
+  | TP_RegisterUninstall of tp_pe_string
 
 (*
   and predicate =
@@ -478,6 +481,9 @@ and tp_constraint =
   | TP_ButOnlyIfItChanges
   | TP_IfExists
 
+and tp_array_construct =
+  | PE_Dollars of tp_pe_string * (tp_pe_string list) * bool * bool
+
 and tp_pe_string =
   | PE_LiteralString of string
   | PE_GetVar of tp_pe_string
@@ -542,7 +548,7 @@ and tp_patchexp =
   | PE_GameIs of string * bool * tp_cache_arg option
   | PE_GameIncludes of string * tp_cache_arg option
   | PE_VariableIsSet of tp_pe_string
-  | PE_VariableIsInArray of tp_pe_string
+  | PE_VariableIsInArray of tp_array_construct
   | PE_IdsOfSymbol of string * string
   | PE_StateWhichSays of (Dlg.tlk_string option) * ((tp_patchexp * string) option) * string
   | PE_IsAnInt of tp_pe_string

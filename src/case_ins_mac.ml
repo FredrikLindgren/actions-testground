@@ -1,6 +1,11 @@
 open BatteriesInit
 open Hashtblinit
 
+let case_fold = ref false
+let lowercase = ref false
+
+let case_sensitive_p () = false
+
 let backslash_to_slash s =
   let s = Str.global_replace (Str.regexp "\\\\") "/" s in
 				s
@@ -26,6 +31,7 @@ let unix_access s p = Unix.access (backslash_to_slash s) p
 
 let sys_readdir s = Sys.readdir (backslash_to_slash s);;
 let sys_remove s = Sys.remove (backslash_to_slash s)
+let sys_file_exists s = Sys.file_exists (backslash_to_slash s)
 
 let weidu_executable = "weidu" ;;
 

@@ -1176,6 +1176,7 @@ let do_tp2_files tp_list force_install_these_main force_uninstall_these_main pau
     let tp_file = Queue.take tp2_queues in
     try
       if file_exists tp_file then begin
+        let tp_file = Util.case_exact_tp_file tp_file in
         let result = handle_tp2_filename tp_file in
         Tpwork.handle_tp game tp_file result;
       end
@@ -1221,6 +1222,7 @@ let do_script process_script pause_at_end game =
     List.iter (fun (a,b) -> log_and_print "%s %d\n" b a) !toproc;
     try
       if file_exists tp_file then begin
+        let tp_file = Util.case_exact_tp_file tp_file in
         let result = handle_tp2_filename tp_file in
         List.iter (fun (a,b) ->
           begin
@@ -1510,7 +1512,7 @@ let main () =
     "--search-ids", Myarg.String Load.add_ids_path, "X\tlook in X for input IDS files (cumulative)" ;
     "--tlkin", Myarg.String Load.set_dialog_tlk_path,"X\tuse X as DIALOG.TLK" ;
     "--ftlkin", Myarg.String Load.set_dialogf_tlk_path,"X\tuse X as DIALOGF.TLK";
-    "--use-lang", Myarg.String (fun s -> ee_use_lang := Some (String.lowercase s)), "X\ton games with multiple languages, use files in lang/X/";
+    "--use-lang", Myarg.String (fun s -> ee_use_lang := Some s), "X\ton games with multiple languages, use files in lang/X/";
     "--tlkmerge", Myarg.String (fun s -> tlk_merge := !tlk_merge @ [s]; test_output_tlk_p := true),
     "X\tmerge X into loaded DIALOG.TLK" ;
     "--yes", Myarg.Set Tp.always_yes,"\tanswer all TP2 questions with 'Yes'";
@@ -1532,8 +1534,8 @@ let main () =
     "--quick-menu", Myarg.Int (fun d -> Tp.chosen_quick_menu := Some d), "\tX installs the quick menu selection X";
     "--process-script", Myarg.String (fun s -> process_script := s; Tp.skip_at_view := true; Tp.quick_log := true; test_output_tlk_p := true), "\tX process installation script X";
     "--skip-at-view", Myarg.Set Tp.skip_at_view, "\tkills AT_* ~VIEW this~";
-    "--quick-log", Myarg.Set Tp.quick_log, "\tDoesn't print the name of components in weidu.log (much faster)";
-    "--safe-exit", Myarg.Set Tpstate.safe_exit, "\tPrints weidu.log after starting the installation of every component";
+    "--quick-log", Myarg.Set Tp.quick_log, "\tDoesn't print the name of components in WeiDU.log (much faster)";
+    "--safe-exit", Myarg.Set Tpstate.safe_exit, "\tPrints WeiDU.log after starting the installation of every component";
     "--version", Myarg.Set exit_now, "\tprint version number and exit";
     "--exit", Myarg.Set exit_now, "\tprint version number and exit";
     "--licence", Myarg.Set show_licence, "\tprint licence information and exit" ;
@@ -1550,7 +1552,7 @@ let main () =
     Myarg.String (fun s -> list_comp_json := Some s) ;
     Myarg.Int (fun i -> list_comp_lang := i) ;
   ], "\tX Y lists all components in X using language Y with JSON output EXPERIMENTAL!" ;
-    "--save-components-name", Myarg.Set save_comp_name, "\trewrites weidu.log, printing every component name";
+    "--save-components-name", Myarg.Set save_comp_name, "\trewrites WeiDU.log, printing every component name";
     "--change-log",Myarg.String (fun s -> change_log := s :: !change_log), "\tgenerates a changelog for the given resource (cumulative)";
     "--change-log-list",Myarg.List (Myarg.String (fun s -> change_log := s :: !change_log)), "\tgenerates a changelog for the given resource (cumulative)";
     "--change-log-rest",Myarg.Rest (Myarg.String (fun s -> change_log := s :: !change_log)), "\tgenerates a changelog for the given resource (cumulative)";
@@ -1564,6 +1566,10 @@ let main () =
     "\tX Y... X, Y... will be stored in the %argvx% variables (cumulative)";
     "--args-list", Myarg.List (Myarg.String (fun s -> Var.set_string ("argv[" ^ (string_of_int !counter) ^ "]") s; incr counter)),
     "\tX Y... X, Y... will be stored in the %argvx% variables (cumulative)";
+    "--no-case-fold", Myarg.Unit (fun () -> Case_ins.case_fold := false ; Hashtbl.replace !Tp.conf "case_fold" "false"), "\tdo not case-fold I/O (Linux only)";
+    "--case-fold", Myarg.Unit (fun () -> Case_ins.case_fold := true ; Hashtbl.replace !Tp.conf "case_fold" "true"), "\tfold case when doing I/O (Linux only, default)";
+    "--lowercase", Myarg.Unit (fun () -> Case_ins.lowercase := true ; Hashtbl.replace !Tp.conf "lowercase" "true"), "\tlowercase I/O for legacy behaviour and compatibility with tolower (Linux only, overrides --case-fold)";
+    "--no-lowercase", Myarg.Unit (fun () -> Case_ins.lowercase := false ; Hashtbl.replace !Tp.conf "lowercase" "false"), "\tunsets --lowercase if it has previously been used (Linux only)";
     "--print-backtrace", Myarg.Unit (fun () -> print_backtrace := true; Printexc.record_backtrace true),"\tprints OCaml stack trace when reporting an exception (rarely of interest to end-users)";
     "--debug-ocaml", Myarg.Set Util.debug_ocaml,"\tenables random debugging information for the Ocaml source (rarely of interest to end-users)" ;
     "--debug-boiic", Myarg.Set Tp.debug_boiic,"\tprints out which files have been changed by BUT_ONLY_IF_IT_CHANGES" ;
@@ -1717,8 +1723,13 @@ let main () =
 
   log_and_print "[%s] WeiDU version %s\n" Sys.argv.(0) version ;
   let version_int = int_of_string Version.version in
-  if version_int mod 100 <> 0 then
-    log_and_print "This is a non-stable version. Unless you're sure about what you're doing, consider downgrading.\n" ;
+  (match version_int mod 100 with
+  | v when (v > 1) -> log_and_print "This version is a release candidate. \
+        Regressions (bugs that were not present in the past) since last \
+        version are not expected but cannot be excluded.\n"
+  | 1 -> log_and_print "This is a version under development. New features \
+        may be incomplete or subject to change.\n"
+  | _ -> ()) ;
 
   (* see if AUTOUPDATE is in our base name *)
   (try
@@ -1768,16 +1779,53 @@ let main () =
   if (!forced_script_style <> Load.NONE) then
     force_script_style game !forced_script_style Sys.argv.(0);
 
-  if Load.enhanced_edition_p game then begin
-    (match !ee_use_lang with
-    | None -> Load.set_bgee_lang_dir game
-              (attempt_to_load_bgee_lang_dir game.Load.game_path)
-    | Some s -> Load.set_bgee_lang_dir game (Some s) ;
-        write_bgee_lang_dir game.Load.game_path s) ;
-  end
-  else begin
-    ignore (Load.actually_load_tlk_pair game (Load.get_active_dialogs game)) ;
+  (match Sys.getenv_opt "WEIDU_NO_CASE_FOLD" with
+  | Some "1"
+  | Some "true" -> Case_ins.case_fold := false
+  | Some _
+  | None -> ()) ;
+
+  if file_exists (Util.conf_filename game.Load.game_path) then begin
+    let conf = Util.load_conf game.Load.game_path in
+    if Load.enhanced_edition_p game then
+      (match !ee_use_lang with
+      | None -> (try
+          let dir = read_directory_name
+              (Hashtbl.find conf "lang_dir") "lang" in
+          Load.set_bgee_lang_dir game (Some dir)
+      with Not_found -> Load.set_bgee_lang_dir game None)
+      | Some s ->
+          let dir = read_directory_name s "lang" in
+          Load.set_bgee_lang_dir game (Some dir) ;
+          Hashtbl.replace conf "lang_dir" dir) ;
+    if Case_ins.case_sensitive_p () then
+      (try
+        (match Hashtbl.find conf "case_fold" with
+        | "true" -> Case_ins.case_fold := true
+        | "false" -> Case_ins.case_fold := false
+        | u -> log_and_print "Unrecognised value for case_fold: %s\n" u) ;
+        (match Hashtbl.find conf "lowercase" with
+        | "true" -> Case_ins.lowercase := true
+        | "false" -> Case_ins.lowercase := false
+        | u -> log_and_print "Unrecognised value for lowercase: %s\n" u)
+      with Not_found -> ()) ;
+    Hashtbl.iter (fun key value ->
+      Hashtbl.replace !Tp.conf key value) conf ;
   end ;
+
+  if Load.enhanced_edition_p game then
+    (match !ee_use_lang with
+    | None -> ()
+    | Some s ->
+        let dir = read_directory_name s "lang" in
+        Load.set_bgee_lang_dir game (Some dir) ;
+        Hashtbl.replace !Tp.conf "lang_dir" dir) ;
+
+  if Load.save_conf_p () then
+    Util.save_conf game.Load.game_path !Tp.conf ;
+
+  if not (Load.enhanced_edition_p game) then
+    ignore (Load.actually_load_tlk_pair game (Load.get_active_dialogs game)) ;
 
   ignore (Load.deal_with_tlkin game) ;
 

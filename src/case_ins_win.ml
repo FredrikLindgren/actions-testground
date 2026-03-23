@@ -1,6 +1,11 @@
 open BatteriesInit
 open Hashtblinit
 
+let case_fold = ref false
+let lowercase = ref false
+
+let case_sensitive_p () = false
+
 (* Pervasives FS calls *)
 let perv_open_out s = open_out s ;;
 let perv_open_out_gen m i s = open_out_gen m i s ;;
@@ -22,6 +27,7 @@ let unix_access s p = Unix.access s p
 
 let sys_readdir s = Sys.readdir s;;
 let sys_remove s = Sys.remove s
+let sys_file_exists s = Sys.file_exists s
 
 let weidu_executable = "weidu.exe" ;;
 

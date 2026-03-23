@@ -875,29 +875,6 @@ let split_log_line line =
   if List.length pieces = 2 then pieces else
   Str.split (Str.regexp " ") line
 
-let attempt_to_load_bgee_lang_dir game_path =
-  let conf = Arch.native_separator (game_path ^ "/weidu.conf") in
-  if file_exists conf then begin
-    let buff = load_file conf in
-    let regexp = (Str.regexp_case_fold "lang_dir[ \t]+=[ \t]+\\([a-z_]+\\)") in
-    (try
-      ignore (Str.search_forward regexp buff 0) ;
-      Some (String.lowercase (Str.matched_group 1 buff))
-    with Not_found -> None)
-  end
-  else None
-
-let write_bgee_lang_dir game_path dir =
-  (try
-    let conf = Arch.native_separator (game_path ^ "/weidu.conf") in
-    let chan = Case_ins.perv_open_out_bin conf in
-    ignore (output_string chan (String.lowercase
-                                  (Printf.sprintf "lang_dir = %s\n" dir))) ;
-    ignore (close_out chan)
-  with e ->
-    log_and_print "ERROR: unable to save weidu.conf because: %s\n"
-      (printexc_to_string e))
-
 let deduplicate list =
   let table = Hashtbl.create (List.length list) in
   List.filter (fun x ->
@@ -952,6 +929,48 @@ let tp2_name filename =
   | a :: b -> (String.concat "-" (a :: b))
   | _ -> filename)
 
+let tp2_directory tp2_file =
+  let parts = List.rev
+      (String.split_on_char '/'
+         (Str.global_replace
+            (Str.regexp "\\\\") "/" tp2_file))
+  in
+  (match parts with
+  | file :: dir :: _ when
+      (String.equal
+         (String.lowercase
+            (Case_ins.filename_chop_extension
+               (tp2_name
+                  (Case_ins.filename_basename file))))
+         (String.lowercase dir)) -> Some dir
+  | _ -> None)
+
+let read_file_name tp2_file directory =
+  let files = Case_ins.sys_readdir directory in
+  Array.fold_left (fun acc item ->
+    if (String.equal (String.lowercase_ascii item)
+          (String.lowercase_ascii tp2_file)) && not (is_directory item) then
+      item else acc) tp2_file files
+
+let read_directory_name dir_name directory =
+  let dirs = Case_ins.sys_readdir directory in
+  Array.fold_left (fun acc item ->
+    if (String.equal (String.lowercase_ascii item)
+          (String.lowercase_ascii dir_name)) &&
+      is_directory (Arch.native_separator directory ^ "/" ^ item) then
+      item else acc) dir_name dirs
+
+let case_exact_tp_file tp_file =
+  (match tp2_directory tp_file with
+  | None ->
+      read_file_name (Case_ins.filename_basename tp_file) "."
+  | Some dir ->
+      let tp2_name = (read_file_name
+                        (Case_ins.filename_basename
+                           tp_file) dir) in
+      let tp2_dir = (read_directory_name dir ".") in
+      Filename.concat tp2_dir tp2_name)
+
 let read_lines file =
   let chan = Case_ins.perv_open_in file in
   let read chan = try Some (input_line chan) with End_of_file -> None in
@@ -960,3 +979,29 @@ let read_lines file =
     | Some line -> loop (line :: list)
     | None -> close_in chan ; List.rev list in
   loop []
+
+let conf_filename game_path =
+  Arch.native_separator (game_path ^ "/weidu.conf")
+
+let load_conf game_path =
+  let lines = read_lines (conf_filename game_path) in
+  List.fold_left (fun acc line ->
+    let parts = List.map String.trim (String.split_on_char '=' line) in
+    (match parts with
+    | "lang_dir" :: value :: [] -> Hashtbl.replace acc "lang_dir" value ; acc
+    | "case_fold" :: value :: [] -> Hashtbl.replace acc "case_fold" value ; acc
+    | "lowercase" :: value :: [] -> Hashtbl.replace acc "lowercase" value ; acc
+    | _ -> acc)) (Hashtbl.create 5) lines
+
+let save_conf game_path table =
+  (try
+    if (Hashtbl.length table) > 0 then begin
+      let chan = Case_ins.perv_open_out_bin (conf_filename game_path) in
+      Hashtbl.iter (fun key value ->
+        ignore (output_string chan (Printf.sprintf "%s = %s\n" key value)))
+        table ;
+      ignore (close_out chan)
+    end
+  with e ->
+    log_and_print "ERROR: unable to save weidu.conf because: %s\n"
+      (printexc_to_string e))

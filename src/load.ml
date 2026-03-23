@@ -282,6 +282,9 @@ let enhanced_edition_p game =
 let eep () =
   enhanced_edition_p (the_game ())
 
+let save_conf_p () =
+  eep () || Case_ins.case_sensitive_p ()
+
 let load_dialog_pair path dpath dfpath =
   let dialog, dialog_path = fake_load_dialog path dpath in
   let dialogf, dialogf_path = fake_load_dialogf path dfpath in
@@ -318,12 +321,11 @@ let load_ee_dialogs game_path =
   let lang_path = game_path ^ "/lang" in
   let lang_dirs =
     (List.fast_sort compare
-       (List.map String.lowercase
-          (List.filter (fun dir ->
-            let dir = Arch.native_separator (lang_path ^ "/" ^ dir) in
-            (is_directory dir) &&
-            (file_exists (Arch.native_separator (dir ^ "/dialog.tlk"))))
-             (Array.to_list (Case_ins.sys_readdir lang_path))))) in
+       (List.filter (fun dir ->
+         let dir = Arch.native_separator (lang_path ^ "/" ^ dir) in
+         (is_directory dir) &&
+         (file_exists (Arch.native_separator (dir ^ "/dialog.tlk"))))
+          (Array.to_list (Case_ins.sys_readdir lang_path)))) in
   let languages = (List.map (fun lang ->
     let path = Arch.native_separator (lang_path ^ "/" ^ lang) in
     load_dialog_pair path None None) lang_dirs) in
@@ -338,7 +340,7 @@ let load_ee_dialogs game_path =
 
 let load_dialogs game_path =
   if file_exists (Arch.native_separator
-                    (game_path ^ "/lang/en_us/dialog.tlk")) then
+                    (game_path ^ "/lang/en_US/dialog.tlk")) then
     load_ee_dialogs game_path
   else
     load_default_dialogs game_path
@@ -404,7 +406,8 @@ let find_key_file game_paths =
       let keyname = find_file_in_path path "^chitin.key$" in
       if file_exists keyname then begin
         let keybuff = load_file keyname in
-        raise (FoundKey((Key.load_key keyname keybuff),keyname,path))
+        raise (FoundKey((Key.load_key keyname keybuff),
+                        (Case_ins.filename_basename keyname),path))
       end) game_paths ;
     log_and_print "\nERROR: Unable to find CHITIN.KEY in:\n" ;
     List.iter (fun path -> log_and_print "\t%s\n" path) game_paths ;
@@ -511,8 +514,8 @@ let load_game () =
 
 let set_additional_bgee_load_paths game dir =
   let gp = game.game_path in
-  let more = List.append (if dir <> "en_us" then [gp ^ "/lang/" ^ dir] else [])
-      [gp ^ "/lang/en_us"] in
+  let more = List.append (if (String.lowercase_ascii dir) <> "en_us" then
+    [gp ^ "/lang/" ^ dir] else []) [gp ^ "/lang/en_US"] in
   game.cd_path_list <- (List.append game.cd_path_list more)
 
 let use_bgee_lang_dir game dir =

@@ -5,7 +5,7 @@
 .github
 .gitignore
 .workflows
-Configuration
+.dir-locals.el
 Dockerfile
 obj/
 result

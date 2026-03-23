@@ -105,8 +105,7 @@ let rec pe_to_str pe = "(" ^ (match pe with
       (pe_to_str e1) (pe_to_str e2) (pe_to_str e3)
 
 | PE_VariableIsSet(s) -> Printf.sprintf "VARIABLE_IS_SET %s" (pe_str_str s)
-| PE_VariableIsInArray(s) -> Printf.sprintf "VARIABLE_IS_IN_ARRAY %s"
-                                            (pe_str_str s)
+| PE_VariableIsInArray(_) -> Printf.sprintf "VARIABLE_IS_IN_ARRAY"
 | PE_TraEntryExists(a,b) ->
     Printf.sprintf "TRA_ENTRY_EXISTS (%s %s)" (pe_str_str a)
       (if b <> [] then (List.fold_left (fun acc elt ->
@@ -214,6 +213,7 @@ let action_to_str a = match a with
 | TP_Outer_Inner_Buff _ -> "OUTER_INNER_PATCH"
 | TP_Outer_Inner_Buff_Save _ -> "OUTER_INNER_PATCH_SAVE"
 | TP_Outer_Set _ -> "OUTER_SET"
+| TP_OuterSetIdsSymOfInt _ -> "OUTER_SET_IDS_SYMBOL_OF_INT"
 | TP_Outer_Sprint _ -> "OUTER_SPRINT"
 | TP_Outer_Sprintf _ -> "OUTER_SPRINTF"
 | TP_Outer_Text_Sprint _ -> "OUTER_TEXT_SPRINT"
@@ -245,6 +245,7 @@ let action_to_str a = match a with
 | TP_WithTra (_, _) -> "WITH_TRA"
 | TP_WithVarScope (_) -> "WITH_SCOPE"
 | TP_ActionTime(_, _) -> "ACTION_TIME"
+| TP_RegisterUninstall(_) -> "REGISTER_UNINSTALL"
 
 
 (************************************************************************
@@ -330,7 +331,7 @@ let init_default_strings () =
   add (-1045) "French" ;
   add (-1046) "Italian" ;
   add (-1047) "Polish" ;
-  add (-1048) "Portuguese" ;
+  add (-1048) "Brazilian Portuguese" ;
   add (-1049) "Turkish" ;
   add (-1050) "Japanese" ;
   add (-1051) "Korean" ;
@@ -512,8 +513,8 @@ let ask_about_lang_dir ask_text: string =
              ("ru_ru", (get_trans (-1053))); ("uk_ua", (get_trans (-1054)));
              ("hu_hu", (get_trans (-1055))); ("no_nb", (get_trans (-1056)))]) ;
   let prettify dir =
-    if Hashtbl.mem pretty_ht dir then
-      Hashtbl.find pretty_ht dir
+    if Hashtbl.mem pretty_ht (String.lowercase_ascii dir) then
+      Hashtbl.find pretty_ht (String.lowercase_ascii dir)
     else dir in
   let answer = ref None in
   while !answer = None do
