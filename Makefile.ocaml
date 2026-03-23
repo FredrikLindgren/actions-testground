@@ -322,7 +322,13 @@ cleancaml:
 # Dependencies for .mli files reside in corresponding .di files.
 #
 
-FIXDEPEND:=perl -e 'while(<>) { s%[^/\\ :]+[/\\]% %g; s%([^ :\\\n\r]+)%$(OBJDIR)/$$1%g; print $$_;}'
+ifeq ($(findstring CYGWIN,$(shell uname -s)),CYGWIN)
+	$(info Quote the quote)
+	FIXDEPEND:=perl -e 'while(<>) { s%[^/\\\\ :]+[/\\\\]% %g; s%([^ :\\\\\n\r]+)%$(OBJDIR)/$$1%g; print $$_;}'
+else
+	$(info Single quote)
+	FIXDEPEND:=perl -e 'while(<>) { s%[^/\\ :]+[/\\]% %g; s%([^ :\\\n\r]+)%$(OBJDIR)/$$1%g; print $$_;}'
+endif
 
 # This sed substitution is valid for GNU sed but not for BSD sed (and
 # probably not POSIX). \r is not a recognised control character.
