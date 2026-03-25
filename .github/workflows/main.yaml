@@ -91,7 +91,7 @@ jobs:
         run: choco install upx zip
       - name: build weidu
         run: |
-          mv elkhound.exe D:/a/actions_testground/actions_testground/_opam/bin/elkhound.exe
+          mv elkhound.exe D:/a/actions-testground/actions-testground/_opam/bin/elkhound.exe
           opam switch
           (& opam env) -split '\r?\n' | ForEach-Object { Invoke-Expression $_ }
           make
