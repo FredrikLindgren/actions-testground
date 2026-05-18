@@ -25,7 +25,7 @@ jobs:
           chmod +x bin/elkhound
           ./bin/elkhound
       - name: Set-up OCaml
-        uses: ocaml/setup-ocaml@v3
+        uses: ocaml/setup-ocaml@v3.5.1
         with:
           ocaml-compiler: ocaml-variants.4.14.2+options,ocaml-option-default-unsafe-string
       - name: Set-up Zip and Upx
@@ -41,7 +41,7 @@ jobs:
           eval $(opam env)
           make
           make osx_zip
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.os }}
           path: WeiDU-Mac-*.zip
@@ -58,7 +58,7 @@ jobs:
           chmod +x bin/elkhound
           ./bin/elkhound
       - name: Set-up OCaml
-        uses: ocaml/setup-ocaml@v3
+        uses: ocaml/setup-ocaml@v3.5.1
         with:
           ocaml-compiler: 4.11.2+default-unsafe-string
       - name: build weidu
@@ -70,7 +70,7 @@ jobs:
           eval $(opam env)
           make
           make linux_zip
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: ubuntu-22.04
           path: WeiDU-Linux-*.zip
@@ -84,7 +84,7 @@ jobs:
         run: |
           curl -Lv https://github.com/The-Mod-Elephant/elkhound/releases/download/1.0.3/elkhound.exe -o elkhound.exe
       - name: Set-up OCaml
-        uses: ocaml/setup-ocaml@v3
+        uses: ocaml/setup-ocaml@v3.5.1
         with:
           ocaml-compiler: ocaml-variants.4.14.2+options,ocaml-option-default-unsafe-string
       - name: Set-up Zip and Upx
@@ -97,7 +97,7 @@ jobs:
           make
           make windows_zip
       - name: upload windows artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: windows-latest
           path: WeiDU-Windows-*.zip
@@ -152,7 +152,7 @@ jobs:
           rc_number=$((10#${{ env.minor_version }} - 1))
           echo "rc=${rc_number}" >> "$GITHUB_OUTPUT"
       - name: create tag
-        uses: action/github-script@v8
+        uses: actions/github-script@v8
         with:
           script: |
             github.rest.git.createRef({
