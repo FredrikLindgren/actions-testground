@@ -60,7 +60,7 @@ jobs:
       - name: Set-up OCaml
         uses: ocaml/setup-ocaml@v3
         with:
-          ocaml-compiler: 4.08.1+default-unsafe-string
+          ocaml-compiler: 4.11.2+default-unsafe-string
       - name: build weidu
         run: |
           export PATH="$PATH:$PWD/bin"
